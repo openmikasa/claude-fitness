@@ -4,6 +4,10 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { StrengthData } from '@/types/workout';
+import { Autocomplete } from '@/components/ui/autocomplete';
+import { MultiSelect } from '@/components/ui/multi-select';
+import { useState } from 'react';
+import type { Exercise } from '@/types/workout';
 
 // Zod validation schema
 const strengthSetSchema = z.object({
@@ -14,6 +18,9 @@ const strengthSetSchema = z.object({
 const strengthExerciseSchema = z.object({
   name: z.string().min(1, 'Exercise name is required'),
   sets: z.array(strengthSetSchema).min(1, 'At least one set is required'),
+  exercise_id: z.string().optional(),
+  equipment: z.array(z.string()).optional(),
+  muscle_groups: z.array(z.string()).optional(),
 });
 
 const strengthFormSchema = z.object({
@@ -32,6 +39,8 @@ export default function StrengthForm({ onSubmit, initialData }: StrengthFormProp
     register,
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<StrengthFormData>({
     resolver: zodResolver(strengthFormSchema),
@@ -67,6 +76,8 @@ export default function StrengthForm({ onSubmit, initialData }: StrengthFormProp
             errors={errors}
             removeExercise={removeExercise}
             canRemoveExercise={exercises.length > 1}
+            setValue={setValue}
+            watch={watch}
           />
         ))}
       </div>
@@ -108,6 +119,8 @@ interface ExerciseFieldProps {
   errors: any;
   removeExercise: (index: number) => void;
   canRemoveExercise: boolean;
+  setValue: any;
+  watch: any;
 }
 
 function ExerciseField({
@@ -117,11 +130,47 @@ function ExerciseField({
   errors,
   removeExercise,
   canRemoveExercise,
+  setValue,
+  watch,
 }: ExerciseFieldProps) {
   const { fields: sets, append: appendSet, remove: removeSet } = useFieldArray({
     control,
     name: `exercises.${exerciseIndex}.sets`,
   });
+
+  const exerciseName = watch(`exercises.${exerciseIndex}.name`);
+  const equipment = watch(`exercises.${exerciseIndex}.equipment`) || [];
+  const muscleGroups = watch(`exercises.${exerciseIndex}.muscle_groups`) || [];
+
+  const handleExerciseSelect = (exercise: Exercise) => {
+    setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
+    setValue(`exercises.${exerciseIndex}.equipment`, exercise.equipment || []);
+    setValue(`exercises.${exerciseIndex}.muscle_groups`, exercise.muscle_groups || []);
+  };
+
+  const equipmentOptions = [
+    'Barbell',
+    'Dumbbell',
+    'Cable',
+    'Machine',
+    'Bodyweight',
+    'Kettlebell',
+    'Resistance Band',
+    'Medicine Ball',
+  ];
+
+  const muscleGroupOptions = [
+    'Chest',
+    'Back',
+    'Legs',
+    'Shoulders',
+    'Arms',
+    'Core',
+    'Glutes',
+    'Hamstrings',
+    'Quadriceps',
+    'Calves',
+  ];
 
   return (
     <div className="p-4 border border-gray-200 rounded-lg bg-white space-y-4">
@@ -134,11 +183,11 @@ function ExerciseField({
           >
             Exercise Name
           </label>
-          <input
-            {...register(`exercises.${exerciseIndex}.name`)}
-            type="text"
+          <Autocomplete
+            value={exerciseName || ''}
+            onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
+            onExerciseSelect={handleExerciseSelect}
             placeholder="e.g., Bench Press"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {errors.exercises?.[exerciseIndex]?.name && (
             <p className="mt-1 text-sm text-red-600">
@@ -155,6 +204,24 @@ function ExerciseField({
             Remove Exercise
           </button>
         )}
+      </div>
+
+      {/* Equipment and Muscle Groups */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <MultiSelect
+          label="Equipment"
+          options={equipmentOptions}
+          selected={equipment}
+          onChange={(value) => setValue(`exercises.${exerciseIndex}.equipment`, value)}
+          placeholder="Select equipment..."
+        />
+        <MultiSelect
+          label="Muscle Groups"
+          options={muscleGroupOptions}
+          selected={muscleGroups}
+          onChange={(value) => setValue(`exercises.${exerciseIndex}.muscle_groups`, value)}
+          placeholder="Select muscle groups..."
+        />
       </div>
 
       {/* Sets */}

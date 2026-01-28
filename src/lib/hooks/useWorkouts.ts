@@ -30,6 +30,8 @@ export interface WorkoutFilters {
   date_to?: string;
   search?: string;
   exercise_search?: string;
+  equipment?: string[];
+  muscle_groups?: string[];
   page?: number;
   pageSize?: number;
 }
@@ -46,6 +48,12 @@ async function fetchWorkouts(
   if (filters.search) params.append('search', filters.search);
   if (filters.exercise_search)
     params.append('exercise_search', filters.exercise_search);
+  if (filters.equipment) {
+    filters.equipment.forEach(eq => params.append('equipment', eq));
+  }
+  if (filters.muscle_groups) {
+    filters.muscle_groups.forEach(mg => params.append('muscle_groups', mg));
+  }
   if (filters.page) params.append('page', filters.page.toString());
   if (filters.pageSize) params.append('pageSize', filters.pageSize.toString());
 

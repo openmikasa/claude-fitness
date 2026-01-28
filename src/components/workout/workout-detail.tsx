@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import WorkoutForm from './workout-form';
+import { getWorkoutExercises, isWorkoutMigrated } from '@/lib/utils/workout-helpers';
 import type {
   Workout,
   StrengthData,
@@ -87,27 +88,55 @@ export default function WorkoutDetail({
     );
   }
 
-  const renderStrengthData = (data: StrengthData) => (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exercises</h3>
-      {data.exercises.map((exercise, idx) => (
-        <div key={idx} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 dark:text-white mb-3">{exercise.name}</h4>
-          <div className="space-y-2">
-            {exercise.sets.map((set, setIdx) => (
-              <div
-                key={setIdx}
-                className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
-              >
-                <span>Set {setIdx + 1}</span>
-                <span>{set.weight}kg × {set.reps} reps</span>
+  const renderStrengthData = (data: StrengthData) => {
+    const exercises = getWorkoutExercises(workout);
+
+    return (
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exercises</h3>
+        {exercises.map((exercise, idx) => (
+          <div key={idx} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 dark:text-white mb-2">{exercise.name}</h4>
+
+            {/* Equipment and Muscle Groups */}
+            {(exercise.equipment.length > 0 || exercise.muscle_groups.length > 0) && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {exercise.equipment.map((eq) => (
+                  <span
+                    key={eq}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  >
+                    {eq}
+                  </span>
+                ))}
+                {exercise.muscle_groups.map((mg) => (
+                  <span
+                    key={mg}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                  >
+                    {mg}
+                  </span>
+                ))}
               </div>
-            ))}
+            )}
+
+            {/* Sets */}
+            <div className="space-y-2">
+              {exercise.sets.map((set, setIdx) => (
+                <div
+                  key={setIdx}
+                  className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+                >
+                  <span>Set {setIdx + 1}</span>
+                  <span>{set.weight}kg × {set.reps} reps</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  };
 
   const renderCardioData = (data: CardioData) => (
     <div className="space-y-4">

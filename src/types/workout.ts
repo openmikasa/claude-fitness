@@ -1,6 +1,27 @@
 // Core workout types
 export type WorkoutType = 'strength' | 'cardio' | 'sauna' | 'mobility';
 
+// Exercise and junction table types
+export interface Exercise {
+  id: string;
+  name: string;
+  category?: string;
+  muscle_groups: string[];
+  equipment?: string[];
+  created_at: string;
+}
+
+export interface WorkoutExercise {
+  id: string;
+  workout_id: string;
+  exercise_id: string;
+  equipment: string[];
+  sets_data: StrengthSet[];
+  created_at: string;
+  updated_at: string;
+  exercises?: Exercise;  // Joined data
+}
+
 // Strength workout structures
 export interface StrengthSet {
   weight: number;
@@ -55,6 +76,7 @@ export interface Workout {
   notes?: string;
   created_at: string;
   updated_at: string;
+  workout_exercises?: WorkoutExercise[];  // Optional for backward compat
 }
 
 // Form types for creating/editing workouts
@@ -99,6 +121,19 @@ export interface CreateProgramInput {
   valid_from: string;
   valid_until: string;
   rationale: string;
+}
+
+// Workout filtering
+export interface WorkoutFilters {
+  workout_type?: WorkoutType;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+  exercise_search?: string;
+  equipment?: string[];
+  muscle_groups?: string[];
+  page?: number;
+  pageSize?: number;
 }
 
 // API response types

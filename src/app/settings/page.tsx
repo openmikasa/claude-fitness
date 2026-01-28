@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { useSettings, useUpdateSettings } from '@/lib/hooks/useSettings';
 
 type Units = 'metric' | 'imperial';
 type Theme = 'light' | 'dark' | 'auto';
@@ -11,9 +12,10 @@ type Theme = 'light' | 'dark' | 'auto';
 export default function SettingsPage() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
+  const { data: settings, isLoading: settingsLoading } = useSettings();
+  const updateSettings = useUpdateSettings();
   const [units, setUnits] = useState<Units>('metric');
   const [theme, setTheme] = useState<Theme>('auto');
-  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -22,21 +24,20 @@ export default function SettingsPage() {
   }, [user, loading, router]);
 
   useEffect(() => {
-    // Load preferences from localStorage
-    const savedUnits = localStorage.getItem('units') as Units;
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedUnits) setUnits(savedUnits);
-    if (savedTheme) setTheme(savedTheme);
-  }, []);
+    // Load settings from API or fallback to localStorage
+    if (settings) {
+      setUnits(settings.units || 'metric');
+      setTheme(settings.theme || 'auto');
+    } else if (typeof window !== 'undefined') {
+      const savedUnits = localStorage.getItem('units') as Units;
+      const savedTheme = localStorage.getItem('theme') as Theme;
+      if (savedUnits) setUnits(savedUnits);
+      if (savedTheme) setTheme(savedTheme);
+    }
+  }, [settings]);
 
-  const handleSave = () => {
-    setIsSaving(true);
-    localStorage.setItem('units', units);
-    localStorage.setItem('theme', theme);
-    
-    setTimeout(() => {
-      setIsSaving(false);
-    }, 500);
+  const handleSave = async () => {
+    await updateSettings.mutateAsync({ units, theme });
   };
 
   const handleSignOut = async () => {
@@ -115,10 +116,10 @@ export default function SettingsPage() {
 
               <button
                 onClick={handleSave}
-                disabled={isSaving}
+                disabled={updateSettings.isPending}
                 className='w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50'
               >
-                {isSaving ? 'Saving...' : 'Save Preferences'}
+                {updateSettings.isPending ? 'Saving...' : 'Save Preferences'}
               </button>
             </div>
           </div>

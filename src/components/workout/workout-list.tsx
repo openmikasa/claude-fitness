@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays } from 'date-fns';
 import type { Workout, WorkoutType, StrengthData, CardioData, SaunaData, MobilityData } from '@/types/workout';
 import WorkoutDetail from './workout-detail';
+import { MultiSelect } from '@/components/ui/multi-select';
 
 interface WorkoutListProps {
   userId: string;
@@ -21,6 +22,8 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [equipmentFilter, setEquipmentFilter] = useState<string[]>([]);
+  const [muscleGroupsFilter, setMuscleGroupsFilter] = useState<string[]>([]);
   const [filtersExpanded, setFiltersExpanded] = useState(true);
 
   // Detail view
@@ -54,6 +57,14 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
         params.append('date_to', dateTo);
       }
 
+      if (equipmentFilter.length > 0) {
+        equipmentFilter.forEach(eq => params.append('equipment', eq));
+      }
+
+      if (muscleGroupsFilter.length > 0) {
+        muscleGroupsFilter.forEach(mg => params.append('muscle_groups', mg));
+      }
+
       const response = await fetch(`/api/workouts?${params.toString()}`);
 
       if (!response.ok) {
@@ -68,7 +79,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     } finally {
       setLoading(false);
     }
-  }, [page, workoutTypeFilter, searchQuery, dateFrom, dateTo]);
+  }, [page, workoutTypeFilter, searchQuery, dateFrom, dateTo, equipmentFilter, muscleGroupsFilter]);
 
   useEffect(() => {
     fetchWorkouts();
@@ -129,10 +140,12 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     setSearchQuery('');
     setDateFrom('');
     setDateTo('');
+    setEquipmentFilter([]);
+    setMuscleGroupsFilter([]);
     setPage(1);
   };
 
-  const removeFilter = (filterType: 'type' | 'search' | 'dates') => {
+  const removeFilter = (filterType: 'type' | 'search' | 'dates' | 'equipment' | 'muscle_groups') => {
     switch (filterType) {
       case 'type':
         setWorkoutTypeFilter('all');
@@ -144,11 +157,17 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
         setDateFrom('');
         setDateTo('');
         break;
+      case 'equipment':
+        setEquipmentFilter([]);
+        break;
+      case 'muscle_groups':
+        setMuscleGroupsFilter([]);
+        break;
     }
     setPage(1);
   };
 
-  const hasActiveFilters = workoutTypeFilter !== 'all' || searchQuery || dateFrom || dateTo;
+  const hasActiveFilters = workoutTypeFilter !== 'all' || searchQuery || dateFrom || dateTo || equipmentFilter.length > 0 || muscleGroupsFilter.length > 0;
 
   const handleWorkoutDeleted = (deletedId: string) => {
     setWorkouts(workouts.filter(w => w.id !== deletedId));
@@ -354,6 +373,30 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               />
             </div>
           </div>
+
+          {/* Equipment and Muscle Groups Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <MultiSelect
+              label="Equipment"
+              options={['Barbell', 'Dumbbell', 'Cable', 'Machine', 'Bodyweight', 'Kettlebell', 'Resistance Band', 'Medicine Ball']}
+              selected={equipmentFilter}
+              onChange={(value) => {
+                setEquipmentFilter(value);
+                handleFilterChange();
+              }}
+              placeholder="Filter by equipment..."
+            />
+            <MultiSelect
+              label="Muscle Groups"
+              options={['Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Core', 'Glutes', 'Hamstrings', 'Quadriceps', 'Calves']}
+              selected={muscleGroupsFilter}
+              onChange={(value) => {
+                setMuscleGroupsFilter(value);
+                handleFilterChange();
+              }}
+              placeholder="Filter by muscle groups..."
+            />
+          </div>
         </div>
 
         {/* Active Filter Chips */}
@@ -403,6 +446,28 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                       ? `From ${format(new Date(dateFrom), 'MMM d, yyyy')}`
                       : `Until ${format(new Date(dateTo), 'MMM d, yyyy')}`}
                   </span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+              {equipmentFilter.length > 0 && (
+                <button
+                  onClick={() => removeFilter('equipment')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                >
+                  <span>Equipment: {equipmentFilter.join(', ')}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+              {muscleGroupsFilter.length > 0 && (
+                <button
+                  onClick={() => removeFilter('muscle_groups')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                >
+                  <span>Muscles: {muscleGroupsFilter.join(', ')}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>

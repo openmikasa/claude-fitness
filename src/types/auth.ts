@@ -12,6 +12,8 @@ export interface Profile {
   weight_kg?: number;
   height_cm?: number;
   fitness_goals?: string[];
+  units?: 'metric' | 'imperial';
+  theme?: 'light' | 'dark' | 'auto';
   created_at: string;
   updated_at: string;
 }

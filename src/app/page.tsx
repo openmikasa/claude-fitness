@@ -1,18 +1,47 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { WorkoutBackfillModal } from '@/components/workout/workout-backfill-modal';
 
 export default function Home() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
+  const [unmigratedCount, setUnmigratedCount] = useState<number>(0);
+  const [showBackfillModal, setShowBackfillModal] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    if (!loading && user) {
+      fetchUnmigratedCount();
+    }
+  }, [user, loading]);
+
+  const fetchUnmigratedCount = async () => {
+    try {
+      const response = await fetch('/api/workouts/unmigrated-count');
+      if (response.ok) {
+        const data = await response.json();
+        setUnmigratedCount(data.count || 0);
+      } else if (response.status !== 401) {
+        // Only log non-auth errors
+        console.error('Failed to fetch unmigrated count:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Failed to fetch unmigrated count:', error);
+    }
+  };
+
+  const handleBackfillComplete = () => {
+    setUnmigratedCount(0);
+    setShowBackfillModal(false);
+  };
 
   if (loading) {
     return (
@@ -53,6 +82,46 @@ export default function Home() {
             Your AI-powered fitness journey starts here.
           </p>
         </div>
+
+        {/* Backfill Banner */}
+        {unmigratedCount > 0 && (
+          <div
+            className="mb-8 bg-blue-50 border-l-4 border-blue-600 p-4 rounded-lg"
+            data-testid="backfill-banner"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-blue-900 mb-1">
+                  Enhance Your Workout Data
+                </h3>
+                <p className="text-sm text-blue-800 mb-3">
+                  You have {unmigratedCount} workout{unmigratedCount !== 1 ? 's' : ''} that can be
+                  enhanced with equipment and muscle group data. This enables advanced filtering
+                  and better analytics.
+                </p>
+                <button
+                  onClick={() => setShowBackfillModal(true)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 text-sm"
+                >
+                  Start Migration
+                </button>
+              </div>
+              <button
+                onClick={() => setUnmigratedCount(0)}
+                className="text-blue-600 hover:text-blue-800 text-xl font-bold ml-4"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Backfill Modal */}
+        <WorkoutBackfillModal
+          isOpen={showBackfillModal}
+          onClose={() => setShowBackfillModal(false)}
+          onComplete={handleBackfillComplete}
+        />
 
         {/* Quick actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
