@@ -4,11 +4,16 @@ AI-powered fitness tracking and workout programming application built with Next.
 
 ## Features
 
-- 🏋️ **Workout Logging** - Track strength, cardio, sauna, and mobility sessions
-- 📊 **History Management** - View, search, and filter past workouts
+- 🏋️ **Workout Logging** - Track strength, cardio, sauna, and mobility sessions with equipment and muscle group tagging
+- 🎯 **Advanced Filtering** - Filter workouts by equipment, muscle groups, workout type, and date range
+- ⚙️ **Settings Persistence** - Units and theme preferences sync across devices via Supabase
+- 📊 **History Management** - View, search, and filter past workouts with pagination
+- 🔄 **Data Migration** - Interactive wizard to enhance old workouts with new metadata
 - 🤖 **AI Programming** - Get personalized workout recommendations from Claude AI
 - 📥 **CSV Import** - Import historical workout data
 - 🔐 **Secure Authentication** - User accounts with row-level security
+- 📱 **PWA Support** - Install as a native app on mobile devices
+- 🔌 **Offline Support** - Settings queue and sync when back online
 
 ## Tech Stack
 
@@ -101,10 +106,11 @@ claude-fitness/
 
 ### Tables
 
-- **profiles** - User profile information
+- **profiles** - User profile information with settings (units, theme)
 - **workouts** - Workout entries (polymorphic JSONB design)
+- **workout_exercises** - Normalized exercise data with equipment metadata (junction table)
+- **exercises** - Exercise definitions for autocomplete with equipment arrays
 - **programs** - AI-generated training plans
-- **exercises** - Exercise definitions for autocomplete
 - **import_batches** - CSV import history
 
 ### Row-Level Security
@@ -114,11 +120,12 @@ All tables enforce RLS policies ensuring users can only access their own data.
 ## Development Phases
 
 - ✅ **Phase 1: Foundation** - Project setup, auth, basic layout
-- ⏳ **Phase 2: Workout Logging** - Forms for all workout types
-- ⏳ **Phase 3: History & Search** - Filtering, pagination, search
-- ⏳ **Phase 4: CSV Import** - Historical data import
-- ⏳ **Phase 5: AI Integration** - Workout recommendations
-- ⏳ **Phase 6: Polish** - PWA, performance, mobile optimization
+- ✅ **Phase 2: Workout Logging** - Forms for all workout types
+- ✅ **Phase 3: History & Search** - Filtering, pagination, search
+- ✅ **Phase 4: CSV Import** - Historical data import
+- ✅ **Phase 5: Advanced Features** - Equipment/muscle filtering, settings persistence, data migration
+- ⏳ **Phase 6: AI Integration** - Workout recommendations (in progress)
+- ⏳ **Phase 7: Polish** - Performance optimization, mobile refinement
 
 ## Usage
 
@@ -151,13 +158,30 @@ All tables enforce RLS policies ensuring users can only access their own data.
 3. View recommended next session
 4. Request full 7-day training plan
 
-## API Routes (Future)
+## API Routes
 
-- `POST /api/workouts` - Create workout
-- `GET /api/workouts` - List workouts
-- `POST /api/import` - Import CSV
+### Workouts
+- `GET /api/workouts` - List workouts with filtering (type, date, equipment, muscle groups)
+- `GET /api/workouts/[id]` - Get single workout
+- `POST /api/workouts` - Create workout (auto-creates junction table records)
+- `PUT /api/workouts/[id]` - Update workout
+- `DELETE /api/workouts/[id]` - Delete workout
+- `GET /api/workouts/unmigrated-count` - Count workouts needing migration
+- `POST /api/workouts/backfill` - Migrate workout to normalized format
+
+### Settings
+- `GET /api/settings` - Get user settings (units, theme)
+- `PUT /api/settings` - Update user settings
+
+### Exercises
+- `GET /api/exercises` - Search exercises for autocomplete
+
+### AI (Planned)
 - `POST /api/ai/next-session` - Generate next workout
 - `POST /api/ai/weekly-plan` - Generate 7-day plan
+
+### Import
+- `POST /api/import` - Import CSV data
 
 ## Contributing
 

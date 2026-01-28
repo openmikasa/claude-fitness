@@ -5,9 +5,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 🤖 Project Instructions: Claude Fitness
 
 ## 🎯 Project Overview
-* **Purpose:** Fitness tracking and workout planning application
-* **Tech Stack:** TBD
-* **Architecture:** TBD
+* **Purpose:** AI-powered fitness tracking and workout programming application
+* **Tech Stack:** Next.js 14 (App Router), Supabase (PostgreSQL + Auth), Claude API, React Query, Tailwind CSS
+* **Architecture:**
+  - Server-side API routes with Supabase RLS for security
+  - React Query for data fetching/caching with optimistic updates
+  - Dual-write pattern: JSONB + normalized tables for backward compatibility
+  - Offline-first with queue sync for settings
+  - Progressive Web App (PWA) for mobile installation
 
 ---
 
@@ -15,7 +20,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 1. Context7 (Documentation Skill)
 * **Protocol:** Before implementing any logic involving external APIs or libraries, use the `context7` tool to fetch the most recent documentation.
-* **Instruction:** Do not rely on internal knowledge for libraries like **Tailwind**, **Prisma**, or **Clerk**. Always verify syntax via `context7` to ensure we are using this year standards.
+* **Key Libraries to Always Check:**
+  - **Supabase** - Auth, database queries, RLS policies
+  - **React Query (@tanstack/react-query)** - Caching, mutations, query keys
+  - **Tailwind CSS** - Utility classes, responsive design
+  - **React Hook Form** - Form handling, validation
+  - **Zod** - Schema validation
+  - **Next.js 14** - App Router, API routes, server components
+* **Instruction:** Do not rely on internal knowledge for these libraries. Always verify syntax via `context7` to ensure we are using current standards.
 
 ### 2. Playwright (Verification Skill)
 * **Protocol:** Once a UI component or a user flow (login, checkout, etc.) is modified, use the `playwright` MCP server to verify the changes.
@@ -79,12 +91,66 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ---
 
 ## 📁 File Structure Guidelines
-* `CLAUDE.md`: This file (Project source of truth)
+
+### Key Directories
+* `src/app/` - Next.js App Router pages and API routes
+* `src/components/` - React components (auth, workout, ui, ai, import)
+* `src/lib/hooks/` - React Query hooks (useWorkouts, useSettings, useAuth)
+* `src/lib/supabase/` - Supabase client configurations
+* `src/lib/utils/` - Utility functions (workout-helpers for backward compat)
+* `src/types/` - TypeScript interfaces (workout, auth, program)
+* `supabase/migrations/` - Database schema migrations (run in order)
+
+### Naming Conventions
+* Files: `kebab-case.tsx` (e.g., `workout-list.tsx`)
+* Components: `PascalCase` (e.g., `WorkoutList`)
+* Hooks: `use` prefix (e.g., `useWorkouts`)
+* API routes: `route.ts` in folder structure (e.g., `api/workouts/route.ts`)
+
+### Component Organization
+* `components/ui/` - Generic reusable components (MultiSelect, Autocomplete)
+* `components/workout/` - Workout-specific components
+* `components/auth/` - Authentication forms
+* Each component should be self-contained with its own file
 
 ---
 
 ## ⚠️ Lessons Learned & Constraints
-* *(Add recurring issues here to prevent Claude from making the same mistake twice)*
+
+### Data Architecture Patterns
+* **[Database] Dual-Write Pattern** | When adding normalized tables, maintain backward compatibility by writing to both JSONB and junction tables. Use helper functions (`workout-helpers.ts`) to read from either source.
+* **[Database] GIN Indexes Required** | Always add GIN indexes for array columns (equipment, muscle_groups) to enable fast containment queries. Critical for filter performance.
+* **[Database] RLS Policies** | Every new table needs RLS enabled + policies for SELECT/INSERT/UPDATE/DELETE. Policy pattern: check ownership via user_id or join to user-owned table.
+
+### React Query Patterns
+* **[State] Optimistic Updates** | All mutations should use onMutate for optimistic UI updates with rollback on error. See `useUpdateSettings` for pattern.
+* **[State] Query Keys** | Use structured query keys with filters: `workoutKeys.list(filters)` not just `['workouts']`. Enables precise cache invalidation.
+* **[State] Offline Queue** | Settings/mutations should queue in localStorage when offline and sync via OfflineQueue when online.
+
+### API Endpoint Patterns
+* **[API] Authentication First** | Always call `getAuthenticatedUser()` first, return 401 if no user. Never trust client-side auth state.
+* **[API] Zod Validation** | Validate all request bodies with Zod schemas. Return 400 with error details on validation failure.
+* **[API] Filtering Logic** | Complex filters (equipment, muscle groups on arrays) require client-side filtering after fetch. Can't use Supabase filters on nested arrays efficiently.
+
+### Component Patterns
+* **[UI] Reusable Components** | Multi-selects, autocompletes, and form controls belong in `components/ui/`. Keep them generic with props, not tied to specific domains.
+* **[Forms] React Hook Form + Zod** | Use `react-hook-form` with `zodResolver`. Validation schema should match API endpoint schema.
+* **[Forms] Autocomplete Integration** | When selecting from autocomplete, auto-populate related fields (e.g., exercise selection fills equipment/muscle groups).
+
+### Migration Patterns
+* **[Database] IF NOT EXISTS** | Always use `IF NOT EXISTS` in migrations for idempotency. Allows safe re-runs.
+* **[Migration] Gradual Rollout** | Use UI wizards (modals) for data migrations instead of forcing immediate migration. Let users migrate at their own pace.
+* **[Migration] Backward Compat Helpers** | Create helper functions that work with both old and new data formats. Never break old workouts.
+
+### Testing Requirements
+* **[Testing] Playwright for Features** | Major feature additions require Playwright E2E tests covering happy path and key edge cases.
+* **[Testing] Manual Verification** | Before production: test offline mode, cross-device sync, filter combinations, and migration flow.
+
+### Common Pitfalls
+* **[Imports] Package Name Typos** | Watch for `@tanstack/react-query` not `@tantml/react-query` (common typo).
+* **[Auth] Timing Issues** | Don't fetch data before auth completes. Check `!loading && user` not just `user`.
+* **[Filters] Empty Arrays** | Filter logic must handle empty arrays as "no filter" not "filter nothing". Check `.length > 0` before applying.
+* **[RLS] Policy Testing** | New RLS policies can silently hide data. Always test with non-owner user to verify policies work correctly.
 
 ---
 
