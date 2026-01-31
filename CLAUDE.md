@@ -6,6 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 🎯 Project Overview
 * **Purpose:** AI-powered weightlifting tracker and workout programming application
+* **Production URL:** https://claude-fitness.vercel.app/
+* **Repository:** https://github.com/openmikasa/claude-fitness
+* **Deployment:** Vercel with auto-deploy from `main` branch (deploys in ~2 minutes)
 * **Tech Stack:** Next.js 14 (App Router), Supabase (PostgreSQL + Auth), Claude API, React Query, Tailwind CSS
 * **Architecture:**
   - Server-side API routes with Supabase RLS for security
@@ -97,7 +100,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * `src/components/` - React components (auth, workout, ui, ai, import)
 * `src/lib/hooks/` - React Query hooks (useWorkouts, useSettings, useAuth)
 * `src/lib/supabase/` - Supabase client configurations
-* `src/lib/utils/` - Utility functions (workout-helpers for backward compat)
+* `src/lib/utils/` - Utility functions (workout-helpers for backward compat, unit-conversion for kg/lb)
 * `src/types/` - TypeScript interfaces (workout, auth, program)
 * `supabase/migrations/` - Database schema migrations (run in order)
 
@@ -136,6 +139,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * **[UI] Reusable Components** | Multi-selects, autocompletes, and form controls belong in `components/ui/`. Keep them generic with props, not tied to specific domains.
 * **[Forms] React Hook Form + Zod** | Use `react-hook-form` with `zodResolver`. Validation schema should match API endpoint schema.
 * **[Forms] Autocomplete Integration** | When selecting from autocomplete, auto-populate related fields (e.g., exercise selection fills equipment/muscle groups).
+* **[Forms] Unit Conversion** | Always store weights in kg in database. Use `inputToKg()` when saving, `displayWeight()` when showing. Form labels should use `getWeightUnitLabel()` based on user preference.
+
+### Unit Conversion System
+* **[Storage] Always Store in KG** | Database always stores weights in kg regardless of user preference. Use `src/lib/utils/unit-conversion.ts` utilities for all conversions.
+* **[Display] User Preference** | All weight displays use `displayWeight(weightInKg, userPreference)` to show in metric or imperial based on user settings.
+* **[CSV Import] Auto-Detection** | CSV parser detects units from cell values (e.g., "60.0kg", "45lb") or column names. Converts all to kg via `normalizeWeight()`.
+* **[Forms] Dynamic Units** | Workout forms show unit labels based on user preference and convert input to kg before saving via `inputToKg()`.
+* **[Backward Compat] Optional Unit Field** | `WeightliftingSet.unit` is optional - existing workouts without unit field are assumed to be kg.
 
 ### Migration Patterns
 * **[Database] IF NOT EXISTS** | Always use `IF NOT EXISTS` in migrations for idempotency. Allows safe re-runs.
@@ -151,6 +162,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * **[Auth] Timing Issues** | Don't fetch data before auth completes. Check `!loading && user` not just `user`.
 * **[Filters] Empty Arrays** | Filter logic must handle empty arrays as "no filter" not "filter nothing". Check `.length > 0` before applying.
 * **[RLS] Policy Testing** | New RLS policies can silently hide data. Always test with non-owner user to verify policies work correctly.
+* **[Drag-Drop] Nested Elements** | Use counter pattern for drag-and-drop with nested elements. Increment counter on `dragEnter`, decrement on `dragLeave`, only clear state when counter reaches 0. Prevents flickering when dragging over child elements.
 
 ---
 
