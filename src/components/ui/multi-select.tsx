@@ -58,7 +58,7 @@ export function MultiSelect({
             {selected.map((item) => (
               <span
                 key={item}
-                className='inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded'
+                className='inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded font-medium'
               >
                 {item}
                 <button
@@ -87,7 +87,7 @@ export function MultiSelect({
                 selected.includes(option) ? 'bg-blue-50' : ''
               }`}
             >
-              <span>{option}</span>
+              <span className='text-gray-900 font-medium'>{option}</span>
               {selected.includes(option) && (
                 <span className='text-blue-600 font-bold'>✓</span>
               )}

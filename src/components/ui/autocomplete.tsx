@@ -78,7 +78,7 @@ export function Autocomplete({
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
-        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none'
+        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 font-medium'
       />
 
       {isOpen && value.length >= 2 && (
@@ -107,7 +107,7 @@ export function Autocomplete({
                 onClick={() => handleSelect(exercise)}
                 className='px-3 py-2 cursor-pointer hover:bg-gray-100'
               >
-                <div className='font-medium'>{exercise.name}</div>
+                <div className='font-semibold text-gray-900'>{exercise.name}</div>
                 {exercise.muscle_groups.length > 0 && (
                   <div className='text-xs text-gray-500 mt-1'>
                     {exercise.muscle_groups.join(', ')}
