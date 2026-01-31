@@ -127,10 +127,17 @@ export default function WorkoutDetail({
                 return (
                   <div
                     key={setIdx}
-                    className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+                    className="flex flex-col gap-1"
                   >
-                    <span>Set {setIdx + 1}</span>
-                    <span>{value}{unit} × {set.reps} reps</span>
+                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                      <span>Set {setIdx + 1}</span>
+                      <span>{value}{unit} × {set.reps} reps</span>
+                    </div>
+                    {set.notes && (
+                      <div className="text-xs text-gray-500 dark:text-gray-500 italic pl-4">
+                        {set.notes}
+                      </div>
+                    )}
                   </div>
                 );
               })}
