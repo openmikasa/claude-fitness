@@ -23,6 +23,7 @@ interface ImportResponse {
 // Convert CSV row to a single set
 interface ParsedSet {
   date: string;
+  session: string; // Session identifier for multiple workouts per day
   exerciseName: string;
   weight: number;
   reps: number;
@@ -56,6 +57,9 @@ function parseRowToSet(
   // Extract exercise name
   const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Exercise';
 
+  // Extract session (optional - for multiple workouts per day)
+  const session = mapping.sessionColumn ? row[mapping.sessionColumn] || 'default' : 'default';
+
   // Extract weight
   const rawWeightValue = mapping.weightColumn ? row[mapping.weightColumn] : '0';
   const weight = mapping.weightColumn
@@ -73,6 +77,7 @@ function parseRowToSet(
 
   return {
     date: workoutDate,
+    session,
     exerciseName: exerciseName || 'Exercise',
     weight,
     reps,
@@ -80,21 +85,23 @@ function parseRowToSet(
   };
 }
 
-// Group sets by date and exercise to create workouts
+// Group sets by date+session and exercise to create workouts
 function groupSetsIntoWorkouts(parsedSets: ParsedSet[]): CreateWorkoutInput[] {
-  // Group by date
-  const byDate = new Map<string, ParsedSet[]>();
+  // Group by date+session (allows multiple workouts per day)
+  const byDateAndSession = new Map<string, ParsedSet[]>();
 
   for (const set of parsedSets) {
-    const existing = byDate.get(set.date) || [];
+    const key = `${set.date}|||${set.session}`; // Use ||| as separator to avoid conflicts
+    const existing = byDateAndSession.get(key) || [];
     existing.push(set);
-    byDate.set(set.date, existing);
+    byDateAndSession.set(key, existing);
   }
 
-  // Convert each date group into a workout
+  // Convert each date+session group into a workout
   const workouts: CreateWorkoutInput[] = [];
 
-  for (const [date, sets] of Array.from(byDate.entries())) {
+  for (const [key, sets] of Array.from(byDateAndSession.entries())) {
+    const [date] = key.split('|||'); // Extract date from key
     // Group by exercise name
     const byExercise = new Map<string, Array<{ weight: number; reps: number }>>();
     let workoutNotes: string[] = [];

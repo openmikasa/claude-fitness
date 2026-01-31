@@ -5,6 +5,7 @@ export interface CsvRow {
 export interface CsvMapping {
   dateColumn: string;
   workoutTypeColumn?: string;
+  sessionColumn?: string; // Optional: to distinguish multiple workouts on same day
   exerciseColumn?: string;
   weightColumn?: string;
   repsColumn?: string;

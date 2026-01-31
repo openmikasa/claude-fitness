@@ -101,6 +101,7 @@ export function parseCSV(file: File): Promise<ParseResult> {
 // Auto-detect common column names (weightlifting only)
 export function autoDetectMapping(headers: string[]): {
   dateColumn?: string;
+  sessionColumn?: string;
   exerciseColumn?: string;
   weightColumn?: string;
   repsColumn?: string;
@@ -117,6 +118,13 @@ export function autoDetectMapping(headers: string[]): {
     datePatterns.some((p) => h.includes(p))
   );
   if (dateMatch !== -1) mapping.dateColumn = headers[dateMatch];
+
+  // Session patterns (for multiple workouts per day)
+  const sessionPatterns = ['session', 'workout', 'workout_name', 'workout name', 'time'];
+  const sessionMatch = headerMap.findIndex((h) =>
+    sessionPatterns.some((p) => h === p) // Exact match to avoid conflicts
+  );
+  if (sessionMatch !== -1) mapping.sessionColumn = headers[sessionMatch];
 
   // Exercise patterns
   const exercisePatterns = ['exercise', 'exercise name', 'exercise_name', 'name'];
