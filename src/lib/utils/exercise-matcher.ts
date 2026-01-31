@@ -1,6 +1,26 @@
 import type { Exercise } from '@/types/workout';
 
 /**
+ * Normalize exercise name for matching
+ * - Lowercase
+ * - Remove trailing 's' for plurals
+ * - Trim whitespace
+ */
+function normalizeExerciseName(name: string): string {
+  let normalized = name.toLowerCase().trim();
+
+  // Remove trailing 's' for plural handling (pull-ups -> pull-up)
+  if (normalized.endsWith('s') && normalized.length > 3) {
+    // Don't remove 's' from words that naturally end in 's' (press, cross, etc.)
+    if (!normalized.endsWith('ss') && !normalized.endsWith('us')) {
+      normalized = normalized.slice(0, -1);
+    }
+  }
+
+  return normalized;
+}
+
+/**
  * Calculate similarity between two strings (0-1 scale)
  * Uses a simple Levenshtein-like algorithm
  */
@@ -49,23 +69,26 @@ export function findBestMatch(
     return { exercise: null, confidence: 0 };
   }
 
+  const normalizedInput = normalizeExerciseName(exerciseName);
   let bestMatch: Exercise | null = null;
   let bestScore = 0;
 
   for (const exercise of allExercises) {
-    const score = similarity(exerciseName, exercise.name);
+    const normalizedDbName = normalizeExerciseName(exercise.name);
 
-    // Exact match (case-insensitive)
-    if (exerciseName.toLowerCase() === exercise.name.toLowerCase()) {
+    // Exact match after normalization (handles plurals and case)
+    if (normalizedInput === normalizedDbName) {
       return { exercise, confidence: 1.0 };
     }
 
-    // Check if exercise name contains the workout exercise name or vice versa
-    const lowerExerciseName = exerciseName.toLowerCase();
-    const lowerDbName = exercise.name.toLowerCase();
-    if (lowerExerciseName.includes(lowerDbName) || lowerDbName.includes(lowerExerciseName)) {
-      if (score > bestScore) {
-        bestScore = Math.max(score, 0.8); // Boost score for partial matches
+    // Calculate similarity score
+    const score = similarity(normalizedInput, normalizedDbName);
+
+    // Check if one contains the other (for variations like "cable row" vs "row")
+    if (normalizedInput.includes(normalizedDbName) || normalizedDbName.includes(normalizedInput)) {
+      const containmentScore = Math.max(score, 0.85); // Boost score for containment
+      if (containmentScore > bestScore) {
+        bestScore = containmentScore;
         bestMatch = exercise;
       }
     } else if (score > bestScore) {
@@ -74,8 +97,8 @@ export function findBestMatch(
     }
   }
 
-  // Only return matches with reasonable confidence
-  if (bestScore < 0.6) {
+  // Lower threshold to 0.5 for more flexible matching
+  if (bestScore < 0.5) {
     return { exercise: null, confidence: bestScore };
   }
 
