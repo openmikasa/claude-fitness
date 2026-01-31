@@ -12,7 +12,7 @@ export const weightliftingSetSchema = z.object({
       required_error: 'Weight is required',
       invalid_type_error: 'Weight must be a number',
     })
-    .positive('Weight must be a positive number'),
+    .nonnegative('Weight must be 0 or greater (0 for bodyweight exercises)'),
   reps: z
     .number({
       required_error: 'Reps is required',
