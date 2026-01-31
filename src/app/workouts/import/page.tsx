@@ -75,6 +75,18 @@ export default function ImportPage() {
         mapping,
         filename: file.name,
       });
+
+      // Automatically trigger migration after successful import
+      try {
+        await fetch('/api/migrate', {
+          method: 'POST',
+          credentials: 'include',
+        });
+      } catch (migrationError) {
+        console.error('Auto-migration failed:', migrationError);
+        // Don't fail the import if migration fails
+      }
+
       setStep('complete');
     } catch (error) {
       console.error('Import failed:', error);
@@ -234,8 +246,8 @@ export default function ImportPage() {
           {step === 'importing' && (
             <div className="flex flex-col items-center gap-4 py-12">
               <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-lg font-medium text-gray-700">Importing workouts...</p>
-              <p className="text-sm text-gray-500">This may take a moment</p>
+              <p className="text-lg font-medium text-gray-700">Importing and enhancing workouts...</p>
+              <p className="text-sm text-gray-500">Adding equipment and muscle group data</p>
             </div>
           )}
 
@@ -258,7 +270,7 @@ export default function ImportPage() {
                   </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Import Complete!</h2>
-                <p className="text-gray-600">Your workouts have been imported successfully.</p>
+                <p className="text-gray-600">Your workouts have been imported and enhanced with equipment and muscle group data.</p>
               </div>
 
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
