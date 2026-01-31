@@ -186,6 +186,7 @@ function ExerciseField({
 
   const equipmentOptions = [
     'Barbell',
+    'Hax Barbell',
     'Dumbbell',
     'Cable',
     'Machine',

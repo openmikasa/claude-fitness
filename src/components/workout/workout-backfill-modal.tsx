@@ -167,6 +167,7 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
 
   const equipmentOptions = [
     'Barbell',
+    'Hax Barbell',
     'Dumbbell',
     'Cable',
     'Machine',

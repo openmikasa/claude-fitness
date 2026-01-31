@@ -50,6 +50,7 @@ export function CreateExerciseModal({
 
   const equipmentOptions = [
     'barbell',
+    'hax barbell',
     'dumbbell',
     'cable',
     'machine',

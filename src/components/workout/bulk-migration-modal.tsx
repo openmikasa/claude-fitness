@@ -193,6 +193,7 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
 
   const equipmentOptions = [
     'Barbell',
+    'Hax Barbell',
     'Dumbbell',
     'Cable',
     'Machine',
