@@ -22,6 +22,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // One-time migration: clear old localStorage tokens
+    if (typeof window !== 'undefined') {
+      const migrated = localStorage.getItem('auth_migrated_to_cookies');
+      if (!migrated) {
+        // Clear old localStorage auth keys
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('sb-') || key.includes('supabase')) {
+            localStorage.removeItem(key);
+          }
+        });
+        localStorage.setItem('auth_migrated_to_cookies', 'true');
+      }
+    }
+
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
