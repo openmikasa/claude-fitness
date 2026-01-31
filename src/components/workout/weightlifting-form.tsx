@@ -15,6 +15,7 @@ import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conve
 const weightliftingSetSchema = z.object({
   weight: z.number().min(0, 'Weight must be 0 or greater'),
   reps: z.number().int().min(1, 'Reps must be at least 1'),
+  notes: z.string().optional(),
 });
 
 const weightliftingExerciseSchema = z.object({
@@ -263,67 +264,78 @@ function ExerciseField({
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-gray-700">Sets</h4>
         {sets.map((set, setIndex) => (
-          <div key={set.id} className="flex items-start gap-3">
-            <div className="flex items-center gap-2 text-sm text-gray-500 min-w-[3rem]">
-              Set {setIndex + 1}
-            </div>
-            <div className="flex-1 grid grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.weight`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  Weight ({weightUnit})
-                </label>
-                <input
-                  {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
-                    valueAsNumber: true,
-                  })}
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  placeholder="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.weight && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {errors.exercises[exerciseIndex].sets[setIndex].weight.message}
-                  </p>
-                )}
+          <div key={set.id} className="space-y-2">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center gap-2 text-sm text-gray-500 min-w-[3rem]">
+                Set {setIndex + 1}
               </div>
-              <div>
-                <label
-                  htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.reps`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  Reps
-                </label>
-                <input
-                  {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
-                    valueAsNumber: true,
-                  })}
-                  type="number"
-                  min="1"
-                  placeholder="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.reps && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {errors.exercises[exerciseIndex].sets[setIndex].reps.message}
-                  </p>
-                )}
+              <div className="flex-1 grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.weight`}
+                    className="block text-xs font-medium text-gray-600 mb-1"
+                  >
+                    Weight ({weightUnit})
+                  </label>
+                  <input
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    placeholder="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.weight && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.exercises[exerciseIndex].sets[setIndex].weight.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.reps`}
+                    className="block text-xs font-medium text-gray-600 mb-1"
+                  >
+                    Reps
+                  </label>
+                  <input
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    min="1"
+                    placeholder="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.reps && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.exercises[exerciseIndex].sets[setIndex].reps.message}
+                    </p>
+                  )}
+                </div>
               </div>
+              {sets.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeSet(setIndex)}
+                  className="px-2 py-2 text-sm text-red-600 hover:text-red-700 focus:outline-none"
+                  aria-label="Remove set"
+                >
+                  ×
+                </button>
+              )}
             </div>
-            {sets.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeSet(setIndex)}
-                className="px-2 py-2 text-sm text-red-600 hover:text-red-700 focus:outline-none"
-                aria-label="Remove set"
-              >
-                ×
-              </button>
-            )}
+            {/* Per-set notes */}
+            <div className="ml-[3rem] mr-8">
+              <input
+                {...register(`exercises.${exerciseIndex}.sets.${setIndex}.notes`)}
+                type="text"
+                placeholder="Notes for this set (optional)"
+                className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
         ))}
       </div>

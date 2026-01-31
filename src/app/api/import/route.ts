@@ -103,18 +103,12 @@ function groupSetsIntoWorkouts(parsedSets: ParsedSet[]): CreateWorkoutInput[] {
   for (const [key, sets] of Array.from(byDateAndSession.entries())) {
     const [date] = key.split('|||'); // Extract date from key
     // Group by exercise name
-    const byExercise = new Map<string, Array<{ weight: number; reps: number }>>();
-    let workoutNotes: string[] = [];
+    const byExercise = new Map<string, Array<{ weight: number; reps: number; notes?: string }>>();
 
     for (const set of sets) {
       const existing = byExercise.get(set.exerciseName) || [];
-      existing.push({ weight: set.weight, reps: set.reps });
+      existing.push({ weight: set.weight, reps: set.reps, notes: set.notes });
       byExercise.set(set.exerciseName, existing);
-
-      // Collect notes (deduplicate)
-      if (set.notes && !workoutNotes.includes(set.notes)) {
-        workoutNotes.push(set.notes);
-      }
     }
 
     // Build exercises array
@@ -126,7 +120,7 @@ function groupSetsIntoWorkouts(parsedSets: ParsedSet[]): CreateWorkoutInput[] {
     workouts.push({
       workout_date: date,
       data: { exercises },
-      notes: workoutNotes.length > 0 ? workoutNotes.join('; ') : undefined,
+      notes: undefined, // Per-set notes instead of workout-level notes
     });
   }
 
