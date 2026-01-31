@@ -198,6 +198,18 @@ export default function ImportPage() {
                         <dd className="text-sm text-gray-600">{mapping.repsColumn}</dd>
                       </>
                     )}
+                    {mapping.setsColumn && (
+                      <>
+                        <dt className="text-sm font-medium text-gray-700">Sets:</dt>
+                        <dd className="text-sm text-gray-600">{mapping.setsColumn}</dd>
+                      </>
+                    )}
+                    {mapping.notesColumn && (
+                      <>
+                        <dt className="text-sm font-medium text-gray-700">Notes:</dt>
+                        <dd className="text-sm text-gray-600">{mapping.notesColumn}</dd>
+                      </>
+                    )}
                   </dl>
                 </div>
               </div>
