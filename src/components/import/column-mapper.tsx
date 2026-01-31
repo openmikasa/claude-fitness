@@ -14,6 +14,7 @@ interface ColumnMapperProps {
 const FIELD_OPTIONS = [
   { value: '', label: 'Skip this column' },
   { value: 'date', label: 'Date (required)' },
+  { value: 'workout', label: 'Workout/Session (optional - for multiple workouts per day)' },
   { value: 'exercise', label: 'Exercise Name' },
   { value: 'weight', label: 'Weight (kg)' },
   { value: 'reps', label: 'Reps' },
@@ -37,6 +38,7 @@ export default function ColumnMapper({
 
     preview.headers.forEach((header) => {
       if (detected.dateColumn === header) initialMappings[header] = 'date';
+      else if (detected.sessionColumn === header) initialMappings[header] = 'workout';
       else if (detected.exerciseColumn === header) initialMappings[header] = 'exercise';
       else if (detected.weightColumn === header) initialMappings[header] = 'weight';
       else if (detected.repsColumn === header) initialMappings[header] = 'reps';
@@ -52,6 +54,7 @@ export default function ColumnMapper({
   useEffect(() => {
     const csvMapping: CsvMapping = {
       dateColumn: Object.keys(mappings).find((k) => mappings[k] === 'date') || '',
+      sessionColumn: Object.keys(mappings).find((k) => mappings[k] === 'workout'),
       exerciseColumn: Object.keys(mappings).find((k) => mappings[k] === 'exercise'),
       weightColumn: Object.keys(mappings).find((k) => mappings[k] === 'weight'),
       repsColumn: Object.keys(mappings).find((k) => mappings[k] === 'reps'),
@@ -83,6 +86,14 @@ export default function ColumnMapper({
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-800">
           Map your CSV columns to workout fields. The <strong>Date</strong> column is required. Other fields are optional.
+        </p>
+      </div>
+
+      {/* Multiple Workouts Per Day Info */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <p className="text-sm text-amber-800">
+          <strong>Multiple workouts per day?</strong> Add a <strong>Workout/Session</strong> column (e.g., &quot;morning&quot;, &quot;evening&quot;)
+          to distinguish different workouts on the same date. Without this column, all exercises on the same date will be grouped into one workout.
         </p>
       </div>
 
