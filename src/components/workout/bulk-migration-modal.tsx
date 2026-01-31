@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { CreateExerciseModal } from '@/components/workout/create-exercise-modal';
 import type { Exercise } from '@/types/workout';
 
 interface AutoMatchedExercise {
@@ -32,6 +33,10 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [expandedWorkouts, setExpandedWorkouts] = useState<Set<string>>(new Set());
+  const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createModalSuggestion, setCreateModalSuggestion] = useState('');
+  const [pendingExerciseKey, setPendingExerciseKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -67,6 +72,15 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
         ...workout,
         exercises: workout.exercises.map((ex, idx) => {
           if (idx !== exerciseIndex) return ex;
+
+          // Clear search query when exercise is selected
+          const key = `${workoutId}-${idx}`;
+          setSearchQueries(prev => {
+            const next = { ...prev };
+            delete next[key];
+            return next;
+          });
+
           return {
             ...ex,
             matchedExercise: exercise,
@@ -96,6 +110,22 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
         }),
       };
     }));
+  };
+
+  const handleCreateExercise = (workoutId: string, exerciseIndex: number, exerciseName: string) => {
+    setPendingExerciseKey(`${workoutId}-${exerciseIndex}`);
+    setCreateModalSuggestion(exerciseName);
+    setShowCreateModal(true);
+  };
+
+  const handleExerciseCreated = (newExercise: Exercise) => {
+    if (!pendingExerciseKey) return;
+
+    const [workoutId, exerciseIdx] = pendingExerciseKey.split('-');
+    handleExerciseSelect(workoutId, parseInt(exerciseIdx), newExercise);
+
+    setPendingExerciseKey(null);
+    setCreateModalSuggestion('');
   };
 
   const toggleWorkoutExpansion = (workoutId: string) => {
@@ -318,10 +348,20 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
                                   Link to Exercise
                                 </label>
                                 <Autocomplete
-                                  value={exercise.matchedExercise?.name || exercise.name}
-                                  onChange={() => {}}
+                                  value={
+                                    `${workout.id}-${exerciseIdx}` in searchQueries
+                                      ? searchQueries[`${workout.id}-${exerciseIdx}`]
+                                      : exercise.matchedExercise?.name ?? exercise.name
+                                  }
+                                  onChange={(value) => {
+                                    const key = `${workout.id}-${exerciseIdx}`;
+                                    setSearchQueries(prev => ({ ...prev, [key]: value }));
+                                  }}
                                   onExerciseSelect={(ex) =>
                                     handleExerciseSelect(workout.id, exerciseIdx, ex)
+                                  }
+                                  onCreateNew={(name) =>
+                                    handleCreateExercise(workout.id, exerciseIdx, name)
                                   }
                                   placeholder='Search for exercise...'
                                 />
@@ -390,6 +430,18 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
           </div>
         )}
       </div>
+
+      {/* Create Exercise Modal */}
+      <CreateExerciseModal
+        isOpen={showCreateModal}
+        onClose={() => {
+          setShowCreateModal(false);
+          setPendingExerciseKey(null);
+          setCreateModalSuggestion('');
+        }}
+        onExerciseCreated={handleExerciseCreated}
+        suggestedName={createModalSuggestion}
+      />
     </div>
   );
 }
