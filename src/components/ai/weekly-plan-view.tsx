@@ -16,18 +16,18 @@ interface WeeklyPlanViewProps {
 }
 
 const DEFAULT_PROGRAM_REQUEST = `Schedule
-Program length: 4 Weeks
-Frequency: 4 Days/Week | Duration: 60-90 Mins/Session
+Program length: [X] Weeks
+Frequency: [X] Days/Week | Duration: [X] Mins/Session
 
 Constraints
-Split: Upper-Lower
-Equipment: Barbell, Dumbbell, Cable, Machine, Bench, Pull-up bar
-Injuries/Limitations/Exercises to avoid: None
+Split: [Full Body / Upper-Lower / Push Pull Legs / Other]
+Equipment: [Barbell, Dumbbell, Cable, Machine, Bench, Pull-up bar, Resistance Band, Kettlebell]
+Injuries/Limitations/Exercises to avoid: [e.g., Left shoulder impingement, no heavy overhead]
 
 Performance & Volume
-Goal: Hypertrophy
-Specific Target: Bigger chest and shoulders
-Preferred Style: Powerbuilding`;
+Goal: [Strength / Hypertrophy / Fat Loss / Athletic Performance]
+Specific Target: [e.g., 200kg Deadlift / 10% Body Fat / Bigger Delts]
+Preferred Style: [Powerbuilding / Pure Hypertrophy / Functional]`;
 
 export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
