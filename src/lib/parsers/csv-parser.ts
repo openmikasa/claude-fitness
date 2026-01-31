@@ -1,5 +1,7 @@
 import Papa from 'papaparse';
 import type { CsvRow, ImportPreview } from '@/types/import';
+import { convertWeight } from '@/lib/utils/unit-conversion';
+import type { WeightUnit } from '@/lib/utils/unit-conversion';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_ROWS = 5000;
@@ -152,4 +154,68 @@ export function autoDetectMapping(headers: string[]): {
   if (notesMatch !== -1) mapping.notesColumn = headers[notesMatch];
 
   return mapping;
+}
+
+/**
+ * Detect weight unit from column name
+ * Returns 'kg', 'lb', or null if unit cannot be determined
+ */
+export function detectWeightUnit(columnName: string): WeightUnit | null {
+  const lower = columnName.toLowerCase().trim();
+
+  // Check for explicit unit indicators
+  if (lower.includes('kg') || lower.includes('kilo')) {
+    return 'kg';
+  }
+
+  if (lower.includes('lb') || lower.includes('pound')) {
+    return 'lb';
+  }
+
+  // Default: cannot determine
+  return null;
+}
+
+/**
+ * Convert weight value to kg for storage
+ * Detects unit from cell value or column name, falls back to user preference
+ */
+export function normalizeWeight(
+  rawValue: string,
+  columnName: string,
+  userPreferredUnit: 'metric' | 'imperial' = 'metric'
+): number {
+  // First try to detect unit from the cell value itself (e.g., "60.0kg" or "45lb")
+  const valueUnitMatch = rawValue.match(/(kg|lb|lbs|pound|kilo)/i);
+  if (valueUnitMatch) {
+    const unit = valueUnitMatch[1].toLowerCase();
+    const numericValue = parseFloat(rawValue);
+
+    if (isNaN(numericValue)) {
+      return 0;
+    }
+
+    if (unit === 'kg' || unit === 'kilo') {
+      return numericValue;
+    } else {
+      // lb, lbs, pound
+      return convertWeight(numericValue, 'lb', 'kg');
+    }
+  }
+
+  // If no unit in value, try to detect from column name
+  const detectedUnit = detectWeightUnit(columnName);
+  const numericValue = parseFloat(rawValue);
+
+  if (isNaN(numericValue)) {
+    return 0;
+  }
+
+  if (detectedUnit) {
+    return detectedUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
+  }
+
+  // Fall back to user preference if no unit detected
+  const fromUnit: WeightUnit = userPreferredUnit === 'imperial' ? 'lb' : 'kg';
+  return fromUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
 }

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGenerateNextSession } from '@/lib/hooks/useAI';
+import { displayWeight } from '@/lib/utils/unit-conversion';
+import { useSettings } from '@/lib/hooks/useSettings';
 import type {
   WeightliftingData,
 } from '@/types/workout';
@@ -17,6 +19,7 @@ export function NextSessionCard({ onUseWorkout }: NextSessionCardProps) {
   const router = useRouter();
   const [showRationale, setShowRationale] = useState(false);
   const generateMutation = useGenerateNextSession();
+  const { data: settings } = useSettings();
 
   const handleGenerate = () => {
     generateMutation.mutate();
@@ -39,11 +42,14 @@ export function NextSessionCard({ onUseWorkout }: NextSessionCardProps) {
   };
 
   const formatWorkoutSummary = (data: WeightliftingData) => {
-    return data.exercises.map((ex) => (
-      <div key={ex.name} className='text-sm'>
-        <span className='font-medium'>{ex.name}:</span> {ex.sets.length} sets × {ex.sets[0].reps} reps @ {ex.sets[0].weight}kg
-      </div>
-    ));
+    return data.exercises.map((ex) => {
+      const { value, unit } = displayWeight(ex.sets[0].weight, settings?.units || 'metric');
+      return (
+        <div key={ex.name} className='text-sm'>
+          <span className='font-medium'>{ex.name}:</span> {ex.sets.length} sets × {ex.sets[0].reps} reps @ {value}{unit}
+        </div>
+      );
+    });
   };
 
   return (

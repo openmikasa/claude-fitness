@@ -6,8 +6,10 @@ import { z } from 'zod';
 import { WeightliftingData } from '@/types/workout';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { Exercise } from '@/types/workout';
+import { useSettings } from '@/lib/hooks/useSettings';
+import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conversion';
 
 // Zod validation schema
 const weightliftingSetSchema = z.object({
@@ -35,6 +37,32 @@ interface WeightliftingFormProps {
 }
 
 export default function WeightliftingForm({ onSubmit, initialData }: WeightliftingFormProps) {
+  const { data: settings } = useSettings();
+
+  // Convert initial data from kg to user's preferred unit
+  const convertedInitialData = useMemo(() => {
+    if (!initialData) {
+      return {
+        exercises: [
+          {
+            name: '',
+            sets: [{ weight: 0, reps: 0 }],
+          },
+        ],
+      };
+    }
+
+    return {
+      exercises: initialData.exercises.map(ex => ({
+        ...ex,
+        sets: ex.sets.map(set => ({
+          ...set,
+          weight: kgToInput(set.weight, settings?.units || 'metric'),
+        })),
+      })),
+    };
+  }, [initialData, settings?.units]);
+
   const {
     register,
     control,
@@ -44,14 +72,7 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
     formState: { errors },
   } = useForm<WeightliftingFormData>({
     resolver: zodResolver(weightliftingFormSchema),
-    defaultValues: initialData || {
-      exercises: [
-        {
-          name: '',
-          sets: [{ weight: 0, reps: 0 }],
-        },
-      ],
-    },
+    defaultValues: convertedInitialData,
   });
 
   const { fields: exercises, append: appendExercise, remove: removeExercise } = useFieldArray({
@@ -60,7 +81,18 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
   });
 
   const handleFormSubmit = (data: WeightliftingFormData) => {
-    onSubmit(data);
+    // Convert weights to kg for storage if user prefers imperial
+    const dataToSubmit = {
+      ...data,
+      exercises: data.exercises.map(ex => ({
+        ...ex,
+        sets: ex.sets.map(set => ({
+          ...set,
+          weight: inputToKg(set.weight, settings?.units || 'metric'),
+        })),
+      })),
+    };
+    onSubmit(dataToSubmit);
   };
 
   return (
@@ -78,6 +110,7 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
             canRemoveExercise={exercises.length > 1}
             setValue={setValue}
             watch={watch}
+            weightUnit={getWeightUnitLabel(settings?.units || 'metric')}
           />
         ))}
       </div>
@@ -121,6 +154,7 @@ interface ExerciseFieldProps {
   canRemoveExercise: boolean;
   setValue: any;
   watch: any;
+  weightUnit: string;
 }
 
 function ExerciseField({
@@ -132,6 +166,7 @@ function ExerciseField({
   canRemoveExercise,
   setValue,
   watch,
+  weightUnit,
 }: ExerciseFieldProps) {
   const { fields: sets, append: appendSet, remove: removeSet } = useFieldArray({
     control,
@@ -238,7 +273,7 @@ function ExerciseField({
                   htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.weight`}
                   className="block text-xs font-medium text-gray-600 mb-1"
                 >
-                  Weight (lbs)
+                  Weight ({weightUnit})
                 </label>
                 <input
                   {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {

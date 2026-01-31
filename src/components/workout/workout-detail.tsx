@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import WorkoutForm from './workout-form';
 import { getWorkoutExercises, isWorkoutMigrated } from '@/lib/utils/workout-helpers';
+import { displayWeight } from '@/lib/utils/unit-conversion';
+import { useSettings } from '@/lib/hooks/useSettings';
 import type {
   Workout,
   WeightliftingData
@@ -26,6 +28,7 @@ export default function WorkoutDetail({
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: settings } = useSettings();
 
   const handleDelete = async () => {
     try {
@@ -119,15 +122,18 @@ export default function WorkoutDetail({
 
             {/* Sets */}
             <div className="space-y-2">
-              {exercise.sets.map((set, setIdx) => (
-                <div
-                  key={setIdx}
-                  className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
-                >
-                  <span>Set {setIdx + 1}</span>
-                  <span>{set.weight}kg × {set.reps} reps</span>
-                </div>
-              ))}
+              {exercise.sets.map((set, setIdx) => {
+                const { value, unit } = displayWeight(set.weight, settings?.units || 'metric');
+                return (
+                  <div
+                    key={setIdx}
+                    className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+                  >
+                    <span>Set {setIdx + 1}</span>
+                    <span>{value}{unit} × {set.reps} reps</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 interface PersonalRecord {
   name: string;
-  value: string;
+  weight: number;  // Changed from value: string to weight: number
   date: string;
 }
 
@@ -102,10 +102,10 @@ export async function GET() {
     const weightliftingRecords: PersonalRecord[] = Array.from(weightliftingPRs.entries())
       .map(([name, data]) => ({
         name,
-        value: `${data.weight}kg`,
+        weight: data.weight,  // Return raw weight value
         date: data.date,
       }))
-      .sort((a, b) => parseFloat(b.value) - parseFloat(a.value))
+      .sort((a, b) => b.weight - a.weight)
       .slice(0, 3);
 
     const response: StatsResponse = {

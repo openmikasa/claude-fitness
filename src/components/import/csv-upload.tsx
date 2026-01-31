@@ -13,6 +13,7 @@ export default function CsvUpload({ onParsed }: CsvUploadProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragCounterRef = useRef(0); // Track drag depth for nested elements
 
   const handleFile = async (file: File) => {
     setError(null);
@@ -40,17 +41,33 @@ export default function CsvUpload({ onParsed }: CsvUploadProps) {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(true);
+    e.stopPropagation();
+    dragCounterRef.current++;
+    if (dragCounterRef.current === 1) {
+      setIsDragging(true);
+    }
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
+      setIsDragging(false);
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current = 0;
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
@@ -74,6 +91,7 @@ export default function CsvUpload({ onParsed }: CsvUploadProps) {
     <div className="space-y-4">
       <div
         onClick={handleClick}
+        onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}

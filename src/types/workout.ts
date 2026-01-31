@@ -23,6 +23,7 @@ export interface WorkoutExercise {
 export interface WeightliftingSet {
   weight: number;
   reps: number;
+  unit?: 'kg' | 'lb';  // Optional for backward compatibility - assume kg if not present
 }
 
 export interface WeightliftingExercise {

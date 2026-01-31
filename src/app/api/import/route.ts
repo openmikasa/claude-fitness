@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
 import { createWorkoutInputSchema } from '@/lib/validation/workout-schemas';
+import { normalizeWeight } from '@/lib/parsers/csv-parser';
 import type { CsvRow, CsvMapping, CsvValidationError } from '@/types/import';
 import type { CreateWorkoutInput } from '@/types/workout';
 
@@ -20,7 +21,11 @@ interface ImportResponse {
 }
 
 // Convert CSV row to workout input (weightlifting only)
-function mapRowToWorkout(row: CsvRow, mapping: CsvMapping): CreateWorkoutInput | null {
+function mapRowToWorkout(
+  row: CsvRow,
+  mapping: CsvMapping,
+  userPreferredUnit: 'metric' | 'imperial' = 'metric'
+): CreateWorkoutInput | null {
   // Extract date (required)
   if (!mapping.dateColumn || !row[mapping.dateColumn]) {
     return null;
@@ -45,9 +50,14 @@ function mapRowToWorkout(row: CsvRow, mapping: CsvMapping): CreateWorkoutInput |
 
   // ALWAYS build weightlifting data
   const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Exercise';
-  const weight = mapping.weightColumn ? parseFloat(row[mapping.weightColumn]) : 0;
+  const rawWeightValue = mapping.weightColumn ? row[mapping.weightColumn] : '0';
   const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
   const setsCount = mapping.setsColumn ? parseInt(row[mapping.setsColumn]) : 1;
+
+  // Normalize weight to kg based on cell value, column name, or user preference
+  const weight = mapping.weightColumn
+    ? normalizeWeight(rawWeightValue, mapping.weightColumn, userPreferredUnit)
+    : 0;
 
   if (isNaN(weight) || weight < 0) return null;
   if (isNaN(reps) || reps < 1) return null;
@@ -100,13 +110,23 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = await createRouteHandlerClient();
+
+    // Fetch user's unit preference
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('units')
+      .eq('id', user.id)
+      .single();
+
+    const userPreferredUnit = profileData?.units || 'metric';
+
     const validWorkouts: CreateWorkoutInput[] = [];
     const errors: CsvValidationError[] = [];
 
     // Map and validate each row
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      const workoutInput = mapRowToWorkout(row, mapping);
+      const workoutInput = mapRowToWorkout(row, mapping, userPreferredUnit);
 
       if (!workoutInput) {
         errors.push({

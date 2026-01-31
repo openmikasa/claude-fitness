@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { displayWeight } from '@/lib/utils/unit-conversion';
+import { useSettings } from '@/lib/hooks/useSettings';
 
 interface PersonalRecord {
   name: string;
-  value: string;
+  weight: number;  // Changed from value: string to weight: number
   date: string;
 }
 
@@ -22,6 +24,7 @@ export default function WorkoutStats() {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { data: settings } = useSettings();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -135,26 +138,29 @@ export default function WorkoutStats() {
                 </h3>
               </div>
               <div className="space-y-3">
-                {stats.personalRecords.weightlifting.map((pr, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
-                  >
-                    <div className="flex-grow min-w-0 mr-3">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {pr.name}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500">
-                        {format(new Date(pr.date), 'MMM d, yyyy')}
-                      </p>
+                {stats.personalRecords.weightlifting.map((pr, index) => {
+                  const { value, unit } = displayWeight(pr.weight, settings?.units || 'metric');
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
+                    >
+                      <div className="flex-grow min-w-0 mr-3">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          {pr.name}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                          {format(new Date(pr.date), 'MMM d, yyyy')}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                          {value}{unit}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex-shrink-0">
-                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                        {pr.value}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
