@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { format, addDays, parseISO } from 'date-fns';
+import { useState, useMemo } from 'react';
+import { format, addDays, parseISO, differenceInDays, startOfDay } from 'date-fns';
 import { useGenerateWeeklyPlan, useUpdateProgramStatus } from '@/lib/hooks/useAI';
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
@@ -31,6 +31,7 @@ Preferred Style: [Powerbuilding / Pure Hypertrophy / Functional]`;
 
 export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [currentWeek, setCurrentWeek] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [programRequest, setProgramRequest] = useState(DEFAULT_PROGRAM_REQUEST);
   const generateMutation = useGenerateWeeklyPlan();
@@ -38,6 +39,42 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const { data: settings } = useSettings();
 
   const plan = generateMutation.data || existingPlan;
+
+  // Calculate weeks from plan data
+  const weeks = useMemo(() => {
+    if (!plan || !plan.plan_data) return [];
+
+    const totalDays = plan.plan_data.length;
+    const weeksArray: ProgramDay[][] = [];
+
+    for (let i = 0; i < totalDays; i += 7) {
+      weeksArray.push(plan.plan_data.slice(i, i + 7));
+    }
+
+    return weeksArray;
+  }, [plan]);
+
+  // Calculate which day we're on (if plan is active)
+  const todayIndex = useMemo(() => {
+    if (!plan) return -1;
+
+    const today = startOfDay(new Date());
+    const planStart = startOfDay(parseISO(plan.valid_from));
+    const daysDiff = differenceInDays(today, planStart);
+
+    // Return -1 if before plan starts or after plan ends
+    if (daysDiff < 0 || daysDiff >= plan.plan_data.length) return -1;
+
+    return daysDiff;
+  }, [plan]);
+
+  // Set current week to today's week when plan loads
+  useMemo(() => {
+    if (todayIndex >= 0) {
+      const weekIndex = Math.floor(todayIndex / 7);
+      setCurrentWeek(weekIndex);
+    }
+  }, [todayIndex]);
 
   const handleGenerate = () => {
     generateMutation.mutate({ customPrompt: programRequest });
@@ -51,11 +88,6 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   };
 
   const getWorkoutEmoji = () => '💪'; // Always weightlifting
-
-  const formatDayWorkout = (day: ProgramDay) => {
-    const weightliftingData = day.data;
-    return 'Weightlifting (' + weightliftingData.exercises.length + ' exercises)';
-  };
 
   const formatDayDetails = (day: ProgramDay) => {
     const weightliftingData = day.data;
@@ -73,7 +105,7 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
     <div className='bg-white rounded-lg shadow-md p-6 border-2 border-purple-100'>
       <div className='flex items-center gap-2 mb-4'>
         <span className='text-2xl'>📅</span>
-        <h2 className='text-xl font-bold text-gray-900'>Your 7-Day Training Plan</h2>
+        <h2 className='text-xl font-bold text-gray-900'>Training Program</h2>
       </div>
 
       {generateMutation.isPending ? (
@@ -120,18 +152,60 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
             {format(parseISO(plan.valid_from), 'MMM d')} - {format(parseISO(plan.valid_until), 'MMM d, yyyy')}
           </div>
 
+          {/* Week Navigation */}
+          {weeks.length > 1 && (
+            <div className='flex items-center justify-between mb-4 bg-gray-50 rounded-lg p-3'>
+              <button
+                onClick={() => setCurrentWeek(Math.max(0, currentWeek - 1))}
+                disabled={currentWeek === 0}
+                className='px-3 py-1.5 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+              >
+                ← Previous Week
+              </button>
+              <div className='text-center'>
+                <div className='text-sm font-semibold text-gray-900'>
+                  Week {currentWeek + 1} of {weeks.length}
+                </div>
+                <div className='text-xs text-gray-600'>
+                  {format(addDays(parseISO(plan.valid_from), currentWeek * 7), 'MMM d')} - {format(addDays(parseISO(plan.valid_from), Math.min(currentWeek * 7 + 6, plan.plan_data.length - 1)), 'MMM d')}
+                </div>
+              </div>
+              <button
+                onClick={() => setCurrentWeek(Math.min(weeks.length - 1, currentWeek + 1))}
+                disabled={currentWeek === weeks.length - 1}
+                className='px-3 py-1.5 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+              >
+                Next Week →
+              </button>
+            </div>
+          )}
+
+          {/* Current Week Days Grid */}
           <div className='grid grid-cols-7 gap-2 mb-4'>
-            {plan.plan_data.map((day, index) => {
-              const dayDate = addDays(parseISO(plan.valid_from), index);
+            {weeks[currentWeek]?.map((day, weekDayIndex) => {
+              const absoluteDayIndex = currentWeek * 7 + weekDayIndex;
+              const dayDate = addDays(parseISO(plan.valid_from), absoluteDayIndex);
               const isSelected = selectedDay === day.day;
-              const btnClass = isSelected ? 'border-purple-600 bg-purple-50' : 'border-gray-200 hover:border-purple-300';
+              const isToday = todayIndex === absoluteDayIndex;
+
+              let btnClass = 'border-gray-200 hover:border-purple-300';
+              if (isSelected) {
+                btnClass = 'border-purple-600 bg-purple-50';
+              } else if (isToday) {
+                btnClass = 'border-green-500 bg-green-50';
+              }
 
               return (
                 <button
                   key={day.day}
                   onClick={() => setSelectedDay(isSelected ? null : day.day)}
-                  className={'p-3 rounded-lg border-2 transition-all ' + btnClass}
+                  className={'p-3 rounded-lg border-2 transition-all relative ' + btnClass}
                 >
+                  {isToday && (
+                    <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
+                      TODAY
+                    </div>
+                  )}
                   <div className='text-xs font-medium text-gray-600 mb-1'>{format(dayDate, 'EEE')}</div>
                   <div className='text-2xl mb-1'>{getWorkoutEmoji()}</div>
                   <div className='text-xs text-gray-700 truncate'>Strength</div>
@@ -188,13 +262,13 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
       ) : (
         <div className='text-center py-8'>
           <p className='text-gray-600 mb-4'>
-            Get a complete 7-day training plan tailored to your goals, equipment, and preferences.
+            Get a personalized training program tailored to your goals, equipment, and preferences.
           </p>
           <button
             onClick={() => setShowForm(true)}
             className='bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors'
           >
-            Create Training Plan
+            Create Training Program
           </button>
         </div>
       )}
