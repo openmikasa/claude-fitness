@@ -15,37 +15,19 @@ interface WeeklyPlanViewProps {
   existingPlan?: Program;
 }
 
-const DEFAULT_PROGRAM_REQUEST = `# Training Program Request
+const DEFAULT_PROGRAM_REQUEST = `Schedule
+Program length: 4 Weeks
+Frequency: 4 Days/Week | Duration: 60-90 Mins/Session
 
-## Equipment Available
-- Barbell
-- Dumbbells
-- Cable machine
-- Bench
-- Pull-up bar
+Constraints
+Split: Upper-Lower
+Equipment: Barbell, Dumbbell, Cable, Machine, Bench, Pull-up bar
+Injuries/Limitations/Exercises to avoid: None
 
-## Training Focus
-I want to focus on:
-- Building overall strength
-- Improving my squat and bench press
-- Example: "I want to increase my deadlift 1RM" or "I want to build bigger shoulders"
-
-## Training Split
-I prefer: Upper/Lower split
-- Options: Full body, Upper/Lower, Push/Pull/Legs, Bro split, or custom
-
-## Training Frequency
-Days per week: 4
-
-## Additional Details
-- Experience level: Intermediate (2+ years training)
-- Any injuries or limitations: None
-- Preferred rep ranges: 6-12 reps for hypertrophy
-- Session duration preference: 60-90 minutes
-- Any exercises to avoid: None
-
-## Notes
-Add any other relevant information for your coach here.`;
+Performance & Volume
+Goal: Hypertrophy
+Specific Target: Bigger chest and shoulders
+Preferred Style: Powerbuilding`;
 
 export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
@@ -104,15 +86,15 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
             <p className='text-sm text-blue-900 font-medium mb-2'>💡 Customize Your Program</p>
             <p className='text-xs text-blue-700'>
-              Edit the template below to describe exactly what you want. Include your equipment, goals,
-              training split preference, and any other details to help the AI create your perfect program.
+              Fill out the template below with your preferences. Update the schedule, constraints,
+              and performance goals to create a personalized training plan.
             </p>
           </div>
 
           <textarea
             value={programRequest}
             onChange={(e) => setProgramRequest(e.target.value)}
-            rows={20}
+            rows={12}
             className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none font-mono text-sm text-gray-900'
             placeholder='Describe your training program requirements...'
           />
