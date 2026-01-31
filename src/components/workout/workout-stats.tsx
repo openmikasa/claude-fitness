@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
@@ -24,6 +24,8 @@ export default function WorkoutStats() {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchFilter, setSearchFilter] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'weight' | 'date'>('name');
   const { data: settings } = useSettings();
 
   useEffect(() => {
@@ -51,6 +53,36 @@ export default function WorkoutStats() {
 
     fetchStats();
   }, []);
+
+  // Filter and sort PRs
+  const filteredAndSortedPRs = useMemo(() => {
+    if (!stats?.personalRecords.weightlifting) return [];
+
+    let filtered = stats.personalRecords.weightlifting;
+
+    // Apply search filter
+    if (searchFilter.trim()) {
+      filtered = filtered.filter((pr) =>
+        pr.name.toLowerCase().includes(searchFilter.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'weight':
+          return b.weight - a.weight; // Descending (highest first)
+        case 'date':
+          return new Date(b.date).getTime() - new Date(a.date).getTime(); // Most recent first
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [stats, searchFilter, sortBy]);
 
   if (loading) {
     return (
@@ -138,31 +170,88 @@ export default function WorkoutStats() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Weightlifting PRs
                 </h3>
+                <span className="ml-auto text-sm text-gray-500 dark:text-gray-400">
+                  {filteredAndSortedPRs.length} {filteredAndSortedPRs.length === 1 ? 'record' : 'records'}
+                </span>
               </div>
-              <div className="space-y-3">
-                {stats.personalRecords.weightlifting.map((pr, index) => {
-                  const { value, unit } = displayWeight(pr.weight, settings?.units || 'metric');
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
-                    >
-                      <div className="flex-grow min-w-0 mr-3">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                          {pr.name}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">
-                          {format(new Date(pr.date), 'MMM d, yyyy')}
-                        </p>
+
+              {/* Filters */}
+              <div className="space-y-3 mb-4">
+                {/* Search */}
+                <input
+                  type="text"
+                  placeholder="Search exercises..."
+                  value={searchFilter}
+                  onChange={(e) => setSearchFilter(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm font-medium"
+                />
+
+                {/* Sort Options */}
+                <div className="flex gap-2 flex-wrap">
+                  <button
+                    onClick={() => setSortBy('name')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      sortBy === 'name'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    Name A-Z
+                  </button>
+                  <button
+                    onClick={() => setSortBy('weight')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      sortBy === 'weight'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    Highest Weight
+                  </button>
+                  <button
+                    onClick={() => setSortBy('date')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      sortBy === 'date'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    Most Recent
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable PR List */}
+              <div className="max-h-96 overflow-y-auto pr-2 space-y-3">
+                {filteredAndSortedPRs.length === 0 ? (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
+                    {searchFilter ? 'No PRs match your search' : 'No personal records yet'}
+                  </p>
+                ) : (
+                  filteredAndSortedPRs.map((pr, index) => {
+                    const { value, unit } = displayWeight(pr.weight, settings?.units || 'metric');
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
+                      >
+                        <div className="flex-grow min-w-0 mr-3">
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                            {pr.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500">
+                            {format(new Date(pr.date), 'MMM d, yyyy')}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                            {value}{unit}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex-shrink-0">
-                        <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                          {value}{unit}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           )}
