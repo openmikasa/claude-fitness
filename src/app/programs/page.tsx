@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { usePrograms, useDeleteProgram } from '@/lib/hooks/useAI';
@@ -50,7 +51,9 @@ export default function ProgramsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">AI Programs</h1>
+        <Link href="/" className="hover:opacity-80 transition-opacity inline-block mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">AI Programs</h1>
+        </Link>
 
         <div className="space-y-6 mb-8">
           <NextSessionCard />

@@ -30,9 +30,11 @@ export default function WorkoutsPage() {
       <header className="bg-white dark:bg-gray-800 shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Workout History
-            </h1>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Workout History
+              </h1>
+            </Link>
             <Link
               href="/workouts/log"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm md:text-base"

@@ -93,7 +93,9 @@ export default function ExportPage() {
       <header className="bg-white shadow">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Export Workouts</h1>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <h1 className="text-2xl font-bold text-gray-900">Export Workouts</h1>
+            </Link>
             <Link href="/workouts" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               Back to Workouts
             </Link>
