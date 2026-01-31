@@ -30,10 +30,11 @@ async function generateNextSession(): Promise<Program> {
   return response.json();
 }
 
-async function generateWeeklyPlan(): Promise<Program> {
+async function generateWeeklyPlan(params?: { customPrompt?: string }): Promise<Program> {
   const response = await fetch('/api/ai/weekly-plan', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params || {}),
     credentials: 'include',
   });
 
@@ -129,13 +130,13 @@ export function useGenerateNextSession(): UseMutationResult<
 export function useGenerateWeeklyPlan(): UseMutationResult<
   Program,
   Error,
-  void,
+  { customPrompt?: string } | undefined,
   unknown
 > {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: generateWeeklyPlan,
+    mutationFn: (params) => generateWeeklyPlan(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: aiKeys.programs() });
     },

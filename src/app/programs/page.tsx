@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { usePrograms, useDeleteProgram } from '@/lib/hooks/useAI';
-import { NextSessionCard } from '@/components/ai/next-session-card';
 import { WeeklyPlanView } from '@/components/ai/weekly-plan-view';
 
 export default function ProgramsPage() {
@@ -56,7 +55,6 @@ export default function ProgramsPage() {
         </Link>
 
         <div className="space-y-6 mb-8">
-          <NextSessionCard />
           <WeeklyPlanView existingPlan={latestWeeklyPlan} />
         </div>
 

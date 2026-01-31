@@ -15,8 +15,42 @@ interface WeeklyPlanViewProps {
   existingPlan?: Program;
 }
 
+const DEFAULT_PROGRAM_REQUEST = `# Training Program Request
+
+## Equipment Available
+- Barbell
+- Dumbbells
+- Cable machine
+- Bench
+- Pull-up bar
+
+## Training Focus
+I want to focus on:
+- Building overall strength
+- Improving my squat and bench press
+- Example: "I want to increase my deadlift 1RM" or "I want to build bigger shoulders"
+
+## Training Split
+I prefer: Upper/Lower split
+- Options: Full body, Upper/Lower, Push/Pull/Legs, Bro split, or custom
+
+## Training Frequency
+Days per week: 4
+
+## Additional Details
+- Experience level: Intermediate (2+ years training)
+- Any injuries or limitations: None
+- Preferred rep ranges: 6-12 reps for hypertrophy
+- Session duration preference: 60-90 minutes
+- Any exercises to avoid: None
+
+## Notes
+Add any other relevant information for your coach here.`;
+
 export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [programRequest, setProgramRequest] = useState(DEFAULT_PROGRAM_REQUEST);
   const generateMutation = useGenerateWeeklyPlan();
   const updateStatusMutation = useUpdateProgramStatus();
   const { data: settings } = useSettings();
@@ -24,7 +58,8 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const plan = generateMutation.data || existingPlan;
 
   const handleGenerate = () => {
-    generateMutation.mutate();
+    generateMutation.mutate({ customPrompt: programRequest });
+    setShowForm(false);
   };
 
   const handleStartPlan = () => {
@@ -63,6 +98,39 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
         <div className='py-8 text-center'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4'></div>
           <p className='text-gray-600'>Creating your personalized plan...</p>
+        </div>
+      ) : showForm ? (
+        <div className='space-y-4'>
+          <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
+            <p className='text-sm text-blue-900 font-medium mb-2'>💡 Customize Your Program</p>
+            <p className='text-xs text-blue-700'>
+              Edit the template below to describe exactly what you want. Include your equipment, goals,
+              training split preference, and any other details to help the AI create your perfect program.
+            </p>
+          </div>
+
+          <textarea
+            value={programRequest}
+            onChange={(e) => setProgramRequest(e.target.value)}
+            rows={20}
+            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none font-mono text-sm text-gray-900'
+            placeholder='Describe your training program requirements...'
+          />
+
+          <div className='flex gap-3'>
+            <button
+              onClick={() => setShowForm(false)}
+              className='flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors'
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleGenerate}
+              className='flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors'
+            >
+              Generate Plan
+            </button>
+          </div>
         </div>
       ) : plan ? (
         <div className='space-y-4'>
@@ -128,18 +196,23 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
               </div>
             )}
             <button
-              onClick={handleGenerate}
+              onClick={() => setShowForm(true)}
               className='flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors'
             >
-              Regenerate Plan
+              Generate New Plan
             </button>
           </div>
         </div>
       ) : (
         <div className='text-center py-8'>
-          <p className='text-gray-600 mb-4'>Get a complete 7-day training plan tailored to your fitness level.</p>
-          <button onClick={handleGenerate} className='bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors'>
-            Generate Weekly Plan
+          <p className='text-gray-600 mb-4'>
+            Get a complete 7-day training plan tailored to your goals, equipment, and preferences.
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className='bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors'
+          >
+            Create Training Plan
           </button>
         </div>
       )}

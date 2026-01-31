@@ -49,12 +49,16 @@ Respond with ONLY valid JSON, no markdown formatting or code blocks:
   "valid_until": "2026-02-02"
 }`;
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // Parse request body for custom prompt
+    const body = await request.json().catch(() => ({}));
+    const customPrompt = body.customPrompt || '';
 
     const rateLimit = await checkRateLimit(user.id);
     if (!rateLimit.isAllowed) {
@@ -103,7 +107,19 @@ export async function POST() {
     const validUntil = addDays(today, 6).toISOString().split('T')[0];
 
     const historyText = formatWorkoutHistory(workouts as Workout[]);
-    const prompt = `Here is the user's recent workout history (last 30 days):\n\n${historyText}\n\nGenerate a complete 7-day training plan starting from ${validFrom} and ending on ${validUntil}. Include exactly 7 days.`;
+
+    // Build the prompt with custom user requirements if provided
+    let prompt = `Here is the user's recent workout history (last 30 days):\n\n${historyText}\n\n`;
+
+    if (customPrompt.trim()) {
+      prompt += `USER'S CUSTOM REQUIREMENTS:\n${customPrompt}\n\n`;
+    }
+
+    prompt += `Generate a complete 7-day training plan starting from ${validFrom} and ending on ${validUntil}. Include exactly 7 days.`;
+
+    if (customPrompt.trim()) {
+      prompt += ` Make sure to follow all the user's requirements listed above including their equipment preferences, training focus, preferred split, and training frequency.`;
+    }
 
     let aiResponse: string;
     try {
