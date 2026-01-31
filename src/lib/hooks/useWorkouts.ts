@@ -54,7 +54,9 @@ async function fetchWorkouts(
   if (filters.page) params.append('page', filters.page.toString());
   if (filters.pageSize) params.append('pageSize', filters.pageSize.toString());
 
-  const response = await fetch(`/api/workouts?${params.toString()}`);
+  const response = await fetch(`/api/workouts?${params.toString()}`, {
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -65,7 +67,9 @@ async function fetchWorkouts(
 }
 
 async function fetchWorkout(id: string): Promise<Workout> {
-  const response = await fetch(`/api/workouts/${id}`);
+  const response = await fetch(`/api/workouts/${id}`, {
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -104,6 +108,7 @@ async function createWorkout(input: CreateWorkoutInput): Promise<Workout> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -138,6 +143,7 @@ async function updateWorkout(input: UpdateWorkoutInput): Promise<Workout> {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updateData),
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -161,6 +167,7 @@ async function deleteWorkout(id: string): Promise<void> {
 
   const response = await fetch(`/api/workouts/${id}`, {
     method: 'DELETE',
+    credentials: 'include',
   });
 
   if (!response.ok) {

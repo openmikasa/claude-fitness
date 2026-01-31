@@ -19,6 +19,7 @@ async function generateNextSession(): Promise<Program> {
   const response = await fetch('/api/ai/next-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -33,6 +34,7 @@ async function generateWeeklyPlan(): Promise<Program> {
   const response = await fetch('/api/ai/weekly-plan', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -50,7 +52,9 @@ async function fetchPrograms(
   if (filters.status) params.append('status', filters.status);
   if (filters.program_type) params.append('program_type', filters.program_type);
 
-  const response = await fetch(`/api/programs?${params.toString()}`);
+  const response = await fetch(`/api/programs?${params.toString()}`, {
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -61,7 +65,9 @@ async function fetchPrograms(
 }
 
 async function fetchProgram(id: string): Promise<Program> {
-  const response = await fetch(`/api/programs/${id}`);
+  const response = await fetch(`/api/programs/${id}`, {
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -80,6 +86,7 @@ async function updateProgramStatus(input: {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -93,6 +100,7 @@ async function updateProgramStatus(input: {
 async function deleteProgram(id: string): Promise<void> {
   const response = await fetch(`/api/programs/${id}`, {
     method: 'DELETE',
+    credentials: 'include',
   });
 
   if (!response.ok) {

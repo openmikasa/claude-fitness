@@ -12,7 +12,9 @@ export interface Settings {
 }
 
 async function fetchSettings(): Promise<Settings> {
-  const response = await fetch('/api/settings');
+  const response = await fetch('/api/settings', {
+    credentials: 'include',
+  });
   if (!response.ok) throw new Error('Failed to fetch settings');
   return response.json();
 }
@@ -39,6 +41,7 @@ async function updateSettings(settings: Partial<Settings>): Promise<Settings> {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(settings),
+    credentials: 'include',
   });
 
   if (!response.ok) throw new Error('Failed to update settings');

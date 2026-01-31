@@ -25,7 +25,9 @@ export default function Home() {
 
   const fetchUnmigratedCount = async () => {
     try {
-      const response = await fetch('/api/workouts/unmigrated-count');
+      const response = await fetch('/api/workouts/unmigrated-count', {
+        credentials: 'include',
+      });
       if (response.ok) {
         const data = await response.json();
         setUnmigratedCount(data.count || 0);

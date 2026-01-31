@@ -40,7 +40,9 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
   const fetchUnmigratedWorkouts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/workouts/unmigrated-count');
+      const response = await fetch('/api/workouts/unmigrated-count', {
+        credentials: 'include',
+      });
       const data = await response.json();
       setUnmigratedWorkouts(data.workouts || []);
     } catch (error) {
@@ -53,7 +55,9 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
   const fetchWorkoutDetails = async (workoutId: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/workouts/${workoutId}`);
+      const response = await fetch(`/api/workouts/${workoutId}`, {
+        credentials: 'include',
+      });
       const workout = await response.json();
       setCurrentWorkout(workout);
 
@@ -110,6 +114,7 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
           workout_id: currentWorkout.id,
           exercises: exerciseForms,
         }),
+        credentials: 'include',
       });
 
       if (!response.ok) {

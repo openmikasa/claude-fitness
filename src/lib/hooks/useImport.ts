@@ -22,6 +22,7 @@ async function importWorkouts(input: ImportInput): Promise<ImportResult> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
+    credentials: 'include',
   });
 
   if (!response.ok) {

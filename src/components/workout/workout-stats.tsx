@@ -32,7 +32,9 @@ export default function WorkoutStats() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch('/api/workouts/stats');
+        const response = await fetch('/api/workouts/stats', {
+          credentials: 'include',
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch statistics');
