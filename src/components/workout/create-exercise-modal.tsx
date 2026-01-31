@@ -18,7 +18,8 @@ export function CreateExerciseModal({
 }: CreateExerciseModalProps) {
   const [name, setName] = useState(suggestedName);
   const [category, setCategory] = useState<'strength' | 'cardio'>('strength');
-  const [muscleGroups, setMuscleGroups] = useState<string[]>([]);
+  const [primaryMuscles, setPrimaryMuscles] = useState<string[]>([]);
+  const [secondaryMuscles, setSecondaryMuscles] = useState<string[]>([]);
   const [equipment, setEquipment] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -37,6 +38,14 @@ export function CreateExerciseModal({
     'biceps',
     'triceps',
     'forearms',
+    'trapezius',
+    'rhomboids',
+    'rear_deltoids',
+    'erector_spinae',
+    'upper_chest',
+    'lower_chest',
+    'hip_flexors',
+    'cardio',
   ];
 
   const equipmentOptions = [
@@ -58,8 +67,8 @@ export function CreateExerciseModal({
       return;
     }
 
-    if (muscleGroups.length === 0) {
-      setError('Please select at least one muscle group');
+    if (primaryMuscles.length === 0) {
+      setError('Please select at least one primary muscle group');
       return;
     }
 
@@ -77,7 +86,8 @@ export function CreateExerciseModal({
         body: JSON.stringify({
           name: name.trim(),
           category,
-          muscle_groups: muscleGroups,
+          primary_muscles: primaryMuscles,
+          secondary_muscles: secondaryMuscles,
           equipment: equipment,
         }),
         credentials: 'include',
@@ -101,7 +111,8 @@ export function CreateExerciseModal({
       // Reset form
       setName('');
       setCategory('strength');
-      setMuscleGroups([]);
+      setPrimaryMuscles([]);
+      setSecondaryMuscles([]);
       setEquipment([]);
       onClose();
     } catch (err) {
@@ -190,14 +201,33 @@ export function CreateExerciseModal({
             </div>
           </div>
 
-          {/* Muscle Groups */}
-          <MultiSelect
-            label='Muscle Groups *'
-            options={muscleGroupOptions}
-            selected={muscleGroups}
-            onChange={setMuscleGroups}
-            placeholder='Select muscle groups...'
-          />
+          {/* Primary Muscle Groups */}
+          <div>
+            <MultiSelect
+              label='Primary Muscle Groups *'
+              options={muscleGroupOptions}
+              selected={primaryMuscles}
+              onChange={setPrimaryMuscles}
+              placeholder='Select primary movers (1-5)...'
+            />
+            <p className='text-xs text-gray-500 mt-1'>
+              Main muscles worked by this exercise (e.g., chest for bench press)
+            </p>
+          </div>
+
+          {/* Secondary Muscle Groups */}
+          <div>
+            <MultiSelect
+              label='Secondary Muscle Groups'
+              options={muscleGroupOptions}
+              selected={secondaryMuscles}
+              onChange={setSecondaryMuscles}
+              placeholder='Select stabilizers (optional)...'
+            />
+            <p className='text-xs text-gray-500 mt-1'>
+              Supporting muscles and stabilizers (e.g., triceps, shoulders for bench press)
+            </p>
+          </div>
 
           {/* Equipment */}
           <MultiSelect

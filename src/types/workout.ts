@@ -3,8 +3,11 @@ export interface Exercise {
   id: string;
   name: string;
   category?: string;
-  muscle_groups: string[];
+  muscle_groups: string[]; // DEPRECATED - kept for backward compatibility
+  primary_muscles?: string[]; // NEW - primary movers
+  secondary_muscles?: string[]; // NEW - stabilizers/synergists
   equipment?: string[];
+  user_id?: string | null; // NULL for global exercises, user UUID for custom
   created_at: string;
 }
 

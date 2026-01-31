@@ -86,7 +86,8 @@ export function BulkMigrationModal({ isOpen, onClose, onComplete }: BulkMigratio
             matchedExercise: exercise,
             confidence: 1.0,
             equipment: exercise.equipment || [],
-            muscle_groups: exercise.muscle_groups || [],
+            // Backward compatibility: use primary_muscles if available, fallback to muscle_groups
+            muscle_groups: exercise.primary_muscles || exercise.muscle_groups || [],
           };
         }),
       };

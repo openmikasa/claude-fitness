@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { CreateExerciseModal } from '@/components/workout/create-exercise-modal';
 import type { Workout, WeightliftingData, Exercise } from '@/types/workout';
 
 interface WorkoutBackfillModalProps {
@@ -24,6 +25,9 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
     muscle_groups: string[];
     sets: any[];
   }[]>([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createModalSuggestion, setCreateModalSuggestion] = useState('');
+  const [pendingExerciseIndex, setPendingExerciseIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -89,7 +93,8 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
               ...form,
               exercise_id: exercise.id,
               equipment: exercise.equipment || [],
-              muscle_groups: exercise.muscle_groups || [],
+              // Backward compatibility: use primary_muscles if available, fallback to muscle_groups
+              muscle_groups: exercise.primary_muscles || exercise.muscle_groups || [],
             }
           : form
       )
@@ -100,6 +105,19 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
     setExerciseForms((forms) =>
       forms.map((form, i) => (i === index ? { ...form, [field]: value } : form))
     );
+  };
+
+  const handleCreateExercise = (index: number, exerciseName: string) => {
+    setPendingExerciseIndex(index);
+    setCreateModalSuggestion(exerciseName);
+    setShowCreateModal(true);
+  };
+
+  const handleExerciseCreated = (newExercise: Exercise) => {
+    if (pendingExerciseIndex === null) return;
+    handleExerciseSelect(pendingExerciseIndex, newExercise);
+    setPendingExerciseIndex(null);
+    setCreateModalSuggestion('');
   };
 
   const handleSaveAndNext = async () => {
@@ -241,6 +259,7 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
                           value={form.name}
                           onChange={(value) => updateExerciseForm(index, 'name', value)}
                           onExerciseSelect={(exercise) => handleExerciseSelect(index, exercise)}
+                          onCreateNew={(name) => handleCreateExercise(index, name)}
                           placeholder='Search for exercise...'
                         />
                         {form.exercise_id && (
@@ -308,6 +327,17 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
           </div>
         </div>
       </div>
+
+      <CreateExerciseModal
+        isOpen={showCreateModal}
+        onClose={() => {
+          setShowCreateModal(false);
+          setPendingExerciseIndex(null);
+          setCreateModalSuggestion('');
+        }}
+        onExerciseCreated={handleExerciseCreated}
+        suggestedName={createModalSuggestion}
+      />
     </div>
   );
 }
