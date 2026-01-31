@@ -9,6 +9,7 @@ interface PersonalRecord {
   name: string;
   equipment: string; // NEW: Track equipment type
   weight: number;  // Changed from value: string to weight: number
+  reps: number; // NEW: Track reps for this weight
   date: string;
 }
 
@@ -77,7 +78,7 @@ export async function GET() {
 
     // Track personal records for weightlifting exercises
     // Key format: "Exercise Name | Equipment" (e.g., "Bench Press | Barbell")
-    const weightliftingPRs = new Map<string, { weight: number; date: string; name: string; equipment: string }>();
+    const weightliftingPRs = new Map<string, { weight: number; reps: number; date: string; name: string; equipment: string }>();
 
     (workouts as Workout[]).forEach((workout) => {
       const workoutDate = new Date(workout.workout_date);
@@ -105,6 +106,7 @@ export async function GET() {
             if (!existing || set.weight > existing.weight) {
               weightliftingPRs.set(key, {
                 weight: set.weight,
+                reps: set.reps,
                 date: workout.workout_date,
                 name: exerciseName,
                 equipment: equipment,
@@ -123,6 +125,7 @@ export async function GET() {
             if (!existing || set.weight > existing.weight) {
               weightliftingPRs.set(key, {
                 weight: set.weight,
+                reps: set.reps,
                 date: workout.workout_date,
                 name: exercise.name,
                 equipment: 'Unknown',
@@ -139,6 +142,7 @@ export async function GET() {
         name: data.name,
         equipment: data.equipment,
         weight: data.weight,
+        reps: data.reps,
         date: data.date,
       }))
       .sort((a, b) => b.weight - a.weight); // Sort by weight, no limit

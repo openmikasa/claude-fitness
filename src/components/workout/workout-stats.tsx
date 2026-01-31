@@ -9,6 +9,7 @@ interface PersonalRecord {
   name: string;
   equipment: string; // NEW: Equipment type
   weight: number;  // Changed from value: string to weight: number
+  reps: number; // NEW: Number of reps for this max
   date: string;
 }
 
@@ -244,10 +245,13 @@ export default function WorkoutStats() {
                             {pr.equipment} • {format(new Date(pr.date), 'MMM d, yyyy')}
                           </p>
                         </div>
-                        <div className="flex-shrink-0">
-                          <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                        <div className="flex-shrink-0 text-right">
+                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                             {value}{unit}
-                          </span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-500">
+                            {pr.reps} {pr.reps === 1 ? 'rep' : 'reps'}
+                          </div>
                         </div>
                       </div>
                     );
