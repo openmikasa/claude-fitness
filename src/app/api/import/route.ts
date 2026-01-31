@@ -20,12 +20,20 @@ interface ImportResponse {
   batchId: string;
 }
 
-// Convert CSV row to workout input (weightlifting only)
-function mapRowToWorkout(
+// Convert CSV row to a single set
+interface ParsedSet {
+  date: string;
+  exerciseName: string;
+  weight: number;
+  reps: number;
+  notes?: string;
+}
+
+function parseRowToSet(
   row: CsvRow,
   mapping: CsvMapping,
   userPreferredUnit: 'metric' | 'imperial' = 'metric'
-): CreateWorkoutInput | null {
+): ParsedSet | null {
   // Extract date (required)
   if (!mapping.dateColumn || !row[mapping.dateColumn]) {
     return null;
@@ -45,39 +53,77 @@ function mapRowToWorkout(
     return null;
   }
 
-  // Extract notes
-  const notes = mapping.notesColumn ? row[mapping.notesColumn] : undefined;
-
-  // ALWAYS build weightlifting data
+  // Extract exercise name
   const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Exercise';
-  const rawWeightValue = mapping.weightColumn ? row[mapping.weightColumn] : '0';
-  const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
-  const setsCount = mapping.setsColumn ? parseInt(row[mapping.setsColumn]) : 1;
 
-  // Normalize weight to kg based on cell value, column name, or user preference
+  // Extract weight
+  const rawWeightValue = mapping.weightColumn ? row[mapping.weightColumn] : '0';
   const weight = mapping.weightColumn
     ? normalizeWeight(rawWeightValue, mapping.weightColumn, userPreferredUnit)
     : 0;
 
+  // Extract reps
+  const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
+
+  // Extract notes
+  const notes = mapping.notesColumn ? row[mapping.notesColumn] : undefined;
+
   if (isNaN(weight) || weight < 0) return null;
   if (isNaN(reps) || reps < 1) return null;
-  if (isNaN(setsCount) || setsCount < 1) return null;
-
-  // Build sets array
-  const sets = Array.from({ length: setsCount }, () => ({ weight, reps }));
 
   return {
-    workout_date: workoutDate,
-    data: {
-      exercises: [
-        {
-          name: exerciseName || 'Exercise',
-          sets,
-        },
-      ],
-    },
+    date: workoutDate,
+    exerciseName: exerciseName || 'Exercise',
+    weight,
+    reps,
     notes,
   };
+}
+
+// Group sets by date and exercise to create workouts
+function groupSetsIntoWorkouts(parsedSets: ParsedSet[]): CreateWorkoutInput[] {
+  // Group by date
+  const byDate = new Map<string, ParsedSet[]>();
+
+  for (const set of parsedSets) {
+    const existing = byDate.get(set.date) || [];
+    existing.push(set);
+    byDate.set(set.date, existing);
+  }
+
+  // Convert each date group into a workout
+  const workouts: CreateWorkoutInput[] = [];
+
+  for (const [date, sets] of Array.from(byDate.entries())) {
+    // Group by exercise name
+    const byExercise = new Map<string, Array<{ weight: number; reps: number }>>();
+    let workoutNotes: string[] = [];
+
+    for (const set of sets) {
+      const existing = byExercise.get(set.exerciseName) || [];
+      existing.push({ weight: set.weight, reps: set.reps });
+      byExercise.set(set.exerciseName, existing);
+
+      // Collect notes (deduplicate)
+      if (set.notes && !workoutNotes.includes(set.notes)) {
+        workoutNotes.push(set.notes);
+      }
+    }
+
+    // Build exercises array
+    const exercises = Array.from(byExercise.entries()).map(([name, sets]) => ({
+      name,
+      sets,
+    }));
+
+    workouts.push({
+      workout_date: date,
+      data: { exercises },
+      notes: workoutNotes.length > 0 ? workoutNotes.join('; ') : undefined,
+    });
+  }
+
+  return workouts;
 }
 
 export async function POST(request: NextRequest) {
@@ -120,15 +166,15 @@ export async function POST(request: NextRequest) {
 
     const userPreferredUnit = profileData?.units || 'metric';
 
-    const validWorkouts: CreateWorkoutInput[] = [];
+    const parsedSets: ParsedSet[] = [];
     const errors: CsvValidationError[] = [];
 
-    // Map and validate each row
+    // Parse each row into sets (each row may represent multiple identical sets)
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      const workoutInput = mapRowToWorkout(row, mapping, userPreferredUnit);
+      const parsedSet = parseRowToSet(row, mapping, userPreferredUnit);
 
-      if (!workoutInput) {
+      if (!parsedSet) {
         errors.push({
           row: i + 1,
           field: 'date',
@@ -137,8 +183,23 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      // Validate with Zod schema
-      const validation = createWorkoutInputSchema.safeParse(workoutInput);
+      // If the row specifies sets > 1, duplicate the set
+      const setsCount = mapping.setsColumn ? parseInt(row[mapping.setsColumn]) || 1 : 1;
+      for (let j = 0; j < setsCount; j++) {
+        parsedSets.push(parsedSet);
+      }
+    }
+
+    // Group sets into workouts by date and exercise
+    const workouts = groupSetsIntoWorkouts(parsedSets);
+
+    // Validate each workout with Zod schema
+    const validWorkouts: CreateWorkoutInput[] = [];
+
+    for (let i = 0; i < workouts.length; i++) {
+      const workout = workouts[i];
+      const validation = createWorkoutInputSchema.safeParse(workout);
+
       if (!validation.success) {
         const firstError = validation.error.errors[0];
         errors.push({
@@ -149,7 +210,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      validWorkouts.push(workoutInput);
+      validWorkouts.push(workout);
     }
 
     // Batch insert valid workouts (chunks of 100)
