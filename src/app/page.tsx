@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { WorkoutBackfillModal } from '@/components/workout/workout-backfill-modal';
+import { BulkMigrationModal } from '@/components/workout/bulk-migration-modal';
 
 export default function Home() {
   const { user, loading, signOut } = useAuth();
@@ -118,8 +118,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* Backfill Modal */}
-        <WorkoutBackfillModal
+        {/* Bulk Migration Modal */}
+        <BulkMigrationModal
           isOpen={showBackfillModal}
           onClose={() => setShowBackfillModal(false)}
           onComplete={handleBackfillComplete}
