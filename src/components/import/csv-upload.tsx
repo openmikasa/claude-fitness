@@ -88,7 +88,45 @@ export default function CsvUpload({ onParsed }: CsvUploadProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* CSV Format Instructions */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-blue-900">CSV Format Requirements</h3>
+        <div className="text-sm text-blue-800 space-y-2">
+          <p><strong>Required column:</strong> Date</p>
+          <p><strong>Optional columns:</strong> Exercise, Weight, Reps, Sets, Notes</p>
+
+          <div className="mt-3 pt-3 border-t border-blue-200">
+            <p className="font-semibold mb-2">How workouts are grouped:</p>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li><strong>One workout per day:</strong> All rows with the same date become one workout</li>
+              <li><strong>Multiple workouts per day:</strong> Add a &quot;workout&quot; or &quot;session&quot; column (e.g., &quot;morning&quot;, &quot;evening&quot;) to create separate workouts on the same date</li>
+            </ul>
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-blue-200">
+            <p className="font-semibold mb-2">Example CSV (one workout per day):</p>
+            <pre className="bg-white p-2 rounded text-xs overflow-x-auto">
+date,exercise,weight,reps,sets,notes
+2026-01-10,Bench press,80kg,10,3,
+2026-01-10,Squat,100kg,8,3,
+2026-01-11,Deadlift,120kg,5,5,</pre>
+            <p className="text-xs mt-1">→ Creates 2 workouts: Jan 10 (Bench + Squat), Jan 11 (Deadlift)</p>
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-blue-200">
+            <p className="font-semibold mb-2">Example CSV (multiple workouts per day):</p>
+            <pre className="bg-white p-2 rounded text-xs overflow-x-auto">
+date,workout,exercise,weight,reps,sets,notes
+2026-01-10,morning,Bench press,80kg,10,3,
+2026-01-10,morning,Squat,100kg,8,3,
+2026-01-10,evening,Deadlift,120kg,5,5,</pre>
+            <p className="text-xs mt-1">→ Creates 2 workouts on Jan 10: morning (Bench + Squat), evening (Deadlift)</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Upload Area */}
       <div
         onClick={handleClick}
         onDragEnter={handleDragEnter}
