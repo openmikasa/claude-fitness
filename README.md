@@ -1,196 +1,80 @@
 # Claude Fitness
 
-AI-powered fitness tracking and workout programming application built with Next.js, Supabase, and Claude AI.
+AI-powered weightlifting tracker and workout programming. Track weightlifting workouts, import CSV data, get AI-powered training plans.
+
+## 📚 Documentation Guide
+
+**New to the project?**
+1. Start here for setup
+2. See [CONTRIBUTING.md](CONTRIBUTING.md) for development guide
+3. See [docs/architecture.md](docs/architecture.md) for complete architecture and implementation details
+
+**Resuming development?**
+- [docs/quick-reference.md](docs/quick-reference.md) - Quick commands and current status
+
+**Contributing or using AI assistance?**
+- [CLAUDE.md](CLAUDE.md) - Mandatory coding standards
+
+**Deploying?**
+- [docs/deployment.md](docs/deployment.md) - Vercel deployment guide
+
+**Historical context?**
+- [docs/archive/](docs/archive/) - Phase summaries and technical decisions
 
 ## Features
 
-- 🏋️ **Workout Logging** - Track strength, cardio, sauna, and mobility sessions with equipment and muscle group tagging
-- 🎯 **Advanced Filtering** - Filter workouts by equipment, muscle groups, workout type, and date range
-- ⚙️ **Settings Persistence** - Units and theme preferences sync across devices via Supabase
-- 📊 **History Management** - View, search, and filter past workouts with pagination
-- 🔄 **Data Migration** - Interactive wizard to enhance old workouts with new metadata
-- 🤖 **AI Programming** - Get personalized workout recommendations from Claude AI
-- 📥 **CSV Import** - Import historical workout data
-- 🔐 **Secure Authentication** - User accounts with row-level security
-- 📱 **PWA Support** - Install as a native app on mobile devices
-- 🔌 **Offline Support** - Settings queue and sync when back online
+- 🏋️ Track weightlifting workouts
+- 📊 Filter by equipment, muscle groups, date range
+- ⚙️ Settings sync across devices
+- 📥 Import CSV workout data (5,000 row limit)
+- 🤖 AI-powered workout recommendations (Claude API)
+- 📱 PWA support - install as native app
+- 🔐 Secure auth with Supabase
 
 ## Tech Stack
 
-- **Frontend:** Next.js 14+ with TypeScript (App Router)
-- **Backend:** Supabase (PostgreSQL + Auth)
-- **AI:** Claude API (Opus 4.5)
-- **Styling:** Tailwind CSS (mobile-first)
-- **State:** React Query + React Context
-- **Forms:** React Hook Form + Zod validation
+Next.js 14 • TypeScript • Supabase • Claude AI • React Query • Tailwind CSS
 
-## Getting Started
+→ See [docs/architecture.md](docs/architecture.md#tech-stack) for complete stack details
 
-### Prerequisites
+## Quick Setup
 
-- Node.js 18+ and npm
-- A Supabase account ([supabase.com](https://supabase.com))
-- An Anthropic API key ([console.anthropic.com](https://console.anthropic.com))
-
-### 1. Clone and Install
+### 1. Install Dependencies
 
 ```bash
-cd claude-fitness
 npm install
 ```
 
-### 2. Set Up Supabase
+### 2. Configure Environment
 
-1. Create a new project at [supabase.com](https://supabase.com)
-2. Go to **Settings** → **API** and copy:
-   - Project URL
-   - `anon` public key
-   - `service_role` secret key
-3. Go to **SQL Editor** and run the migration:
-   - Copy contents of `supabase/migrations/001_initial_schema.sql`
-   - Paste and execute in SQL Editor
-
-### 3. Configure Environment Variables
-
-Create `.env.local` in the project root:
+Create `.env.local`:
 
 ```bash
-# Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
-
-# Anthropic AI
-ANTHROPIC_API_KEY=sk-ant-your-api-key-here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ANTHROPIC_API_KEY=sk-ant-your-key
 ```
+
+### 3. Set Up Database
+
+1. Create project at [supabase.com](https://supabase.com)
+2. Run migrations in `supabase/migrations/` (in order)
+3. Copy credentials to `.env.local`
 
 ### 4. Run Development Server
 
 ```bash
 npm run dev
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Project Status
 
-## Project Structure
+**All 6 phases complete** ✅
 
-```
-claude-fitness/
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── layout.tsx          # Root layout with AuthProvider
-│   │   ├── page.tsx            # Dashboard
-│   │   ├── login/              # Authentication
-│   │   ├── workouts/           # Workout logging & history
-│   │   ├── programs/           # AI training plans
-│   │   └── api/                # API routes (future)
-│   ├── components/             # React components
-│   │   ├── auth/               # Login/signup forms
-│   │   ├── workout/            # Workout forms & list
-│   │   ├── ai/                 # AI recommendation cards
-│   │   ├── import/             # CSV upload & mapping
-│   │   └── ui/                 # Reusable UI components
-│   ├── lib/
-│   │   ├── supabase/           # Supabase clients
-│   │   ├── ai/                 # Claude API integration
-│   │   ├── parsers/            # CSV parsing utilities
-│   │   └── hooks/              # React hooks
-│   └── types/                  # TypeScript definitions
-├── supabase/
-│   └── migrations/             # Database schema
-├── public/                     # Static assets
-└── package.json
-```
-
-## Database Schema
-
-### Tables
-
-- **profiles** - User profile information with settings (units, theme)
-- **workouts** - Workout entries (polymorphic JSONB design)
-- **workout_exercises** - Normalized exercise data with equipment metadata (junction table)
-- **exercises** - Exercise definitions for autocomplete with equipment arrays
-- **programs** - AI-generated training plans
-- **import_batches** - CSV import history
-
-### Row-Level Security
-
-All tables enforce RLS policies ensuring users can only access their own data.
-
-## Development Phases
-
-- ✅ **Phase 1: Foundation** - Project setup, auth, basic layout
-- ✅ **Phase 2: Workout Logging** - Forms for all workout types
-- ✅ **Phase 3: History & Search** - Filtering, pagination, search
-- ✅ **Phase 4: CSV Import** - Historical data import
-- ✅ **Phase 5: Advanced Features** - Equipment/muscle filtering, settings persistence, data migration
-- ⏳ **Phase 6: AI Integration** - Workout recommendations (in progress)
-- ⏳ **Phase 7: Polish** - Performance optimization, mobile refinement
-
-## Usage
-
-### Creating an Account
-
-1. Navigate to `/login`
-2. Click "Don't have an account? Sign up"
-3. Enter email and password
-4. Check your email to confirm account
-
-### Logging a Workout
-
-1. Click "Log Workout" from dashboard
-2. Select workout type (strength/cardio/sauna/mobility)
-3. Fill in workout details
-4. Add optional notes
-5. Submit
-
-### Viewing History
-
-1. Click "View History" from dashboard
-2. Filter by workout type or date range
-3. Search for specific exercises
-4. Click any workout to view details
-
-### Getting AI Recommendations
-
-1. Log a workout
-2. AI automatically analyzes your performance
-3. View recommended next session
-4. Request full 7-day training plan
-
-## API Routes
-
-### Workouts
-- `GET /api/workouts` - List workouts with filtering (type, date, equipment, muscle groups)
-- `GET /api/workouts/[id]` - Get single workout
-- `POST /api/workouts` - Create workout (auto-creates junction table records)
-- `PUT /api/workouts/[id]` - Update workout
-- `DELETE /api/workouts/[id]` - Delete workout
-- `GET /api/workouts/unmigrated-count` - Count workouts needing migration
-- `POST /api/workouts/backfill` - Migrate workout to normalized format
-
-### Settings
-- `GET /api/settings` - Get user settings (units, theme)
-- `PUT /api/settings` - Update user settings
-
-### Exercises
-- `GET /api/exercises` - Search exercises for autocomplete
-
-### AI (Planned)
-- `POST /api/ai/next-session` - Generate next workout
-- `POST /api/ai/weekly-plan` - Generate 7-day plan
-
-### Import
-- `POST /api/import` - Import CSV data
-
-## Contributing
-
-This is a personal project following the implementation plan in `CLAUDE.md`.
+See [docs/quick-reference.md](docs/quick-reference.md) for current status and [docs/architecture.md](docs/architecture.md) for implementation details.
 
 ## License
 
 MIT
-
-## Support
-
-For issues or questions, please open an issue on GitHub.

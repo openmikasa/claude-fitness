@@ -6,10 +6,7 @@ import WorkoutForm from './workout-form';
 import { getWorkoutExercises, isWorkoutMigrated } from '@/lib/utils/workout-helpers';
 import type {
   Workout,
-  StrengthData,
-  CardioData,
-  SaunaData,
-  MobilityData
+  WeightliftingData
 } from '@/types/workout';
 
 interface WorkoutDetailProps {
@@ -88,7 +85,7 @@ export default function WorkoutDetail({
     );
   }
 
-  const renderStrengthData = (data: StrengthData) => {
+  const renderWeightliftingData = (data: WeightliftingData) => {
     const exercises = getWorkoutExercises(workout);
 
     return (
@@ -138,92 +135,6 @@ export default function WorkoutDetail({
     );
   };
 
-  const renderCardioData = (data: CardioData) => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Type</div>
-          <div className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
-            {data.type}
-          </div>
-        </div>
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Duration</div>
-          <div className="text-lg font-semibold text-gray-900 dark:text-white">
-            {data.time_minutes} min
-          </div>
-        </div>
-        {data.distance_km && (
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Distance</div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-              {data.distance_km} km
-            </div>
-          </div>
-        )}
-        {data.pace && (
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Pace</div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-              {data.pace}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderSaunaData = (data: SaunaData) => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Duration</div>
-          <div className="text-lg font-semibold text-gray-900 dark:text-white">
-            {data.duration_minutes} min
-          </div>
-        </div>
-        {data.temperature_celsius && (
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Temperature</div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-              {data.temperature_celsius}°C
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderMobilityData = (data: MobilityData) => (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exercises</h3>
-      {data.exercises.map((exercise, idx) => (
-        <div key={idx} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <h4 className="font-medium text-gray-900 dark:text-white">{exercise.name}</h4>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {exercise.duration_minutes} min
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const renderWorkoutData = () => {
-    switch (workout.workout_type) {
-      case 'strength':
-        return renderStrengthData(workout.data as StrengthData);
-      case 'cardio':
-        return renderCardioData(workout.data as CardioData);
-      case 'sauna':
-        return renderSaunaData(workout.data as SaunaData);
-      case 'mobility':
-        return renderMobilityData(workout.data as MobilityData);
-      default:
-        return <div className="text-gray-500">Unknown workout type</div>;
-    }
-  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
@@ -231,8 +142,8 @@ export default function WorkoutDetail({
       <div className="border-b border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white capitalize mb-2">
-              {workout.workout_type} Workout
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Workout
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {format(new Date(workout.workout_date), 'EEEE, MMMM d, yyyy')}
@@ -249,7 +160,7 @@ export default function WorkoutDetail({
 
       {/* Workout Data */}
       <div className="p-6">
-        {renderWorkoutData()}
+        {renderWeightliftingData(workout.data)}
 
         {/* Notes */}
         {workout.notes && (

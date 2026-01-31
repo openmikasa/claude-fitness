@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
 import { createWorkoutInputSchema } from '@/lib/validation/workout-schemas';
 import type { CsvRow, CsvMapping, CsvValidationError } from '@/types/import';
-import type { CreateWorkoutInput, WorkoutType } from '@/types/workout';
+import type { CreateWorkoutInput } from '@/types/workout';
 
 interface ImportRequest {
   rows: CsvRow[];
@@ -19,7 +19,7 @@ interface ImportResponse {
   batchId: string;
 }
 
-// Convert CSV row to workout input
+// Convert CSV row to workout input (weightlifting only)
 function mapRowToWorkout(row: CsvRow, mapping: CsvMapping): CreateWorkoutInput | null {
   // Extract date (required)
   if (!mapping.dateColumn || !row[mapping.dateColumn]) {
@@ -40,83 +40,32 @@ function mapRowToWorkout(row: CsvRow, mapping: CsvMapping): CreateWorkoutInput |
     return null;
   }
 
-  // Extract workout type (default to 'strength' if not provided)
-  let workoutType: WorkoutType = 'strength';
-  if (mapping.workoutTypeColumn && row[mapping.workoutTypeColumn]) {
-    const typeValue = row[mapping.workoutTypeColumn].toLowerCase().trim();
-    if (['strength', 'cardio', 'sauna', 'mobility'].includes(typeValue)) {
-      workoutType = typeValue as WorkoutType;
-    }
-  }
-
   // Extract notes
   const notes = mapping.notesColumn ? row[mapping.notesColumn] : undefined;
 
-  // Build workout data based on type
-  let data: any;
+  // ALWAYS build weightlifting data
+  const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Exercise';
+  const weight = mapping.weightColumn ? parseFloat(row[mapping.weightColumn]) : 0;
+  const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
+  const setsCount = mapping.setsColumn ? parseInt(row[mapping.setsColumn]) : 1;
 
-  if (workoutType === 'strength') {
-    // For strength workouts, create exercise with sets
-    const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Exercise';
-    const weight = mapping.weightColumn ? parseFloat(row[mapping.weightColumn]) : 0;
-    const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
-    const setsCount = mapping.setsColumn ? parseInt(row[mapping.setsColumn]) : 1;
+  if (isNaN(weight) || weight < 0) return null;
+  if (isNaN(reps) || reps < 1) return null;
+  if (isNaN(setsCount) || setsCount < 1) return null;
 
-    if (isNaN(weight) || weight < 0) return null;
-    if (isNaN(reps) || reps < 1) return null;
-    if (isNaN(setsCount) || setsCount < 1) return null;
+  // Build sets array
+  const sets = Array.from({ length: setsCount }, () => ({ weight, reps }));
 
-    const sets = Array.from({ length: setsCount }, () => ({ weight, reps }));
-    data = {
+  return {
+    workout_date: workoutDate,
+    data: {
       exercises: [
         {
           name: exerciseName || 'Exercise',
           sets,
         },
       ],
-    };
-  } else if (workoutType === 'cardio') {
-    // For cardio workouts
-    const timeMinutes = mapping.timeColumn ? parseFloat(row[mapping.timeColumn]) : 0;
-    const distanceKm = mapping.distanceColumn ? parseFloat(row[mapping.distanceColumn]) : undefined;
-
-    if (isNaN(timeMinutes) || timeMinutes <= 0) return null;
-
-    data = {
-      type: 'running', // Default cardio type
-      time_minutes: timeMinutes,
-      distance_km: distanceKm && !isNaN(distanceKm) ? distanceKm : undefined,
-    };
-  } else if (workoutType === 'sauna') {
-    // For sauna sessions
-    const durationMinutes = mapping.timeColumn ? parseFloat(row[mapping.timeColumn]) : 0;
-
-    if (isNaN(durationMinutes) || durationMinutes <= 0) return null;
-
-    data = {
-      duration_minutes: durationMinutes,
-    };
-  } else if (workoutType === 'mobility') {
-    // For mobility sessions
-    const exerciseName = mapping.exerciseColumn ? row[mapping.exerciseColumn] : 'Stretching';
-    const durationMinutes = mapping.timeColumn ? parseFloat(row[mapping.timeColumn]) : 0;
-
-    if (isNaN(durationMinutes) || durationMinutes <= 0) return null;
-
-    data = {
-      exercises: [
-        {
-          name: exerciseName || 'Stretching',
-          duration_minutes: durationMinutes,
-        },
-      ],
-    };
-  }
-
-  return {
-    workout_type: workoutType,
-    workout_date: workoutDate,
-    data,
+    },
     notes,
   };
 }
@@ -191,7 +140,7 @@ export async function POST(request: NextRequest) {
       const batch = validWorkouts.slice(i, i + BATCH_SIZE);
       const workoutsToInsert = batch.map((workout) => ({
         user_id: user.id,
-        workout_type: workout.workout_type,
+        workout_type: 'weightlifting', // Always weightlifting
         workout_date: workout.workout_date,
         data: workout.data,
         notes: workout.notes,

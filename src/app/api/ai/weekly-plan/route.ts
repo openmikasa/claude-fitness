@@ -15,11 +15,10 @@ import type { Workout } from '@/types/workout';
 
 export const dynamic = 'force-dynamic';
 
-const WEEKLY_PLAN_SYSTEM_PROMPT = `You are an expert strength and conditioning coach. Create a complete 7-day training program for the user based on their workout history.
+const WEEKLY_PLAN_SYSTEM_PROMPT = `You are an expert weightlifting coach. Create a complete 7-day training program for the user based on their workout history.
 
 Goals:
-- Balance strength, cardio, and recovery
-- Progressive overload where appropriate (2.5-5kg for upper body, 5-10kg for lower body)
+- Progressive overload for weightlifting exercises (2.5-5kg for upper body, 5-10kg for lower body)
 - Variety to prevent boredom
 - Realistic volume based on user's capacity
 - Include at least 1-2 rest/recovery days
@@ -30,7 +29,6 @@ Respond with ONLY valid JSON, no markdown formatting or code blocks:
   "plan_data": [
     {
       "day": 1,
-      "workout_type": "strength",
       "data": {
         "exercises": [
           {
@@ -44,19 +42,9 @@ Respond with ONLY valid JSON, no markdown formatting or code blocks:
         ]
       },
       "coaching_notes": "Focus on form and depth"
-    },
-    {
-      "day": 2,
-      "workout_type": "cardio",
-      "data": {
-        "type": "running",
-        "time_minutes": 30,
-        "distance_km": 5
-      },
-      "coaching_notes": "Easy pace, focus on aerobic base"
     }
   ],
-  "rationale": "This plan focuses on strength development with adequate recovery...",
+  "rationale": "This plan focuses on weightlifting development with adequate recovery...",
   "valid_from": "2026-01-27",
   "valid_until": "2026-02-02"
 }`;

@@ -24,7 +24,7 @@ Build a mobile-optimized fitness tracking web app that logs workouts, imports hi
 
 ### Core Features
 
-- ✅ **Workout Logging** - Track strength, cardio, sauna, and mobility sessions
+- ✅ **Workout Logging** - Track strength training sessions
 - ✅ **History Management** - View, search, filter, and edit past workouts
 - ✅ **Statistics Dashboard** - PRs, weekly/monthly stats, personal records
 - ✅ **CSV Import** - Import up to 5,000 historical workouts with auto-column detection
@@ -87,9 +87,8 @@ Build a mobile-optimized fitness tracking web app that logs workouts, imports hi
 ### Phase 2: Workout Logging (Complete)
 
 **What Was Built:**
-- Zod validation schemas for all workout types
-- 4 workout form components (Strength, Cardio, Sauna, Mobility)
-- Workout form orchestrator with type selection
+- Zod validation schemas for strength workouts
+- Strength workout form component with multi-exercise support
 - Complete CRUD API routes
 - Workout list with filtering and pagination
 - Workout detail view with delete functionality
@@ -98,9 +97,6 @@ Build a mobile-optimized fitness tracking web app that logs workouts, imports hi
 **Key Files:**
 - `src/lib/validation/workout-schemas.ts` - Zod validation
 - `src/components/workout/strength-form.tsx` - Multi-exercise form
-- `src/components/workout/cardio-form.tsx` - Cardio with pace calculation
-- `src/components/workout/sauna-form.tsx` - Simple duration form
-- `src/components/workout/mobility-form.tsx` - Dynamic exercise list
 - `src/components/workout/workout-form.tsx` - Form orchestrator
 - `src/components/workout/workout-list.tsx` - History with filters
 - `src/components/workout/workout-detail.tsx` - Detail view
@@ -108,7 +104,7 @@ Build a mobile-optimized fitness tracking web app that logs workouts, imports hi
 - `src/app/api/workouts/[id]/route.ts` - GET, PUT, DELETE
 
 **Verification:**
-- ✅ Can log all 4 workout types
+- ✅ Can log strength workouts
 - ✅ Forms validate correctly
 - ✅ Workouts persist to database
 - ✅ History displays with filtering
@@ -319,13 +315,10 @@ Accepted: .csv, .txt (max 10MB)
 - Show all detected CSV columns
 - Dropdown for each column to map to workout fields:
   - Date (required)
-  - Workout Type (strength/cardio/sauna/mobility)
   - Exercise Name
   - Weight
   - Reps
   - Sets
-  - Time (minutes)
-  - Distance (km)
   - Notes
 - Auto-detect common column names (fuzzy matching)
 - Validation indicator (✓ or ✗ for each row)
@@ -347,7 +340,6 @@ Accepted: .csv, .txt (max 10MB)
   "rows": [...],
   "mapping": {
     "dateColumn": "Date",
-    "workoutTypeColumn": "Type",
     "exerciseColumn": "Exercise",
     "weightColumn": "Weight",
     "repsColumn": "Reps"
@@ -461,8 +453,8 @@ Recent Workout History (Last 4 weeks):
 
 Week 1 (Jan 1-7):
 - Mon: Strength - Squat 3x5 @ 225lbs, Bench 3x5 @ 185lbs
-- Wed: Cardio - Running 5km in 30min (6:00/km pace)
-- Fri: Strength - Deadlift 1x5 @ 315lbs
+- Wed: Strength - Deadlift 3x5 @ 275lbs, Row 3x8 @ 135lbs
+- Fri: Strength - Squat 3x5 @ 230lbs, Press 3x5 @ 105lbs
 
 Week 2 (Jan 8-14):
 ...
@@ -486,7 +478,6 @@ Apply these principles:
 
 Respond with valid JSON only, no markdown:
 {
-  "workout_type": "strength",
   "data": {
     "exercises": [
       {
@@ -522,7 +513,7 @@ You are an expert strength and conditioning coach. Create a complete
 7-day training program for the user based on their workout history.
 
 Goals:
-- Balance strength, cardio, and recovery
+- Optimize strength training progression
 - Progressive overload where appropriate
 - Variety to prevent boredom
 - Realistic volume based on user's capacity
@@ -533,7 +524,6 @@ Respond with valid JSON only:
   "plan_data": [
     {
       "day": 1,
-      "workout_type": "strength",
       "data": { ... },
       "coaching_notes": "..."
     },
@@ -727,9 +717,7 @@ npm run build
 **Charts/Visualizations:**
 - Weekly workout frequency (bar chart)
 - Volume progression over time (line chart)
-- Workout type distribution (pie chart)
 - Strength progress per exercise (line chart)
-- Cardio pace improvements (line chart)
 
 **Library:** Use recharts or chart.js
 
@@ -743,7 +731,6 @@ npm run build
 
 **Features:**
 - Filter by date range
-- Select workout types to export
 - Include/exclude notes
 - Download button
 
@@ -830,16 +817,17 @@ npm run build
 ### Database Schema (Quick Reference)
 
 ```sql
--- Workouts (polymorphic JSONB)
+-- Workouts (strength training only)
 CREATE TABLE workouts (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES auth.users,
-  workout_type workout_type,
+  workout_type VARCHAR DEFAULT 'strength', -- Always 'strength'
   workout_date DATE,
-  data JSONB,
+  data JSONB, -- StrengthData structure
   notes TEXT,
   created_at TIMESTAMPTZ,
-  updated_at TIMESTAMPTZ
+  updated_at TIMESTAMPTZ,
+  CONSTRAINT only_strength_workouts CHECK (workout_type = 'strength')
 );
 
 -- Programs (AI-generated)
@@ -917,10 +905,7 @@ App
     │   ├── Dashboard (/)
     │   ├── Log Workout (/workouts/log)
     │   │   └── WorkoutForm
-    │   │       ├── StrengthForm
-    │   │       ├── CardioForm
-    │   │       ├── SaunaForm
-    │   │       └── MobilityForm
+    │   │       └── StrengthForm
     │   ├── History (/workouts)
     │   │   ├── WorkoutStats
     │   │   ├── WorkoutList
@@ -987,7 +972,7 @@ App
 The core application is now production-ready with all 6 phases implemented:
 
 1. ✅ **Foundation** - Auth, database, routing
-2. ✅ **Workout Logging** - All 4 workout types
+2. ✅ **Workout Logging** - Strength training workouts
 3. ✅ **History & Search** - Filtering, stats, editing
 4. ✅ **CSV Import** - Batch import up to 5,000 workouts
 5. ✅ **AI Integration** - Claude-powered recommendations
@@ -1043,7 +1028,6 @@ vercel --prod
 - ✅ Delete workouts with confirmation
 - ✅ Search by exercise name in JSONB data
 - ✅ Search in notes
-- ✅ Filter by workout type
 - ✅ Filter by date range with quick filters
 - ✅ Active filter chips
 - ✅ Statistics dashboard

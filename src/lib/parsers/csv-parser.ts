@@ -96,16 +96,13 @@ export function parseCSV(file: File): Promise<ParseResult> {
   });
 }
 
-// Auto-detect common column names
+// Auto-detect common column names (weightlifting only)
 export function autoDetectMapping(headers: string[]): {
   dateColumn?: string;
-  workoutTypeColumn?: string;
   exerciseColumn?: string;
   weightColumn?: string;
   repsColumn?: string;
   setsColumn?: string;
-  timeColumn?: string;
-  distanceColumn?: string;
   notesColumn?: string;
 } {
   const mapping: Record<string, string | undefined> = {};
@@ -118,13 +115,6 @@ export function autoDetectMapping(headers: string[]): {
     datePatterns.some((p) => h.includes(p))
   );
   if (dateMatch !== -1) mapping.dateColumn = headers[dateMatch];
-
-  // Workout type patterns
-  const typePatterns = ['type', 'workout type', 'workout_type', 'category'];
-  const typeMatch = headerMap.findIndex((h) =>
-    typePatterns.some((p) => h.includes(p))
-  );
-  if (typeMatch !== -1) mapping.workoutTypeColumn = headers[typeMatch];
 
   // Exercise patterns
   const exercisePatterns = ['exercise', 'exercise name', 'exercise_name', 'name'];
@@ -153,20 +143,6 @@ export function autoDetectMapping(headers: string[]): {
     setsPatterns.some((p) => h.includes(p))
   );
   if (setsMatch !== -1) mapping.setsColumn = headers[setsMatch];
-
-  // Time patterns
-  const timePatterns = ['time', 'duration', 'minutes', 'mins'];
-  const timeMatch = headerMap.findIndex((h) =>
-    timePatterns.some((p) => h.includes(p))
-  );
-  if (timeMatch !== -1) mapping.timeColumn = headers[timeMatch];
-
-  // Distance patterns
-  const distancePatterns = ['distance', 'km', 'miles', 'dist'];
-  const distanceMatch = headerMap.findIndex((h) =>
-    distancePatterns.some((p) => h.includes(p))
-  );
-  if (distanceMatch !== -1) mapping.distanceColumn = headers[distanceMatch];
 
   // Notes patterns
   const notesPatterns = ['notes', 'note', 'comments', 'comment'];

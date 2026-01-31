@@ -90,9 +90,6 @@ export async function PUT(
 
     // Build update object (only include fields that were provided)
     const updateData: any = {};
-    if (workoutInput.workout_type !== undefined) {
-      updateData.workout_type = workoutInput.workout_type;
-    }
     if (workoutInput.workout_date !== undefined) {
       updateData.workout_date = workoutInput.workout_date;
     }

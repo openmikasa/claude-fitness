@@ -1,4 +1,4 @@
-import type { Workout, StrengthData } from '@/types/workout';
+import type { Workout, WeightliftingData } from '@/types/workout';
 
 /**
  * Helper function to get exercises from a workout, handling both new normalized
@@ -17,9 +17,9 @@ export function getWorkoutExercises(workout: Workout) {
     }));
   }
 
-  // Fallback to JSONB (old format)
-  if (workout.workout_type === 'strength') {
-    const data = workout.data as StrengthData;
+  // Fallback to JSONB (old format) - weightlifting data
+  if (workout.workout_type === 'weightlifting') {
+    const data = workout.data as WeightliftingData;
     return data.exercises.map((ex) => ({
       id: undefined,
       name: ex.name,
@@ -38,7 +38,7 @@ export function getWorkoutExercises(workout: Workout) {
  */
 export function isWorkoutMigrated(workout: Workout): boolean {
   return (
-    workout.workout_type === 'strength' &&
+    workout.workout_type === 'weightlifting' &&
     !!workout.workout_exercises &&
     workout.workout_exercises.length > 0
   );

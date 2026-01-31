@@ -1,0 +1,17 @@
+
+
+> claude-fitness@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ○ (pwa) PWA support is disabled.
+ ✓ Ready in 1236ms
+ ✓ Compiled / in 494ms (652 modules)
+ GET / 200 in 580ms
+ ✓ Compiled in 68ms (333 modules)
+ GET / 200 in 16ms
+ ✓ Compiled /login in 142ms (644 modules)

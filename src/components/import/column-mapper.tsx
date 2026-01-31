@@ -14,13 +14,10 @@ interface ColumnMapperProps {
 const FIELD_OPTIONS = [
   { value: '', label: 'Skip this column' },
   { value: 'date', label: 'Date (required)' },
-  { value: 'workoutType', label: 'Workout Type' },
   { value: 'exercise', label: 'Exercise Name' },
   { value: 'weight', label: 'Weight (kg)' },
   { value: 'reps', label: 'Reps' },
   { value: 'sets', label: 'Sets' },
-  { value: 'time', label: 'Time (minutes)' },
-  { value: 'distance', label: 'Distance (km)' },
   { value: 'notes', label: 'Notes' },
 ];
 
@@ -40,13 +37,10 @@ export default function ColumnMapper({
 
     preview.headers.forEach((header) => {
       if (detected.dateColumn === header) initialMappings[header] = 'date';
-      else if (detected.workoutTypeColumn === header) initialMappings[header] = 'workoutType';
       else if (detected.exerciseColumn === header) initialMappings[header] = 'exercise';
       else if (detected.weightColumn === header) initialMappings[header] = 'weight';
       else if (detected.repsColumn === header) initialMappings[header] = 'reps';
       else if (detected.setsColumn === header) initialMappings[header] = 'sets';
-      else if (detected.timeColumn === header) initialMappings[header] = 'time';
-      else if (detected.distanceColumn === header) initialMappings[header] = 'distance';
       else if (detected.notesColumn === header) initialMappings[header] = 'notes';
       else initialMappings[header] = '';
     });
@@ -58,13 +52,10 @@ export default function ColumnMapper({
   useEffect(() => {
     const csvMapping: CsvMapping = {
       dateColumn: Object.keys(mappings).find((k) => mappings[k] === 'date') || '',
-      workoutTypeColumn: Object.keys(mappings).find((k) => mappings[k] === 'workoutType'),
       exerciseColumn: Object.keys(mappings).find((k) => mappings[k] === 'exercise'),
       weightColumn: Object.keys(mappings).find((k) => mappings[k] === 'weight'),
       repsColumn: Object.keys(mappings).find((k) => mappings[k] === 'reps'),
       setsColumn: Object.keys(mappings).find((k) => mappings[k] === 'sets'),
-      timeColumn: Object.keys(mappings).find((k) => mappings[k] === 'time'),
-      distanceColumn: Object.keys(mappings).find((k) => mappings[k] === 'distance'),
       notesColumn: Object.keys(mappings).find((k) => mappings[k] === 'notes'),
     };
     onMappingChange(csvMapping);

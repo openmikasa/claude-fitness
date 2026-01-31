@@ -4,17 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGenerateNextSession } from '@/lib/hooks/useAI';
 import type {
-  StrengthData,
-  CardioData,
-  SaunaData,
-  MobilityData,
-  WorkoutData,
+  WeightliftingData,
 } from '@/types/workout';
 
 interface NextSessionCardProps {
   onUseWorkout?: (data: {
-    workout_type: string;
-    data: WorkoutData;
+    data: WeightliftingData;
   }) => void;
 }
 
@@ -32,12 +27,10 @@ export function NextSessionCard({ onUseWorkout }: NextSessionCardProps) {
       const workout = generateMutation.data.plan_data[0];
       if (onUseWorkout) {
         onUseWorkout({
-          workout_type: workout.workout_type,
           data: workout.data,
         });
       } else {
         const presetData = JSON.stringify({
-          workout_type: workout.workout_type,
           data: workout.data,
         });
         router.push('/workouts/log?preset=' + encodeURIComponent(presetData));
@@ -45,48 +38,12 @@ export function NextSessionCard({ onUseWorkout }: NextSessionCardProps) {
     }
   };
 
-  const formatWorkoutSummary = (
-    type: string,
-    data: StrengthData | CardioData | SaunaData | MobilityData
-  ) => {
-    switch (type) {
-      case 'strength': {
-        const strengthData = data as StrengthData;
-        return strengthData.exercises.map((ex) => (
-          <div key={ex.name} className='text-sm'>
-            <span className='font-medium'>{ex.name}:</span> {ex.sets.length} sets × {ex.sets[0].reps} reps @ {ex.sets[0].weight}kg
-          </div>
-        ));
-      }
-      case 'cardio': {
-        const cardioData = data as CardioData;
-        const distanceText = cardioData.distance_km ? ' • ' + cardioData.distance_km + ' km' : '';
-        return (
-          <div className='text-sm'>
-            <span className='font-medium capitalize'>{cardioData.type}:</span> {cardioData.time_minutes} min{distanceText}
-          </div>
-        );
-      }
-      case 'sauna': {
-        const saunaData = data as SaunaData;
-        const tempText = saunaData.temperature_celsius ? ' • ' + saunaData.temperature_celsius + '°C' : '';
-        return (
-          <div className='text-sm'>
-            <span className='font-medium'>Duration:</span> {saunaData.duration_minutes} min{tempText}
-          </div>
-        );
-      }
-      case 'mobility': {
-        const mobilityData = data as MobilityData;
-        return mobilityData.exercises.map((ex) => (
-          <div key={ex.name} className='text-sm'>
-            <span className='font-medium'>{ex.name}:</span> {ex.duration_minutes} min
-          </div>
-        ));
-      }
-      default:
-        return null;
-    }
+  const formatWorkoutSummary = (data: WeightliftingData) => {
+    return data.exercises.map((ex) => (
+      <div key={ex.name} className='text-sm'>
+        <span className='font-medium'>{ex.name}:</span> {ex.sets.length} sets × {ex.sets[0].reps} reps @ {ex.sets[0].weight}kg
+      </div>
+    ));
   };
 
   return (
@@ -106,14 +63,11 @@ export function NextSessionCard({ onUseWorkout }: NextSessionCardProps) {
       ) : generateMutation.data ? (
         <div className='space-y-4'>
           <div className='bg-blue-50 rounded-lg p-4'>
-            <h3 className='font-semibold text-gray-900 mb-2 capitalize'>
-              {generateMutation.data.plan_data[0].workout_type} Workout
+            <h3 className='font-semibold text-gray-900 mb-2'>
+              Workout
             </h3>
             <div className='space-y-2'>
-              {formatWorkoutSummary(
-                generateMutation.data.plan_data[0].workout_type,
-                generateMutation.data.plan_data[0].data
-              )}
+              {formatWorkoutSummary(generateMutation.data.plan_data[0].data)}
             </div>
           </div>
 

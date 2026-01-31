@@ -1,21 +1,11 @@
 import { z } from 'zod';
 import {
-  workoutTypeSchema,
-  strengthDataSchema,
-  cardioDataSchema,
-  saunaDataSchema,
-  mobilityDataSchema,
+  weightliftingDataSchema,
 } from './workout-schemas';
 
-// Next Session Response Schema
+// Next Session Response Schema (weightlifting only)
 export const nextSessionResponseSchema = z.object({
-  workout_type: workoutTypeSchema,
-  data: z.union([
-    strengthDataSchema,
-    cardioDataSchema,
-    saunaDataSchema,
-    mobilityDataSchema,
-  ]),
+  data: weightliftingDataSchema, // Always weightlifting data
   rationale: z.string().min(10, 'Rationale must be at least 10 characters'),
   coaching_notes: z
     .string()
@@ -24,16 +14,10 @@ export const nextSessionResponseSchema = z.object({
 
 export type NextSessionResponse = z.infer<typeof nextSessionResponseSchema>;
 
-// Program Day Schema
+// Program Day Schema (weightlifting only)
 export const programDaySchema = z.object({
   day: z.number().int().min(1).max(7),
-  workout_type: workoutTypeSchema,
-  data: z.union([
-    strengthDataSchema,
-    cardioDataSchema,
-    saunaDataSchema,
-    mobilityDataSchema,
-  ]),
+  data: weightliftingDataSchema, // Always weightlifting data
   coaching_notes: z.string().min(5, 'Coaching notes required'),
 });
 

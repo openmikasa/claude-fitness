@@ -14,7 +14,7 @@ import type { Workout } from '@/types/workout';
 
 export const dynamic = 'force-dynamic';
 
-const NEXT_SESSION_SYSTEM_PROMPT = `You are an expert strength and conditioning coach. Analyze the user's recent workout history and generate the optimal next training session.
+const NEXT_SESSION_SYSTEM_PROMPT = `You are an expert weightlifting coach. Analyze the user's recent workout history and generate the optimal next training session.
 
 Apply these principles:
 - Progressive overload (gradual weight/volume increase of 2.5-5kg for upper body, 5-10kg for lower body)
@@ -25,7 +25,6 @@ Apply these principles:
 
 Respond with ONLY valid JSON, no markdown formatting or code blocks:
 {
-  "workout_type": "strength",
   "data": {
     "exercises": [
       {
@@ -148,8 +147,7 @@ export async function POST() {
         plan_data: [
           {
             day: 1,
-            workout_type: nextSession.workout_type,
-            data: nextSession.data,
+            data: nextSession.data, // Always weightlifting data
             coaching_notes: nextSession.coaching_notes,
           },
         ],

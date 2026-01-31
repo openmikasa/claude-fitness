@@ -119,8 +119,10 @@ openmikasa/claude-fitness (PUBLIC)
 ├── public/
 │   ├── icons/            # PWA icons
 │   └── manifest.json     # PWA config
-├── DEPLOYMENT.md         # Vercel deployment guide
-├── PROJECT_PLAN.md       # Complete project documentation
+├── docs/
+│   ├── architecture.md   # Complete project documentation
+│   ├── deployment.md     # Vercel deployment guide
+│   └── quick-reference.md # Quick commands
 └── README.md             # Quick start guide
 
 openmikasa/claude-fitness-secrets (PRIVATE)
@@ -217,8 +219,8 @@ git push
 
 **Documentation:**
 - Public Repo README: Quick start
-- DEPLOYMENT.md: Vercel setup
-- PROJECT_PLAN.md: Complete details
+- docs/deployment.md: Vercel setup
+- docs/architecture.md: Complete details
 - Private Repo: Full recovery guide
 
 **Lost Everything?**

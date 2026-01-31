@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
-import type { Workout, StrengthData, Exercise } from '@/types/workout';
+import type { Workout, WeightliftingData, Exercise } from '@/types/workout';
 
 interface WorkoutBackfillModalProps {
   isOpen: boolean;
@@ -58,10 +58,10 @@ export function WorkoutBackfillModal({ isOpen, onClose, onComplete }: WorkoutBac
       setCurrentWorkout(workout);
 
       // Initialize exercise forms from workout data
-      if (workout.workout_type === 'strength') {
-        const strengthData = workout.data as StrengthData;
+      if (workout.workout_type === 'weightlifting') {
+        const weightliftingData = workout.data as WeightliftingData;
         setExerciseForms(
-          strengthData.exercises.map((ex) => ({
+          weightliftingData.exercises.map((ex) => ({
             name: ex.name,
             exercise_id: '',
             equipment: [],

@@ -4,7 +4,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create enum types
-CREATE TYPE workout_type AS ENUM ('strength', 'cardio', 'sauna', 'mobility');
+CREATE TYPE workout_type AS ENUM ('weightlifting');
 CREATE TYPE program_type AS ENUM ('next_session', 'weekly_plan');
 CREATE TYPE program_status AS ENUM ('pending', 'active', 'completed');
 

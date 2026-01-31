@@ -3,38 +3,38 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { StrengthData } from '@/types/workout';
+import { WeightliftingData } from '@/types/workout';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { useState } from 'react';
 import type { Exercise } from '@/types/workout';
 
 // Zod validation schema
-const strengthSetSchema = z.object({
+const weightliftingSetSchema = z.object({
   weight: z.number().min(0, 'Weight must be 0 or greater'),
   reps: z.number().int().min(1, 'Reps must be at least 1'),
 });
 
-const strengthExerciseSchema = z.object({
+const weightliftingExerciseSchema = z.object({
   name: z.string().min(1, 'Exercise name is required'),
-  sets: z.array(strengthSetSchema).min(1, 'At least one set is required'),
+  sets: z.array(weightliftingSetSchema).min(1, 'At least one set is required'),
   exercise_id: z.string().optional(),
   equipment: z.array(z.string()).optional(),
   muscle_groups: z.array(z.string()).optional(),
 });
 
-const strengthFormSchema = z.object({
-  exercises: z.array(strengthExerciseSchema).min(1, 'At least one exercise is required'),
+const weightliftingFormSchema = z.object({
+  exercises: z.array(weightliftingExerciseSchema).min(1, 'At least one exercise is required'),
 });
 
-type StrengthFormData = z.infer<typeof strengthFormSchema>;
+type WeightliftingFormData = z.infer<typeof weightliftingFormSchema>;
 
-interface StrengthFormProps {
-  onSubmit: (data: StrengthData) => void;
-  initialData?: StrengthData;
+interface WeightliftingFormProps {
+  onSubmit: (data: WeightliftingData) => void;
+  initialData?: WeightliftingData;
 }
 
-export default function StrengthForm({ onSubmit, initialData }: StrengthFormProps) {
+export default function WeightliftingForm({ onSubmit, initialData }: WeightliftingFormProps) {
   const {
     register,
     control,
@@ -42,8 +42,8 @@ export default function StrengthForm({ onSubmit, initialData }: StrengthFormProp
     setValue,
     watch,
     formState: { errors },
-  } = useForm<StrengthFormData>({
-    resolver: zodResolver(strengthFormSchema),
+  } = useForm<WeightliftingFormData>({
+    resolver: zodResolver(weightliftingFormSchema),
     defaultValues: initialData || {
       exercises: [
         {
@@ -59,7 +59,7 @@ export default function StrengthForm({ onSubmit, initialData }: StrengthFormProp
     name: 'exercises',
   });
 
-  const handleFormSubmit = (data: StrengthFormData) => {
+  const handleFormSubmit = (data: WeightliftingFormData) => {
     onSubmit(data);
   };
 

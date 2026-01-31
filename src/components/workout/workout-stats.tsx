@@ -14,9 +14,7 @@ interface StatsData {
   thisWeek: number;
   thisMonth: number;
   personalRecords: {
-    strength: PersonalRecord[];
-    cardio: PersonalRecord[];
-    sauna: number;
+    weightlifting: PersonalRecord[];
   };
 }
 
@@ -122,38 +120,22 @@ export default function WorkoutStats() {
             Current month
           </p>
         </div>
-
-        {/* Longest Sauna */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl md:text-3xl">🧖</span>
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              Sauna PR
-            </h3>
-          </div>
-          <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-            {stats.personalRecords.sauna > 0 ? stats.personalRecords.sauna : '-'}
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-            {stats.personalRecords.sauna > 0 ? 'minutes' : 'No sessions yet'}
-          </p>
-        </div>
       </div>
 
       {/* Personal Records */}
-      {(stats.personalRecords.strength.length > 0 || stats.personalRecords.cardio.length > 0) && (
+      {stats.personalRecords.weightlifting.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Strength PRs */}
-          {stats.personalRecords.strength.length > 0 && (
+          {/* Weightlifting PRs */}
+          {stats.personalRecords.weightlifting.length > 0 && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🏋️</span>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Strength PRs
+                  Weightlifting PRs
                 </h3>
               </div>
               <div className="space-y-3">
-                {stats.personalRecords.strength.map((pr, index) => (
+                {stats.personalRecords.weightlifting.map((pr, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
@@ -168,40 +150,6 @@ export default function WorkoutStats() {
                     </div>
                     <div className="flex-shrink-0">
                       <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                        {pr.value}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Cardio PRs */}
-          {stats.personalRecords.cardio.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">🏃</span>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Cardio PRs
-                </h3>
-              </div>
-              <div className="space-y-3">
-                {stats.personalRecords.cardio.map((pr, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0"
-                  >
-                    <div className="flex-grow min-w-0 mr-3">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white capitalize truncate">
-                        {pr.name}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500">
-                        {format(new Date(pr.date), 'MMM d, yyyy')}
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <span className="text-lg font-bold text-green-600 dark:text-green-400">
                         {pr.value}
                       </span>
                     </div>

@@ -11,12 +11,12 @@ export async function GET() {
 
     const supabase = await createRouteHandlerClient();
 
-    // Get all strength workouts
-    const { data: strengthWorkouts, error: workoutsError } = await supabase
+    // Get all weightlifting workouts
+    const { data: weightliftingWorkouts, error: workoutsError } = await supabase
       .from('workouts')
       .select('id, workout_exercises(id)')
       .eq('user_id', user.id)
-      .eq('workout_type', 'strength');
+      .eq('workout_type', 'weightlifting');
 
     if (workoutsError) {
       console.error('Error fetching workouts:', workoutsError);
@@ -24,7 +24,7 @@ export async function GET() {
     }
 
     // Count workouts that have no workout_exercises
-    const unmigrated = (strengthWorkouts || []).filter(
+    const unmigrated = (weightliftingWorkouts || []).filter(
       (workout: any) => !workout.workout_exercises || workout.workout_exercises.length === 0
     );
 

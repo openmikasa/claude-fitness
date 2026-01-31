@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays } from 'date-fns';
-import type { Workout, WorkoutType, StrengthData, CardioData, SaunaData, MobilityData } from '@/types/workout';
+import type { Workout, WeightliftingData } from '@/types/workout';
 import WorkoutDetail from './workout-detail';
 import { MultiSelect } from '@/components/ui/multi-select';
 
@@ -18,7 +18,6 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
   const [error, setError] = useState<string | null>(null);
 
   // Filters
-  const [workoutTypeFilter, setWorkoutTypeFilter] = useState<WorkoutType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -40,10 +39,6 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
         page: page.toString(),
         pageSize: pageSize.toString(),
       });
-
-      if (workoutTypeFilter !== 'all') {
-        params.append('workout_type', workoutTypeFilter);
-      }
 
       if (searchQuery.trim()) {
         params.append('search', searchQuery.trim());
@@ -79,7 +74,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     } finally {
       setLoading(false);
     }
-  }, [page, workoutTypeFilter, searchQuery, dateFrom, dateTo, equipmentFilter, muscleGroupsFilter]);
+  }, [page, searchQuery, dateFrom, dateTo, equipmentFilter, muscleGroupsFilter]);
 
   useEffect(() => {
     fetchWorkouts();
@@ -136,7 +131,6 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
   };
 
   const clearAllFilters = () => {
-    setWorkoutTypeFilter('all');
     setSearchQuery('');
     setDateFrom('');
     setDateTo('');
@@ -145,11 +139,8 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     setPage(1);
   };
 
-  const removeFilter = (filterType: 'type' | 'search' | 'dates' | 'equipment' | 'muscle_groups') => {
+  const removeFilter = (filterType: 'search' | 'dates' | 'equipment' | 'muscle_groups') => {
     switch (filterType) {
-      case 'type':
-        setWorkoutTypeFilter('all');
-        break;
       case 'search':
         setSearchQuery('');
         break;
@@ -167,7 +158,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     setPage(1);
   };
 
-  const hasActiveFilters = workoutTypeFilter !== 'all' || searchQuery || dateFrom || dateTo || equipmentFilter.length > 0 || muscleGroupsFilter.length > 0;
+  const hasActiveFilters = searchQuery || dateFrom || dateTo || equipmentFilter.length > 0 || muscleGroupsFilter.length > 0;
 
   const handleWorkoutDeleted = (deletedId: string) => {
     setWorkouts(workouts.filter(w => w.id !== deletedId));
@@ -180,55 +171,13 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
     setSelectedWorkout(updated);
   };
 
-  const getWorkoutIcon = (type: WorkoutType): string => {
-    switch (type) {
-      case 'strength':
-        return '💪';
-      case 'cardio':
-        return '🏃';
-      case 'sauna':
-        return '🧖';
-      case 'mobility':
-        return '🧘';
-      default:
-        return '🏋️';
-    }
-  };
+  const getWorkoutIcon = (): string => '💪'; // Always weightlifting
 
   const getWorkoutSummary = (workout: Workout): string => {
-    switch (workout.workout_type) {
-      case 'strength': {
-        const data = workout.data as StrengthData;
-        const exerciseCount = data.exercises.length;
-        const totalSets = data.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
-        return `${exerciseCount} exercise${exerciseCount !== 1 ? 's' : ''} • ${totalSets} set${totalSets !== 1 ? 's' : ''}`;
-      }
-      case 'cardio': {
-        const data = workout.data as CardioData;
-        const parts: string[] = [data.type];
-        if (data.distance_km) {
-          parts.push(`${data.distance_km}km`);
-        }
-        parts.push(`${data.time_minutes}min`);
-        return parts.join(' • ');
-      }
-      case 'sauna': {
-        const data = workout.data as SaunaData;
-        const parts = [`${data.duration_minutes}min`];
-        if (data.temperature_celsius) {
-          parts.push(`${data.temperature_celsius}°C`);
-        }
-        return parts.join(' • ');
-      }
-      case 'mobility': {
-        const data = workout.data as MobilityData;
-        const exerciseCount = data.exercises.length;
-        const totalMinutes = data.exercises.reduce((sum, ex) => sum + ex.duration_minutes, 0);
-        return `${exerciseCount} exercise${exerciseCount !== 1 ? 's' : ''} • ${totalMinutes}min`;
-      }
-      default:
-        return 'Unknown workout';
-    }
+    const data = workout.data;
+    const exerciseCount = data.exercises.length;
+    const totalSets = data.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
+    return `${exerciseCount} exercise${exerciseCount !== 1 ? 's' : ''} • ${totalSets} set${totalSets !== 1 ? 's' : ''}`;
   };
 
   const totalPages = Math.ceil(total / pageSize);
@@ -299,28 +248,6 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                 All Time
               </button>
             </div>
-          </div>
-
-          {/* Workout Type Filter */}
-          <div>
-            <label htmlFor="workout-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Workout Type
-            </label>
-            <select
-              id="workout-type"
-              value={workoutTypeFilter}
-              onChange={(e) => {
-                setWorkoutTypeFilter(e.target.value as WorkoutType | 'all');
-                handleFilterChange();
-              }}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="all">All Types</option>
-              <option value="strength">Strength</option>
-              <option value="cardio">Cardio</option>
-              <option value="sauna">Sauna</option>
-              <option value="mobility">Mobility</option>
-            </select>
           </div>
 
           {/* Search */}
@@ -412,17 +339,6 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {workoutTypeFilter !== 'all' && (
-                <button
-                  onClick={() => removeFilter('type')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
-                >
-                  <span className="capitalize">{workoutTypeFilter}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
               {searchQuery && (
                 <button
                   onClick={() => removeFilter('search')}
@@ -523,7 +439,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
             No workouts found
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {workoutTypeFilter !== 'all' || searchQuery || dateFrom || dateTo
+            {searchQuery || dateFrom || dateTo
               ? 'Try adjusting your filters'
               : 'Start by logging your first workout'}
           </p>
@@ -542,14 +458,14 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               <div className="flex items-start gap-4">
                 {/* Icon */}
                 <div className="text-4xl flex-shrink-0">
-                  {getWorkoutIcon(workout.workout_type)}
+                  {getWorkoutIcon()}
                 </div>
 
                 {/* Content */}
                 <div className="flex-grow min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
-                      {workout.workout_type}
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Workout
                     </h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
                       {format(new Date(workout.workout_date), 'MMM d, yyyy')}

@@ -1,10 +1,7 @@
 import { format, startOfWeek, parseISO } from 'date-fns';
 import type {
   Workout,
-  StrengthData,
-  CardioData,
-  SaunaData,
-  MobilityData,
+  WeightliftingData,
 } from '@/types/workout';
 
 /**
@@ -54,54 +51,19 @@ export function formatWorkoutHistory(workouts: Workout[]): string {
 }
 
 /**
- * Format a single workout as a readable summary
+ * Format a single workout as a readable summary (weightlifting only)
  */
 function formatWorkoutSummary(workout: Workout): string {
-  const type = workout.workout_type;
   const data = workout.data;
-
-  switch (type) {
-    case 'strength': {
-      const strengthData = data as StrengthData;
-      const exercises = strengthData.exercises
-        .map((ex) => {
-          const topSet = ex.sets.reduce((max, set) =>
-            set.weight > max.weight ? set : max
-          );
-          return `${ex.name} ${ex.sets.length}x${topSet.reps} @ ${topSet.weight}kg`;
-        })
-        .join(', ');
-      return `Strength - ${exercises}`;
-    }
-
-    case 'cardio': {
-      const cardioData = data as CardioData;
-      const distance = cardioData.distance_km
-        ? ` ${cardioData.distance_km}km`
-        : '';
-      const pace = cardioData.pace ? ` (${cardioData.pace} pace)` : '';
-      return `Cardio - ${cardioData.type} ${cardioData.time_minutes}min${distance}${pace}`;
-    }
-
-    case 'sauna': {
-      const saunaData = data as SaunaData;
-      const temp = saunaData.temperature_celsius
-        ? ` @ ${saunaData.temperature_celsius}°C`
-        : '';
-      return `Sauna - ${saunaData.duration_minutes}min${temp}`;
-    }
-
-    case 'mobility': {
-      const mobilityData = data as MobilityData;
-      const exercises = mobilityData.exercises
-        .map((ex) => `${ex.name} ${ex.duration_minutes}min`)
-        .join(', ');
-      return `Mobility - ${exercises}`;
-    }
-
-    default:
-      return 'Unknown workout';
-  }
+  const exercises = data.exercises
+    .map((ex) => {
+      const topSet = ex.sets.reduce((max, set) =>
+        set.weight > max.weight ? set : max
+      );
+      return `${ex.name} ${ex.sets.length}x${topSet.reps} @ ${topSet.weight}kg`;
+    })
+    .join(', ');
+  return `Weightlifting - ${exercises}`;
 }
 
 /**
@@ -109,18 +71,11 @@ function formatWorkoutSummary(workout: Workout): string {
  */
 export function analyzeRecentWorkouts(workouts: Workout[]): {
   totalWorkouts: number;
-  strengthWorkouts: number;
-  cardioWorkouts: number;
   averagePerWeek: number;
   lastWorkoutDate: string;
   commonExercises: string[];
 } {
-  const strengthWorkouts = workouts.filter(
-    (w) => w.workout_type === 'strength'
-  ).length;
-  const cardioWorkouts = workouts.filter(
-    (w) => w.workout_type === 'cardio'
-  ).length;
+  // All workouts are weightlifting now
 
   // Calculate average per week
   const oldestDate = workouts.length
@@ -141,12 +96,9 @@ export function analyzeRecentWorkouts(workouts: Workout[]): {
   // Find common exercises
   const exerciseCount = new Map<string, number>();
   workouts.forEach((workout) => {
-    if (workout.workout_type === 'strength') {
-      const data = workout.data as StrengthData;
-      data.exercises.forEach((ex) => {
-        exerciseCount.set(ex.name, (exerciseCount.get(ex.name) || 0) + 1);
-      });
-    }
+    workout.data.exercises.forEach((ex) => {
+      exerciseCount.set(ex.name, (exerciseCount.get(ex.name) || 0) + 1);
+    });
   });
 
   const commonExercises = Array.from(exerciseCount.entries())
@@ -156,8 +108,6 @@ export function analyzeRecentWorkouts(workouts: Workout[]): {
 
   return {
     totalWorkouts: workouts.length,
-    strengthWorkouts,
-    cardioWorkouts,
     averagePerWeek,
     lastWorkoutDate: workouts[0]?.workout_date || new Date().toISOString(),
     commonExercises,

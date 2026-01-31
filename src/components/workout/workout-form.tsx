@@ -2,16 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import StrengthForm from './strength-form';
-import CardioForm from './cardio-form';
-import { SaunaForm } from './sauna-form';
-import { MobilityForm } from './mobility-form';
+import WeightliftingForm from './weightlifting-form';
 import type {
-  WorkoutType,
-  StrengthData,
-  CardioData,
-  SaunaData,
-  MobilityData,
+  WeightliftingData,
   CreateWorkoutInput,
   Workout,
 } from '@/types/workout';
@@ -29,9 +22,6 @@ interface WorkoutFormProps {
 
 export default function WorkoutForm({ initialData, workoutId, onSuccess }: WorkoutFormProps) {
   const router = useRouter();
-  const [workoutType, setWorkoutType] = useState<WorkoutType>(
-    initialData?.workout_type || 'strength'
-  );
   const [workoutDate, setWorkoutDate] = useState<string>(
     initialData?.workout_date || new Date().toISOString().split('T')[0]
   );
@@ -44,16 +34,13 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
     setTimeout(() => setToast(null), 5000);
   };
 
-  const handleWorkoutDataSubmit = async (
-    data: StrengthData | CardioData | SaunaData | MobilityData
-  ) => {
+  const handleWorkoutDataSubmit = async (data: WeightliftingData) => {
     setIsSubmitting(true);
 
     try {
       const workoutInput: CreateWorkoutInput = {
-        workout_type: workoutType,
         workout_date: workoutDate,
-        data,
+        data, // Always WeightliftingData
         notes: notes.trim() || undefined,
       };
 
@@ -129,29 +116,8 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
         <p className="text-gray-600">
           {workoutId
             ? 'Update your workout details'
-            : 'Track your fitness progress by logging your workouts'}
+            : 'Track your weightlifting progress'}
         </p>
-      </div>
-
-      {/* Workout Type Selector */}
-      <div className="mb-6">
-        <label
-          htmlFor="workoutType"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Workout Type
-        </label>
-        <select
-          id="workoutType"
-          value={workoutType}
-          onChange={(e) => setWorkoutType(e.target.value as WorkoutType)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base bg-white"
-        >
-          <option value="strength">Strength Training</option>
-          <option value="cardio">Cardio</option>
-          <option value="sauna">Sauna Session</option>
-          <option value="mobility">Mobility & Stretching</option>
-        </select>
       </div>
 
       {/* Date Picker */}
@@ -172,56 +138,17 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
         />
       </div>
 
-      {/* Conditional Form Rendering */}
+      {/* Weightlifting Form - Always Rendered */}
       <div className="mb-6">
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {workoutType === 'strength' && 'Strength Workout Details'}
-            {workoutType === 'cardio' && 'Cardio Workout Details'}
-            {workoutType === 'sauna' && 'Sauna Session Details'}
-            {workoutType === 'mobility' && 'Mobility Session Details'}
+            Workout Details
           </h2>
 
-          {workoutType === 'strength' && (
-            <StrengthForm
-              onSubmit={handleWorkoutDataSubmit}
-              initialData={
-                initialData?.workout_type === 'strength'
-                  ? (initialData.data as StrengthData)
-                  : undefined
-              }
-            />
-          )}
-          {workoutType === 'cardio' && (
-            <CardioForm
-              onSubmit={handleWorkoutDataSubmit}
-              initialData={
-                initialData?.workout_type === 'cardio'
-                  ? (initialData.data as CardioData)
-                  : undefined
-              }
-            />
-          )}
-          {workoutType === 'sauna' && (
-            <SaunaForm
-              onSubmit={handleWorkoutDataSubmit}
-              initialData={
-                initialData?.workout_type === 'sauna'
-                  ? (initialData.data as SaunaData)
-                  : undefined
-              }
-            />
-          )}
-          {workoutType === 'mobility' && (
-            <MobilityForm
-              onSubmit={handleWorkoutDataSubmit}
-              initialData={
-                initialData?.workout_type === 'mobility'
-                  ? (initialData.data as MobilityData)
-                  : undefined
-              }
-            />
-          )}
+          <WeightliftingForm
+            onSubmit={handleWorkoutDataSubmit}
+            initialData={initialData?.data}
+          />
         </div>
       </div>
 

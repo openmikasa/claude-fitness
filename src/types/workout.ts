@@ -1,6 +1,3 @@
-// Core workout types
-export type WorkoutType = 'strength' | 'cardio' | 'sauna' | 'mobility';
-
 // Exercise and junction table types
 export interface Exercise {
   id: string;
@@ -16,63 +13,34 @@ export interface WorkoutExercise {
   workout_id: string;
   exercise_id: string;
   equipment: string[];
-  sets_data: StrengthSet[];
+  sets_data: WeightliftingSet[];
   created_at: string;
   updated_at: string;
   exercises?: Exercise;  // Joined data
 }
 
-// Strength workout structures
-export interface StrengthSet {
+// Weightlifting workout structures
+export interface WeightliftingSet {
   weight: number;
   reps: number;
 }
 
-export interface StrengthExercise {
+export interface WeightliftingExercise {
   name: string;
-  sets: StrengthSet[];
+  sets: WeightliftingSet[];
 }
 
-export interface StrengthData {
-  exercises: StrengthExercise[];
+export interface WeightliftingData {
+  exercises: WeightliftingExercise[];
 }
 
-// Cardio workout structures
-export type CardioType = 'running' | 'cycling' | 'swimming' | 'rowing';
-
-export interface CardioData {
-  type: CardioType;
-  time_minutes: number;
-  distance_km?: number;
-  pace?: string; // e.g., "5:46/km"
-}
-
-// Sauna workout structure
-export interface SaunaData {
-  duration_minutes: number;
-  temperature_celsius?: number;
-}
-
-// Mobility workout structure
-export interface MobilityExercise {
-  name: string;
-  duration_minutes: number;
-}
-
-export interface MobilityData {
-  exercises: MobilityExercise[];
-}
-
-// Union type for all workout data
-export type WorkoutData = StrengthData | CardioData | SaunaData | MobilityData;
-
-// Main workout interface
+// Main workout interface (weightlifting only)
 export interface Workout {
   id: string;
   user_id: string;
-  workout_type: WorkoutType;
+  workout_type: 'weightlifting'; // Literal type - always weightlifting
   workout_date: string; // ISO date string
-  data: WorkoutData;
+  data: WeightliftingData; // No longer a union
   notes?: string;
   created_at: string;
   updated_at: string;
@@ -81,10 +49,10 @@ export interface Workout {
 
 // Form types for creating/editing workouts
 export interface CreateWorkoutInput {
-  workout_type: WorkoutType;
   workout_date: string;
-  data: WorkoutData;
+  data: WeightliftingData; // Direct type, not unknown
   notes?: string;
+  // workout_type removed - always 'weightlifting'
 }
 
 export interface UpdateWorkoutInput extends Partial<CreateWorkoutInput> {
@@ -97,8 +65,7 @@ export type ProgramStatus = 'pending' | 'active' | 'completed';
 
 export interface ProgramDay {
   day: number;
-  workout_type: WorkoutType;
-  data: WorkoutData;
+  data: WeightliftingData; // Always weightlifting data
   coaching_notes: string;
 }
 
@@ -125,7 +92,7 @@ export interface CreateProgramInput {
 
 // Workout filtering
 export interface WorkoutFilters {
-  workout_type?: WorkoutType;
+  // workout_type removed - always weightlifting
   date_from?: string;
   date_to?: string;
   search?: string;

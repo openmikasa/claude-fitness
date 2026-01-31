@@ -10,7 +10,6 @@ import type {
   WorkoutListResponse,
   CreateWorkoutInput,
   UpdateWorkoutInput,
-  WorkoutType,
 } from '@/types/workout';
 import { OfflineQueue } from '@/lib/offline/queue';
 
@@ -23,9 +22,8 @@ export const workoutKeys = {
   detail: (id: string) => [...workoutKeys.details(), id] as const,
 };
 
-// Filter types
+// Filter types (weightlifting only)
 export interface WorkoutFilters {
-  workout_type?: WorkoutType;
   date_from?: string;
   date_to?: string;
   search?: string;
@@ -42,7 +40,6 @@ async function fetchWorkouts(
 ): Promise<WorkoutListResponse> {
   const params = new URLSearchParams();
 
-  if (filters.workout_type) params.append('workout_type', filters.workout_type);
   if (filters.date_from) params.append('date_from', filters.date_from);
   if (filters.date_to) params.append('date_to', filters.date_to);
   if (filters.search) params.append('search', filters.search);
@@ -85,7 +82,7 @@ async function createWorkout(input: CreateWorkoutInput): Promise<Workout> {
     const tempWorkout: Workout = {
       id: `temp-${Date.now()}`,
       user_id: 'pending',
-      workout_type: input.workout_type,
+      workout_type: 'weightlifting', // Always weightlifting
       workout_date: input.workout_date,
       data: input.data,
       notes: input.notes,

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
-import type { Workout, StrengthData, CardioData, SaunaData } from '@/types/workout';
+import type { Workout, WeightliftingData } from '@/types/workout';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,44 +16,18 @@ interface StatsResponse {
   thisWeek: number;
   thisMonth: number;
   personalRecords: {
-    strength: PersonalRecord[];
-    cardio: PersonalRecord[];
-    sauna: number;
+    weightlifting: PersonalRecord[]; // Only weightlifting PRs
   };
 }
 
-// Type guards
-function isStrengthData(data: unknown): data is StrengthData {
+// Type guard for weightlifting data
+function isWeightliftingData(data: unknown): data is WeightliftingData {
   return (
     typeof data === 'object' &&
     data !== null &&
     'exercises' in data &&
-    Array.isArray((data as StrengthData).exercises)
+    Array.isArray((data as WeightliftingData).exercises)
   );
-}
-
-function isCardioData(data: unknown): data is CardioData {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'type' in data &&
-    'time_minutes' in data
-  );
-}
-
-function isSaunaData(data: unknown): data is SaunaData {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'duration_minutes' in data
-  );
-}
-
-// Helper to convert pace string to seconds for comparison
-function paceToSeconds(pace: string): number {
-  const match = pace.match(/^(\d+):(\d+)/);
-  if (!match) return Infinity;
-  return parseInt(match[1]) * 60 + parseInt(match[2]);
 }
 
 export async function GET() {
@@ -92,10 +66,8 @@ export async function GET() {
     let thisWeek = 0;
     let thisMonth = 0;
 
-    // Track personal records
-    const strengthPRs = new Map<string, { weight: number; date: string }>();
-    const cardioPRs = new Map<string, { pace: string; paceSeconds: number; date: string }>();
-    let longestSauna = 0;
+    // Track personal records for weightlifting exercises
+    const weightliftingPRs = new Map<string, { weight: number; date: string }>();
 
     (workouts as Workout[]).forEach((workout) => {
       const workoutDate = new Date(workout.workout_date);
@@ -110,13 +82,13 @@ export async function GET() {
         thisMonth++;
       }
 
-      // Calculate personal records
-      if (workout.workout_type === 'strength' && isStrengthData(workout.data)) {
+      // Calculate personal records (all workouts are weightlifting)
+      if (isWeightliftingData(workout.data)) {
         workout.data.exercises.forEach((exercise) => {
           exercise.sets.forEach((set) => {
-            const existing = strengthPRs.get(exercise.name);
+            const existing = weightliftingPRs.get(exercise.name);
             if (!existing || set.weight > existing.weight) {
-              strengthPRs.set(exercise.name, {
+              weightliftingPRs.set(exercise.name, {
                 weight: set.weight,
                 date: workout.workout_date,
               });
@@ -124,30 +96,10 @@ export async function GET() {
           });
         });
       }
-
-      if (workout.workout_type === 'cardio' && isCardioData(workout.data)) {
-        if (workout.data.pace) {
-          const paceSeconds = paceToSeconds(workout.data.pace);
-          const existing = cardioPRs.get(workout.data.type);
-          if (!existing || paceSeconds < existing.paceSeconds) {
-            cardioPRs.set(workout.data.type, {
-              pace: workout.data.pace,
-              paceSeconds,
-              date: workout.workout_date,
-            });
-          }
-        }
-      }
-
-      if (workout.workout_type === 'sauna' && isSaunaData(workout.data)) {
-        if (workout.data.duration_minutes > longestSauna) {
-          longestSauna = workout.data.duration_minutes;
-        }
-      }
     });
 
-    // Convert PRs to arrays and sort
-    const strengthRecords: PersonalRecord[] = Array.from(strengthPRs.entries())
+    // Convert PRs to arrays and sort by weight
+    const weightliftingRecords: PersonalRecord[] = Array.from(weightliftingPRs.entries())
       .map(([name, data]) => ({
         name,
         value: `${data.weight}kg`,
@@ -156,22 +108,12 @@ export async function GET() {
       .sort((a, b) => parseFloat(b.value) - parseFloat(a.value))
       .slice(0, 3);
 
-    const cardioRecords: PersonalRecord[] = Array.from(cardioPRs.entries())
-      .map(([name, data]) => ({
-        name,
-        value: data.pace,
-        date: data.date,
-      }))
-      .slice(0, 3);
-
     const response: StatsResponse = {
       total: workouts.length,
       thisWeek,
       thisMonth,
       personalRecords: {
-        strength: strengthRecords,
-        cardio: cardioRecords,
-        sauna: longestSauna,
+        weightlifting: weightliftingRecords,
       },
     };
 

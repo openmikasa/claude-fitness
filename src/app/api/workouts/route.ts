@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     // Parse query parameters
-    const workoutType = searchParams.get('workout_type');
     const dateFrom = searchParams.get('date_from');
     const dateTo = searchParams.get('date_to');
     const search = searchParams.get('search');
@@ -50,10 +49,6 @@ export async function GET(request: NextRequest) {
       .order('workout_date', { ascending: false });
 
     // Apply filters
-    if (workoutType) {
-      query = query.eq('workout_type', workoutType);
-    }
-
     if (dateFrom) {
       query = query.gte('workout_date', dateFrom);
     }
@@ -103,7 +98,6 @@ export async function GET(request: NextRequest) {
       const searchLower = exerciseSearch?.toLowerCase() || '';
       const filtered = (allData || []).filter((workout) => {
         // Apply other filters
-        if (workoutType && workout.workout_type !== workoutType) return false;
         if (dateFrom && workout.workout_date < dateFrom) return false;
         if (dateTo && workout.workout_date > dateTo) return false;
         if (search && (!workout.notes || !workout.notes.toLowerCase().includes(search.toLowerCase()))) return false;
@@ -130,19 +124,13 @@ export async function GET(request: NextRequest) {
           if (!hasMatchingEquipment || !hasMatchingMuscleGroup) return false;
         }
 
-        // Apply exercise search based on workout type
+        // Apply exercise search (weightlifting workouts only)
         if (exerciseSearch) {
-          if (workout.workout_type === 'strength' || workout.workout_type === 'mobility') {
-            const data = workout.data as any;
-            if (data.exercises && Array.isArray(data.exercises)) {
-              return data.exercises.some((ex: any) =>
-                ex.name && ex.name.toLowerCase().includes(searchLower)
-              );
-            }
-            return false;
-          } else if (workout.workout_type === 'cardio') {
-            const data = workout.data as any;
-            return data.type && data.type.toLowerCase().includes(searchLower);
+          const data = workout.data as any;
+          if (data.exercises && Array.isArray(data.exercises)) {
+            return data.exercises.some((ex: any) =>
+              ex.name && ex.name.toLowerCase().includes(searchLower)
+            );
           }
           return false;
         }
@@ -158,10 +146,6 @@ export async function GET(request: NextRequest) {
       queryData = filtered.slice(from, to);
     } else {
       // Apply basic filters to query
-      if (workoutType) {
-        query = query.eq('workout_type', workoutType);
-      }
-
       if (dateFrom) {
         query = query.gte('workout_date', dateFrom);
       }
@@ -246,7 +230,7 @@ export async function POST(request: NextRequest) {
       .from('workouts')
       .insert({
         user_id: user.id,
-        workout_type: workoutInput.workout_type,
+        workout_type: 'weightlifting', // Always weightlifting
         workout_date: workoutInput.workout_date,
         data: workoutInput.data,
         notes: workoutInput.notes,
@@ -262,30 +246,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If strength workout with exercises that have exercise_id, create junction table records
-    if (workoutInput.workout_type === 'strength') {
-      const strengthData = workoutInput.data as any;
-      if (strengthData.exercises && Array.isArray(strengthData.exercises)) {
-        const exercisesWithId = strengthData.exercises.filter(
-          (ex: any) => ex.exercise_id && ex.exercise_id.trim() !== ''
-        );
+    // Create junction table records for exercises with exercise_id
+    const weightliftingData = workoutInput.data as any;
+    if (weightliftingData.exercises && Array.isArray(weightliftingData.exercises)) {
+      const exercisesWithId = weightliftingData.exercises.filter(
+        (ex: any) => ex.exercise_id && ex.exercise_id.trim() !== ''
+      );
 
-        if (exercisesWithId.length > 0) {
-          const workoutExercises = exercisesWithId.map((ex: any) => ({
-            workout_id: data.id,
-            exercise_id: ex.exercise_id,
-            equipment: ex.equipment || [],
-            sets_data: ex.sets,
-          }));
+      if (exercisesWithId.length > 0) {
+        const workoutExercises = exercisesWithId.map((ex: any) => ({
+          workout_id: data.id,
+          exercise_id: ex.exercise_id,
+          equipment: ex.equipment || [],
+          sets_data: ex.sets,
+        }));
 
-          const { error: junctionError } = await supabase
-            .from('workout_exercises')
-            .insert(workoutExercises);
+        const { error: junctionError } = await supabase
+          .from('workout_exercises')
+          .insert(workoutExercises);
 
-          if (junctionError) {
-            console.error('Error creating workout_exercises:', junctionError);
-            // Don't fail the whole request, just log the error
-          }
+        if (junctionError) {
+          console.error('Error creating workout_exercises:', junctionError);
+          // Don't fail the whole request, just log the error
         }
       }
     }

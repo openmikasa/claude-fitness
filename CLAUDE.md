@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 🤖 Project Instructions: Claude Fitness
 
 ## 🎯 Project Overview
-* **Purpose:** AI-powered fitness tracking and workout programming application
+* **Purpose:** AI-powered weightlifting tracker and workout programming application
 * **Tech Stack:** Next.js 14 (App Router), Supabase (PostgreSQL + Auth), Claude API, React Query, Tailwind CSS
 * **Architecture:**
   - Server-side API routes with Supabase RLS for security
