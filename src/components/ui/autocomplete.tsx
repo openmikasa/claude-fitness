@@ -7,6 +7,7 @@ interface AutocompleteProps {
   value: string;
   onChange: (value: string) => void;
   onExerciseSelect?: (exercise: Exercise) => void;
+  onCreateNew?: (name: string) => void;
   placeholder?: string;
 }
 
@@ -14,6 +15,7 @@ export function Autocomplete({
   value,
   onChange,
   onExerciseSelect,
+  onCreateNew,
   placeholder = 'Search exercises...',
 }: AutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,7 +86,20 @@ export function Autocomplete({
           {loading ? (
             <div className='px-3 py-2 text-gray-500 text-sm'>Searching...</div>
           ) : exercises.length === 0 ? (
-            <div className='px-3 py-2 text-gray-500 text-sm'>No exercises found</div>
+            <div>
+              <div className='px-3 py-2 text-gray-500 text-sm'>No exercises found</div>
+              {onCreateNew && (
+                <button
+                  onClick={() => {
+                    onCreateNew(value);
+                    setIsOpen(false);
+                  }}
+                  className='w-full px-3 py-2 text-left text-blue-600 hover:bg-blue-50 border-t border-gray-200 text-sm font-medium'
+                >
+                  + Create &quot;{value}&quot; as custom exercise
+                </button>
+              )}
+            </div>
           ) : (
             exercises.map((exercise) => (
               <div
