@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 interface PersonalRecord {
   name: string;
+  equipment: string; // NEW: Track equipment type
   weight: number;  // Changed from value: string to weight: number
   date: string;
 }
@@ -42,10 +43,18 @@ export async function GET() {
 
     const supabase = await createRouteHandlerClient();
 
-    // Fetch all workouts (no pagination)
+    // Fetch all workouts with workout_exercises for equipment data
     const { data: workouts, error } = await supabase
       .from('workouts')
-      .select('*')
+      .select(`
+        *,
+        workout_exercises (
+          exercise_id,
+          equipment,
+          sets_data,
+          exercises (name)
+        )
+      `)
       .eq('user_id', user.id)
       .order('workout_date', { ascending: false });
 
@@ -67,7 +76,8 @@ export async function GET() {
     let thisMonth = 0;
 
     // Track personal records for weightlifting exercises
-    const weightliftingPRs = new Map<string, { weight: number; date: string }>();
+    // Key format: "Exercise Name | Equipment" (e.g., "Bench Press | Barbell")
+    const weightliftingPRs = new Map<string, { weight: number; date: string; name: string; equipment: string }>();
 
     (workouts as Workout[]).forEach((workout) => {
       const workoutDate = new Date(workout.workout_date);
@@ -82,15 +92,40 @@ export async function GET() {
         thisMonth++;
       }
 
-      // Calculate personal records (all workouts are weightlifting)
-      if (isWeightliftingData(workout.data)) {
-        workout.data.exercises.forEach((exercise) => {
-          exercise.sets.forEach((set) => {
-            const existing = weightliftingPRs.get(exercise.name);
+      // Calculate PRs from workout_exercises (new format with equipment)
+      if (workout.workout_exercises && workout.workout_exercises.length > 0) {
+        workout.workout_exercises.forEach((we) => {
+          const exerciseName = we.exercises?.name || 'Unknown';
+          const equipment = we.equipment?.[0] || 'Unknown'; // Take first equipment
+
+          we.sets_data?.forEach((set) => {
+            const key = `${exerciseName} | ${equipment}`;
+            const existing = weightliftingPRs.get(key);
+
             if (!existing || set.weight > existing.weight) {
-              weightliftingPRs.set(exercise.name, {
+              weightliftingPRs.set(key, {
                 weight: set.weight,
                 date: workout.workout_date,
+                name: exerciseName,
+                equipment: equipment,
+              });
+            }
+          });
+        });
+      }
+      // Fallback to JSONB data for backward compatibility (no equipment tracking)
+      else if (isWeightliftingData(workout.data)) {
+        workout.data.exercises.forEach((exercise) => {
+          const key = `${exercise.name} | Unknown`;
+
+          exercise.sets.forEach((set) => {
+            const existing = weightliftingPRs.get(key);
+            if (!existing || set.weight > existing.weight) {
+              weightliftingPRs.set(key, {
+                weight: set.weight,
+                date: workout.workout_date,
+                name: exercise.name,
+                equipment: 'Unknown',
               });
             }
           });
@@ -98,15 +133,15 @@ export async function GET() {
       }
     });
 
-    // Convert PRs to arrays and sort by weight
-    const weightliftingRecords: PersonalRecord[] = Array.from(weightliftingPRs.entries())
-      .map(([name, data]) => ({
-        name,
-        weight: data.weight,  // Return raw weight value
+    // Convert PRs to arrays and sort by weight (descending)
+    const weightliftingRecords: PersonalRecord[] = Array.from(weightliftingPRs.values())
+      .map((data) => ({
+        name: data.name,
+        equipment: data.equipment,
+        weight: data.weight,
         date: data.date,
       }))
-      .sort((a, b) => b.weight - a.weight)
-      .slice(0, 3);
+      .sort((a, b) => b.weight - a.weight); // Sort by weight, no limit
 
     const response: StatsResponse = {
       total: workouts.length,

@@ -7,6 +7,7 @@ import { useSettings } from '@/lib/hooks/useSettings';
 
 interface PersonalRecord {
   name: string;
+  equipment: string; // NEW: Equipment type
   weight: number;  // Changed from value: string to weight: number
   date: string;
 }
@@ -240,7 +241,7 @@ export default function WorkoutStats() {
                             {pr.name}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-500">
-                            {format(new Date(pr.date), 'MMM d, yyyy')}
+                            {pr.equipment} • {format(new Date(pr.date), 'MMM d, yyyy')}
                           </p>
                         </div>
                         <div className="flex-shrink-0">
