@@ -15,3 +15,1562 @@
  ✓ Compiled in 68ms (333 modules)
  GET / 200 in 16ms
  ✓ Compiled /login in 142ms (644 modules)
+ ✓ Compiled in 81ms (335 modules)
+ ✓ Compiled in 47ms (335 modules)
+ ✓ Compiled in 45ms (335 modules)
+ ✓ Compiled in 40ms (335 modules)
+ ✓ Compiled in 41ms (335 modules)
+ ✓ Compiled in 40ms (335 modules)
+ ✓ Compiled in 39ms (335 modules)
+ ✓ Compiled in 38ms (335 modules)
+ ✓ Compiled in 50ms (335 modules)
+ ✓ Compiled in 44ms (335 modules)
+ ✓ Compiled in 41ms (335 modules)
+ ✓ Compiled in 38ms (335 modules)
+ ✓ Compiled in 49ms (335 modules)
+ ✓ Compiled in 44ms (335 modules)
+ ✓ Compiled in 40ms (335 modules)
+ ✓ Compiled in 40ms (335 modules)
+ ✓ Compiled in 37ms (335 modules)
+ ✓ Compiled in 38ms (335 modules)
+ ✓ Compiled in 46ms (335 modules)
+ ✓ Compiled in 42ms (335 modules)
+ ✓ Compiled in 39ms (335 modules)
+ ✓ Compiled in 37ms (335 modules)
+ ✓ Compiled in 48ms (335 modules)
+ ✓ Compiled in 48ms (335 modules)
+ ✓ Compiled in 37ms (335 modules)
+ ✓ Compiled in 38ms (335 modules)
+ ✓ Compiled in 71ms (335 modules)
+ ✓ Compiled in 43ms (335 modules)
+ ✓ Compiled /workouts/import in 199ms (701 modules)
+ GET /workouts/import 200 in 271ms
+ ✓ Compiled /_not-found in 134ms (704 modules)
+ GET /workouts/import 404 in 195ms
+ ✓ Compiled in 86ms (718 modules)
+ GET /_next/static/css/app/layout.css?v=1769882959052 404 in 16ms
+ ✓ Compiled in 76ms (718 modules)
+ GET /_next/static/css/app/layout.css?v=1769882972659 404 in 11ms
+ ✓ Compiled in 85ms (718 modules)
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/workouts/import/page.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/workouts/import/page.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ○ (pwa) PWA support is disabled.
+ ✓ Compiled /_error in 317ms (931 modules)
+ GET /_next/static/css/app/layout.css?v=1769883008317 500 in 878ms
+ GET /_next/static/css/app/layout.css?v=1769883009236 404 in 24ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/papaparse.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/papaparse' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/papaparse.js', but to 'Error: Can't resolve './vendor-chunks/papaparse' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/papaparse (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/papaparse.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/iceberg-js' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/iceberg-js.js', but to 'Error: Can't resolve './vendor-chunks/iceberg-js' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/iceberg-js (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/iceberg-js.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/tslib' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/tslib.js', but to 'Error: Can't resolve './vendor-chunks/tslib' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/tslib (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/tslib.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+ ✓ Compiled in 116ms (931 modules)
+ ✓ Compiled in 61ms (553 modules)
+ GET /_next/static/css/app/layout.css?v=1769883065722 404 in 47ms
+ ✓ Compiled in 80ms (943 modules)
+ GET /_next/static/css/app/layout.css?v=1769883079714 404 in 31ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/papaparse' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/papaparse.js', but to 'Error: Can't resolve './vendor-chunks/papaparse' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/papaparse (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/papaparse.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/iceberg-js' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/iceberg-js.js', but to 'Error: Can't resolve './vendor-chunks/iceberg-js' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/iceberg-js (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/iceberg-js.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/tslib' in /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/tslib.js', but to 'Error: Can't resolve './vendor-chunks/tslib' in '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/tslib (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/vendor-chunks/tslib.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+ GET /workouts/import 200 in 22ms
+ GET /_next/static/css/app/layout.css?v=1769883165137 404 in 10ms
+ GET /_next/static/chunks/webpack.js?v=1769883165137 404 in 12ms
+ GET /_next/static/chunks/app/workouts/import/page.js 404 in 14ms
+ GET /_next/static/chunks/main-app.js?v=1769883165137 404 in 16ms
+ GET /_next/static/chunks/app/layout.js 404 in 13ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 16ms
+ ✓ Compiled / in 118ms (398 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.__webpack_require__ [as require] (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:33:43)
+digest: "2107550226"
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.__webpack_require__ [as require] (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:33:43)
+    at require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:20064)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108376
+    at ea (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108583)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:110813
+    at Object._fromJSON (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:111370)
+    at JSON.parse (<anonymous>)
+    at ec (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:109078)
+    at eo (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108123)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115291
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115308
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115341
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115358
+    at t (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115581)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.__webpack_require__ [as require] (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:33:43)
+    at require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:20064)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108376
+    at ea (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108583)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:110813
+    at Object._fromJSON (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:111370)
+    at JSON.parse (<anonymous>)
+    at ec (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:109078)
+    at eo (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:108123)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115291
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115308
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115341
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115358
+    at t (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:115581) {
+  page: '/'
+}
+ ✓ Compiled /_error in 67ms (938 modules)
+ ⨯ Error: Cannot find module './682.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js:1:335
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js:1:376)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET / 500 in 218ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/fallback/webpack.js 500 in 5ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/fallback/main.js 500 in 5ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 4ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/fallback/pages/_app.js 500 in 5ms
+ GET /_next/static/chunks/fallback/pages/_error.js 500 in 5ms
+ GET / 200 in 67ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/css/app/layout.css?v=1769883176407 500 in 6ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/main-app.js?v=1769883176407 500 in 8ms
+ GET /_next/static/chunks/app-pages-internals.js 500 in 8ms
+ GET /_next/static/chunks/app/page.js 500 in 7ms
+ GET /_next/static/chunks/app/layout.js 500 in 7ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 7ms
+ GET / 404 in 10ms
+ GET / 404 in 7ms
+ GET / 404 in 9ms
+ GET / 404 in 7ms
+ GET / 404 in 8ms
+ GET / 404 in 12ms
+ GET / 404 in 8ms
+ GET / 404 in 9ms
+ GET / 404 in 11ms
+ GET / 404 in 10ms
+ GET / 404 in 7ms
+ GET / 404 in 14ms
+ GET / 404 in 9ms
+ GET / 404 in 8ms
+ GET / 404 in 11ms
+ GET / 404 in 11ms
+ GET / 404 in 4ms
+ GET / 404 in 12ms
+ GET / 404 in 12ms
+ GET / 404 in 15ms
+ GET / 404 in 11ms
+ GET / 404 in 7ms
+ GET / 404 in 11ms
+ GET / 404 in 9ms
+ GET / 404 in 12ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 11ms
+ GET / 404 in 10ms
+ GET / 404 in 4ms
+ GET / 404 in 11ms
+ GET / 404 in 9ms
+ GET / 404 in 11ms
+ GET / 404 in 11ms
+ GET / 404 in 11ms
+ GET / 404 in 12ms
+ GET / 404 in 49ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/page' in /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server for build dependencies doesn't lead to expected result '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/page.js', but to 'Error: Can't resolve '../../../../.next/server/app/page' in '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/page (expected /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/page.js)
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+ GET / 404 in 12ms
+ GET / 404 in 8ms
+ GET / 404 in 13ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 5ms
+ GET / 404 in 13ms
+ GET / 404 in 11ms
+ GET / 404 in 9ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 9ms
+ GET / 404 in 9ms
+ GET / 404 in 7ms
+ GET / 404 in 9ms
+ GET / 404 in 5ms
+ GET / 404 in 5ms
+ GET / 404 in 10ms
+ GET / 404 in 12ms
+ GET / 404 in 8ms
+ GET / 404 in 8ms
+ GET / 404 in 12ms
+ GET / 404 in 9ms
+ GET / 404 in 10ms
+ GET / 404 in 8ms
+ GET / 404 in 6ms
+ GET / 404 in 7ms
+ GET / 404 in 9ms
+ GET / 404 in 6ms
+ GET / 404 in 12ms
+ GET / 404 in 5ms
+ GET / 404 in 5ms
+ GET / 404 in 4ms
+ GET / 404 in 6ms
+ GET / 404 in 4ms
+ GET / 404 in 6ms
+ GET / 404 in 5ms
+ GET / 404 in 5ms
+ GET / 404 in 5ms
+ GET / 404 in 5ms
+ GET / 404 in 4ms
+ GET / 404 in 4ms
+ GET / 404 in 3ms
+ GET / 404 in 4ms
+ GET / 404 in 3ms
+ GET / 200 in 14ms
+ GET / 200 in 13ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/css/app/layout.css?v=1769883281136 500 in 6ms
+ GET /_next/static/chunks/webpack.js?v=1769883281136 500 in 5ms
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './276.js'
+Require stack:
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js
+- /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
+    at Module._load (node:internal/modules/cjs/loader:1233:25)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at __webpack_require__.f.require (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:198:28)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js:162:22)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7192
+    at Object.<anonymous> (/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/app/_not-found/page.js:1:7237)
+    at Module._compile (node:internal/modules/cjs/loader:1803:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1934:10)
+    at Module.load (node:internal/modules/cjs/loader:1524:32)
+    at Module._load (node:internal/modules/cjs/loader:1326:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1547:12)
+    at mod.require (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js:109:84)
+    at /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderErrorToResponseImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2090:30)
+    at async pipe.req.req (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:2056:30)
+    at async DevServer.pipeImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/base-server.js:922:25)
+    at async /Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:374:24)
+    at async requestHandlerImpl (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/webpack-runtime.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/.next/server/pages/_document.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/require.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/load-components.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/build/utils.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/ramyg/Desktop/Vibes/claude-fitness/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/main-app.js?v=1769883281136 500 in 7ms
+ GET /_next/static/chunks/app-pages-internals.js 500 in 7ms
+ GET /_next/static/chunks/app/page.js 500 in 7ms
+ GET /_next/static/chunks/app/layout.js 500 in 7ms
+ ✓ Compiled in 918ms (940 modules)
