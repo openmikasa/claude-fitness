@@ -4,10 +4,28 @@ import type { Exercise } from '@/types/workout';
  * Normalize exercise name for matching
  * - Lowercase
  * - Remove trailing 's' for plurals
+ * - Strip grip/stance/tempo variations
  * - Trim whitespace
  */
 function normalizeExerciseName(name: string): string {
   let normalized = name.toLowerCase().trim();
+
+  // Remove grip/stance/tempo variations before other processing
+  const variationKeywords = [
+    'wide grip', 'narrow grip', 'close grip', 'neutral grip',
+    'pronated', 'supinated', 'overhand', 'underhand',
+    'wide stance', 'narrow stance', 'sumo stance',
+    'slow', 'pause', 'explosive', 'tempo',
+    'full range', 'partial', 'deficit',
+    'wide', 'narrow', 'close', 'neutral'
+  ];
+
+  for (const keyword of variationKeywords) {
+    normalized = normalized.replace(new RegExp(`\\b${keyword}\\b`, 'gi'), '');
+  }
+
+  // Clean up multiple spaces
+  normalized = normalized.replace(/\s+/g, ' ').trim();
 
   // Remove trailing 's' for plural handling (pull-ups -> pull-up)
   if (normalized.endsWith('s') && normalized.length > 3) {
@@ -70,29 +88,54 @@ export function findBestMatch(
   }
 
   const normalizedInput = normalizeExerciseName(exerciseName);
+  const originalInput = exerciseName.toLowerCase().trim();
   let bestMatch: Exercise | null = null;
   let bestScore = 0;
 
+  // Equipment prefixes to check
+  const equipmentPrefixes = ['barbell', 'dumbbell', 'cable', 'kettlebell', 'band'];
+
   for (const exercise of allExercises) {
     const normalizedDbName = normalizeExerciseName(exercise.name);
+    const originalDbName = exercise.name.toLowerCase().trim();
 
     // Exact match after normalization (handles plurals and case)
     if (normalizedInput === normalizedDbName) {
-      return { exercise, confidence: 1.0 };
+      // If both have same equipment prefix, it's a perfect match
+      const inputHasPrefix = equipmentPrefixes.some(prefix => originalInput.startsWith(prefix));
+      const dbHasPrefix = equipmentPrefixes.some(prefix => originalDbName.startsWith(prefix));
+
+      if (inputHasPrefix === dbHasPrefix) {
+        return { exercise, confidence: 1.0 };
+      }
+      // If one has prefix and other doesn't, it's still good but not perfect
+      if (bestScore < 0.95) {
+        bestScore = 0.95;
+        bestMatch = exercise;
+      }
     }
 
     // Calculate similarity score
     const score = similarity(normalizedInput, normalizedDbName);
 
+    // Boost score if equipment prefix matches
+    let adjustedScore = score;
+    for (const prefix of equipmentPrefixes) {
+      if (originalInput.startsWith(prefix) && originalDbName.startsWith(prefix)) {
+        adjustedScore = Math.min(1.0, score + 0.15); // Boost for matching equipment prefix
+        break;
+      }
+    }
+
     // Check if one contains the other (for variations like "cable row" vs "row")
     if (normalizedInput.includes(normalizedDbName) || normalizedDbName.includes(normalizedInput)) {
-      const containmentScore = Math.max(score, 0.85); // Boost score for containment
+      const containmentScore = Math.max(adjustedScore, 0.85);
       if (containmentScore > bestScore) {
         bestScore = containmentScore;
         bestMatch = exercise;
       }
-    } else if (score > bestScore) {
-      bestScore = score;
+    } else if (adjustedScore > bestScore) {
+      bestScore = adjustedScore;
       bestMatch = exercise;
     }
   }
