@@ -120,7 +120,7 @@ export function autoDetectMapping(headers: string[]): {
   if (dateMatch !== -1) mapping.dateColumn = headers[dateMatch];
 
   // Session patterns (for multiple workouts per day)
-  const sessionPatterns = ['session', 'workout', 'workout_name', 'workout name', 'time'];
+  const sessionPatterns = ['session', 'workout', 'workout_name', 'workout name'];
   const sessionMatch = headerMap.findIndex((h) =>
     sessionPatterns.some((p) => h === p) // Exact match to avoid conflicts
   );
