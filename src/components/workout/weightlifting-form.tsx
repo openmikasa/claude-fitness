@@ -216,7 +216,7 @@ function ExerciseField({
         <div className="flex-1">
           <label
             htmlFor={`exercises.${exerciseIndex}.name`}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-900 mb-1"
           >
             Exercise Name
           </label>
@@ -263,18 +263,18 @@ function ExerciseField({
 
       {/* Sets */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-700">Sets</h4>
+        <h4 className="text-sm font-medium text-gray-900">Sets</h4>
         {sets.map((set, setIndex) => (
           <div key={set.id} className="space-y-2">
             <div className="flex items-start gap-3">
-              <div className="flex items-center gap-2 text-sm text-gray-500 min-w-[3rem]">
+              <div className="flex items-center gap-2 text-sm text-gray-900 min-w-[3rem]">
                 Set {setIndex + 1}
               </div>
               <div className="flex-1 grid grid-cols-2 gap-3">
                 <div>
                   <label
                     htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.weight`}
-                    className="block text-xs font-medium text-gray-600 mb-1"
+                    className="block text-xs font-medium text-gray-900 mb-1"
                   >
                     Weight ({weightUnit})
                   </label>
@@ -286,7 +286,7 @@ function ExerciseField({
                     step="0.1"
                     min="0"
                     placeholder="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.weight && (
                     <p className="mt-1 text-xs text-red-600">
@@ -297,7 +297,7 @@ function ExerciseField({
                 <div>
                   <label
                     htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.reps`}
-                    className="block text-xs font-medium text-gray-600 mb-1"
+                    className="block text-xs font-medium text-gray-900 mb-1"
                   >
                     Reps
                   </label>
@@ -308,7 +308,7 @@ function ExerciseField({
                     type="number"
                     min="1"
                     placeholder="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.reps && (
                     <p className="mt-1 text-xs text-red-600">
