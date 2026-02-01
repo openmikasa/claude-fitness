@@ -33,6 +33,32 @@ export function ProgramManager() {
   const deleteMutation = useDeleteProgram();
   const { data: settings } = useSettings();
 
+  // Cleanup exercise names mutation
+  const cleanupProgramsMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/ai/cleanup-programs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to cleanup programs');
+      }
+      return response.json();
+    },
+    onSuccess: async (data) => {
+      console.log('[Cleanup Success]', data);
+      await queryClient.invalidateQueries({ queryKey: ['programs'] });
+      await queryClient.refetchQueries({ queryKey: ['programs'] });
+      alert(`✅ Cleanup Complete!\n\n${data.message}\n\nUpdated: ${data.updated}/${data.total} programs\n\nExercise names are now normalized with equipment separated.`);
+      window.location.reload();
+    },
+    onError: (error) => {
+      console.error('Failed to cleanup programs:', error);
+      alert(`❌ Cleanup Failed\n\n${error.message}`);
+    },
+  });
+
   // Fix program week numbers mutation
   const fixWeeksMutation = useMutation({
     mutationFn: async ({ programId, silent }: { programId: string; silent?: boolean }) => {
@@ -216,9 +242,24 @@ export function ProgramManager() {
 
   return (
     <div className='bg-white rounded-lg shadow-md p-6'>
-      <div className='flex items-center gap-2 mb-6'>
-        <span className='text-2xl'>📋</span>
-        <h2 className='text-xl font-bold text-gray-900'>My Programs</h2>
+      <div className='flex items-center justify-between mb-6'>
+        <div className='flex items-center gap-2'>
+          <span className='text-2xl'>📋</span>
+          <h2 className='text-xl font-bold text-gray-900'>My Programs</h2>
+        </div>
+        {programs.length > 0 && (
+          <button
+            onClick={() => {
+              if (confirm('Clean up all programs?\n\nThis will normalize exercise names (e.g., "Hax Deadlift" → "Deadlift" with equipment "Hax Barbell").\n\nThis is safe and reversible.')) {
+                cleanupProgramsMutation.mutate();
+              }
+            }}
+            disabled={cleanupProgramsMutation.isPending}
+            className='text-xs px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors disabled:opacity-50 font-medium'
+          >
+            {cleanupProgramsMutation.isPending ? '🔄 Cleaning...' : '🧹 Clean Exercise Names'}
+          </button>
+        )}
       </div>
 
       {programs.length === 0 ? (
