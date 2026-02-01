@@ -220,22 +220,22 @@ Include a detailed rationale explaining all major adjustments with references to
     console.log(`JSON extracted successfully using method: ${extraction.extractionMethod}`);
 
     // Validate response
-    const validation = weeklyPlanResponseSchema.safeParse(extraction.data);
-    if (!validation.success) {
+    const aiValidation = weeklyPlanResponseSchema.safeParse(extraction.data);
+    if (!aiValidation.success) {
       console.error('=== VALIDATION FAILURE ===');
-      console.error('Validation error:', validation.error);
+      console.error('Validation error:', aiValidation.error);
       console.error('Parsed response keys:', Object.keys(extraction.data as object));
       console.error('=== END VALIDATION FAILURE ===');
       return NextResponse.json(
         {
           error: 'Invalid AI response structure',
-          details: validation.error.flatten(),
+          details: aiValidation.error.flatten(),
         },
         { status: 500 }
       );
     }
 
-    const validatedResponse = validation.data;
+    const validatedResponse = aiValidation.data;
 
     // Build updated plan_data: keep past days, replace future days
     const updatedPlanData = [
