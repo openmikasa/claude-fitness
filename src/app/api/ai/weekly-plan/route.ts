@@ -18,10 +18,23 @@ import type { Workout } from '@/types/workout';
 export const dynamic = 'force-dynamic';
 
 // Load fitness coaching skill
-const COACHING_SKILL_PATH = join(process.cwd(), '.claude/skills/fitness-coach/SKILL.md');
-const COACHING_SKILL = readFileSync(COACHING_SKILL_PATH, 'utf-8')
-  .split('---')[2] // Extract content after YAML frontmatter
-  .trim();
+function loadCoachingSkill(): string {
+  try {
+    const COACHING_SKILL_PATH = join(process.cwd(), '.claude/skills/fitness-coach/SKILL.md');
+    const content = readFileSync(COACHING_SKILL_PATH, 'utf-8');
+    const parts = content.split('---');
+
+    if (parts.length < 3) {
+      console.error('Invalid SKILL.md format: expected YAML frontmatter with --- delimiters');
+      return ''; // Fallback to empty string if format is wrong
+    }
+
+    return parts[2].trim();
+  } catch (error) {
+    console.error('Failed to load coaching skill file:', error);
+    return ''; // Fallback to empty string if file can't be read
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -104,13 +117,15 @@ export async function POST(request: Request) {
 
     let aiResponse: string;
     try {
-      aiResponse = await askClaude(prompt, COACHING_SKILL);
+      const coachingSkill = loadCoachingSkill();
+      aiResponse = await askClaude(prompt, coachingSkill);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
+      console.error('Error details:', JSON.stringify(aiError, null, 2));
       return NextResponse.json(
         {
           error: 'AI generation failed',
-          message: 'Failed to generate weekly plan. Please try again.',
+          message: aiError instanceof Error ? aiError.message : 'Failed to generate weekly plan. Please try again.',
         },
         { status: 500 }
       );
