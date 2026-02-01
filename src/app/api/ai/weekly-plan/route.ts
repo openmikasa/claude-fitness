@@ -119,7 +119,13 @@ export async function POST(request: Request) {
     let aiResponse: string;
     try {
       const coachingSkill = loadCoachingSkill();
-      aiResponse = await askClaude(prompt, coachingSkill);
+
+      // Calculate max_tokens based on program length
+      // Base: 2048 tokens + 1500 tokens per week
+      // 1 week: 3548 tokens, 4 weeks: 8048 tokens, 12 weeks: 20048 tokens
+      const maxTokens = 2048 + (programWeeks * 1500);
+
+      aiResponse = await askClaude(prompt, coachingSkill, maxTokens);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       console.error('Error details:', JSON.stringify(aiError, null, 2));

@@ -184,7 +184,11 @@ Include a detailed rationale explaining all major adjustments with references to
     const systemPrompt = 'You are an evidence-based strength and conditioning coach.';
     let aiResponse: string;
     try {
-      aiResponse = await askClaude(prompt, systemPrompt);
+      // Calculate max_tokens based on program length
+      // Same formula as weekly-plan: Base 2048 + 1500 per week
+      const maxTokens = 2048 + (totalWeeks * 1500);
+
+      aiResponse = await askClaude(prompt, systemPrompt, maxTokens);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(

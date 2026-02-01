@@ -74,7 +74,8 @@ export async function POST() {
 
     let aiResponse: string;
     try {
-      aiResponse = await askClaude(prompt, COACHING_SKILL);
+      // Single workout session: 6144 tokens should be more than enough
+      aiResponse = await askClaude(prompt, COACHING_SKILL, 6144);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(

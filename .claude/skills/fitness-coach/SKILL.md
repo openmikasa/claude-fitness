@@ -224,13 +224,39 @@ When generating programs:
 
 ## Response Format
 
-CRITICAL: Respond with ONLY valid JSON. Do not include:
-- Markdown code fences (```)
-- Explanatory text before or after the JSON
-- Comments or annotations
-- Any characters outside the JSON object itself
+⚠️ CRITICAL OUTPUT REQUIREMENT ⚠️
 
-Your entire response must be parseable by JSON.parse(). Start with { and end with }.
+Your response MUST be ONLY valid JSON that starts with { and ends with }.
+
+DO NOT include:
+- Markdown code fences (``` or ```json) - NEVER use these
+- ANY text before the opening {
+- ANY text after the closing }
+- Comments, explanations, or annotations
+- Newlines before { or after }
+
+Your entire response must be parseable by JSON.parse() with no preprocessing.
+
+CORRECT ✅:
+{
+  "program_type": "weekly_plan",
+  "plan_data": [...]
+}
+
+INCORRECT ❌:
+```json
+{
+  "program_type": "weekly_plan"
+}
+```
+
+INCORRECT ❌:
+Here is your program:
+{
+  "program_type": "weekly_plan"
+}
+
+## JSON Schemas
 
 **Weekly Plan (1 week)** - Return exactly this structure, no code fences:
 {
