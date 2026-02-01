@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
-import Anthropic from '@anthropic-ai/sdk';
+import { askClaude } from '@/lib/ai/claude-client';
 import { z } from 'zod';
 import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
 import type {
@@ -132,10 +132,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Build AI prompt
-    const anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
-
     const totalWeeks = program.mesocycle_info?.total_weeks || 1;
     const totalDays = program.plan_data.length;
     const completedWorkoutsText = (workouts || [])
@@ -183,50 +179,35 @@ Return ONLY valid JSON matching this exact format:
 Include a detailed rationale explaining all major adjustments with references to specific workout notes.
 `;
 
-    // Call Claude API with skill
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 8000,
-      system: 'You are an evidence-based strength and conditioning coach.',
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: prompt,
-              cache_control: { type: 'ephemeral' },
-            },
-          ],
-        },
-      ],
-      metadata: {
-        user_id: user.id,
-      },
-      extended_thinking: {
-        enabled: true,
-        type: 'enabled',
-        budget_tokens: 2000,
-      },
-    });
-
-    // Extract text response
-    const textContent = message.content.find((c) => c.type === 'text');
-    if (!textContent || textContent.type !== 'text') {
-      throw new Error('No text content in AI response');
+    // Call Claude API using helper
+    const systemPrompt = 'You are an evidence-based strength and conditioning coach.';
+    let aiResponse: string;
+    try {
+      aiResponse = await askClaude(prompt, systemPrompt);
+    } catch (aiError) {
+      console.error('Claude API error:', aiError);
+      return NextResponse.json(
+        { error: 'AI generation failed', message: 'Failed to refresh program. Please try again.' },
+        { status: 500 }
+      );
     }
 
     // Parse JSON response
-    let aiResponse;
+    let jsonText = aiResponse.trim();
+    if (jsonText.startsWith('```')) {
+      jsonText = jsonText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+    }
+
+    let aiResponseParsed;
     try {
-      aiResponse = JSON.parse(textContent.text);
+      aiResponseParsed = JSON.parse(jsonText);
     } catch (parseError) {
-      console.error('Failed to parse AI response:', textContent.text);
+      console.error('Failed to parse AI response:', aiResponse);
       throw new Error('AI returned invalid JSON');
     }
 
     // Validate response
-    const validatedResponse = weeklyPlanResponseSchema.parse(aiResponse);
+    const validatedResponse = weeklyPlanResponseSchema.parse(aiResponseParsed);
 
     // Build updated plan_data: keep past days, replace future days
     const updatedPlanData = [
