@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import {
   createRouteHandlerClient,
   getAuthenticatedUser,
@@ -14,32 +16,11 @@ import type { Workout } from '@/types/workout';
 
 export const dynamic = 'force-dynamic';
 
-const NEXT_SESSION_SYSTEM_PROMPT = `You are an expert weightlifting coach. Analyze the user's recent workout history and generate the optimal next training session.
-
-Apply these principles:
-- Progressive overload (gradual weight/volume increase of 2.5-5kg for upper body, 5-10kg for lower body)
-- Adequate recovery (48-72 hours between similar muscle groups)
-- Exercise variety to prevent plateaus
-- Realistic recommendations based on recent performance
-- If user hasn't trained a muscle group recently, prioritize it
-
-Respond with ONLY valid JSON, no markdown formatting or code blocks:
-{
-  "data": {
-    "exercises": [
-      {
-        "name": "Squat",
-        "sets": [
-          { "weight": 100, "reps": 5 },
-          { "weight": 100, "reps": 5 },
-          { "weight": 100, "reps": 5 }
-        ]
-      }
-    ]
-  },
-  "rationale": "Increasing squat weight by 5kg for progressive overload after successful completion last week. Adding volume with bench press variations.",
-  "coaching_notes": "Focus on depth and bar path. Rest 3-5 min between sets. If you can't complete all reps, reduce weight by 10%."
-}`;
+// Load fitness coaching skill
+const COACHING_SKILL_PATH = join(process.cwd(), '.claude/skills/fitness-coach/SKILL.md');
+const COACHING_SKILL = readFileSync(COACHING_SKILL_PATH, 'utf-8')
+  .split('---')[2] // Extract content after YAML frontmatter
+  .trim();
 
 export async function POST() {
   try {
@@ -67,7 +48,7 @@ export async function POST() {
       .select('*')
       .eq('user_id', user.id)
       .order('workout_date', { ascending: false })
-      .limit(20);
+      .limit(50);
 
     if (fetchError) {
       console.error('Error fetching workouts:', fetchError);
@@ -92,7 +73,7 @@ export async function POST() {
 
     let aiResponse: string;
     try {
-      aiResponse = await askClaude(prompt, NEXT_SESSION_SYSTEM_PROMPT);
+      aiResponse = await askClaude(prompt, COACHING_SKILL);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(

@@ -34,7 +34,7 @@ export function formatWorkoutHistory(workouts: Workout[]): string {
   // Format output
   let output = 'Recent Workout History:\n\n';
 
-  sortedWeeks.slice(0, 4).forEach(([weekStart, weekWorkouts], weekIndex) => {
+  sortedWeeks.slice(0, 12).forEach(([weekStart, weekWorkouts], weekIndex) => {
     const weekNum = weekIndex + 1;
     output += `Week ${weekNum} (${format(parseISO(weekStart), 'MMM d')}):\n`;
 

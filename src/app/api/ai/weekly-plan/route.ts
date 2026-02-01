@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { addDays } from 'date-fns';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import {
   createRouteHandlerClient,
   getAuthenticatedUser,
@@ -15,39 +17,11 @@ import type { Workout } from '@/types/workout';
 
 export const dynamic = 'force-dynamic';
 
-const WEEKLY_PLAN_SYSTEM_PROMPT = `You are an expert weightlifting coach. Create a complete 7-day training program for the user based on their workout history.
-
-Goals:
-- Progressive overload for weightlifting exercises (2.5-5kg for upper body, 5-10kg for lower body)
-- Variety to prevent boredom
-- Realistic volume based on user's capacity
-- Include at least 1-2 rest/recovery days
-
-Respond with ONLY valid JSON, no markdown formatting or code blocks:
-{
-  "program_type": "weekly_plan",
-  "plan_data": [
-    {
-      "day": 1,
-      "data": {
-        "exercises": [
-          {
-            "name": "Squat",
-            "sets": [
-              { "weight": 100, "reps": 5 },
-              { "weight": 100, "reps": 5 },
-              { "weight": 100, "reps": 5 }
-            ]
-          }
-        ]
-      },
-      "coaching_notes": "Focus on form and depth"
-    }
-  ],
-  "rationale": "This plan focuses on weightlifting development with adequate recovery...",
-  "valid_from": "2026-01-27",
-  "valid_until": "2026-02-02"
-}`;
+// Load fitness coaching skill
+const COACHING_SKILL_PATH = join(process.cwd(), '.claude/skills/fitness-coach/SKILL.md');
+const COACHING_SKILL = readFileSync(COACHING_SKILL_PATH, 'utf-8')
+  .split('---')[2] // Extract content after YAML frontmatter
+  .trim();
 
 export async function POST(request: Request) {
   try {
@@ -56,9 +30,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Parse request body for custom prompt
+    // Parse request body for custom prompt and program weeks
     const body = await request.json().catch(() => ({}));
     const customPrompt = body.customPrompt || '';
+    const programWeeks = Math.min(Math.max(body.programWeeks || 1, 1), 12); // 1-12 weeks
 
     const rateLimit = await checkRateLimit(user.id);
     if (!rateLimit.isAllowed) {
@@ -74,14 +49,14 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createRouteHandlerClient();
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
 
     const { data: workouts, error: fetchError } = await supabase
       .from('workouts')
       .select('*')
       .eq('user_id', user.id)
-      .gte('workout_date', thirtyDaysAgo.toISOString().split('T')[0])
+      .gte('workout_date', ninetyDaysAgo.toISOString().split('T')[0])
       .order('workout_date', { ascending: false });
 
     if (fetchError) {
@@ -102,20 +77,26 @@ export async function POST(request: Request) {
       );
     }
 
+    // Calculate dates based on program length
     const today = new Date();
     const validFrom = today.toISOString().split('T')[0];
-    const validUntil = addDays(today, 6).toISOString().split('T')[0];
+    const totalDays = programWeeks * 7;
+    const validUntil = addDays(today, totalDays - 1).toISOString().split('T')[0];
 
     const historyText = formatWorkoutHistory(workouts as Workout[]);
 
     // Build the prompt with custom user requirements if provided
-    let prompt = `Here is the user's recent workout history (last 30 days):\n\n${historyText}\n\n`;
+    let prompt = `Here is the user's recent workout history (last 90 days):\n\n${historyText}\n\n`;
 
     if (customPrompt.trim()) {
       prompt += `USER'S CUSTOM REQUIREMENTS:\n${customPrompt}\n\n`;
     }
 
-    prompt += `Generate a complete 7-day training plan starting from ${validFrom} and ending on ${validUntil}. Include exactly 7 days.`;
+    prompt += `Generate a ${programWeeks}-week periodized training program starting from ${validFrom} and ending on ${validUntil}. Include exactly ${totalDays} days (day 1 through day ${totalDays}).`;
+
+    if (programWeeks >= 4) {
+      prompt += ` Include strategic deload week(s) approximately every 4 weeks with reduced volume (50-60% of normal). Mark deload days with is_deload: true and include "week" field (1-${programWeeks}) for each day. Include mesocycle_info in your response.`;
+    }
 
     if (customPrompt.trim()) {
       prompt += ` Make sure to follow all the user's requirements listed above including their equipment preferences, training focus, preferred split, and training frequency.`;
@@ -123,7 +104,7 @@ export async function POST(request: Request) {
 
     let aiResponse: string;
     try {
-      aiResponse = await askClaude(prompt, WEEKLY_PLAN_SYSTEM_PROMPT);
+      aiResponse = await askClaude(prompt, COACHING_SKILL);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(
@@ -174,6 +155,7 @@ export async function POST(request: Request) {
       .insert({
         user_id: user.id,
         program_type: 'weekly_plan',
+        mesocycle_info: weeklyPlan.mesocycle_info || null,
         plan_data: weeklyPlan.plan_data,
         status: 'pending',
         valid_from: weeklyPlan.valid_from,
@@ -196,6 +178,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ...weeklyPlan,
       programId: program.id,
+      mesocycle_info: weeklyPlan.mesocycle_info,
     });
   } catch (error) {
     console.error('Unexpected error in POST /api/ai/weekly-plan:', error);

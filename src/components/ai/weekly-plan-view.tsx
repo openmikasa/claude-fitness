@@ -8,16 +8,38 @@ import { useSettings } from '@/lib/hooks/useSettings';
 import type {
   Program,
   ProgramDay,
-  WeightliftingData,
 } from '@/types/workout';
 
 interface WeeklyPlanViewProps {
   existingPlan?: Program;
 }
 
-const DEFAULT_PROGRAM_REQUEST = `Schedule
-Program length: [X] Weeks
+// Extract program weeks from user's template input
+const extractProgramWeeks = (prompt: string): number => {
+  // Match patterns like "Program length: 4 Weeks" or "4 weeks"
+  const match = prompt.match(/program\s*length[:\s]*(\d+)\s*weeks?/i)
+    || prompt.match(/(\d+)\s*weeks?/i);
+  if (match) {
+    const weeks = parseInt(match[1], 10);
+    return Math.min(Math.max(weeks, 1), 12); // Clamp 1-12
+  }
+  return 1; // Default to 1 week
+};
+
+const DEFAULT_PROGRAM_REQUEST = `User Profile
+Age: [Your age in years]
+Sex: [Male / Female / Other]
+Body Weight: [Your weight in kg or lb]
+Height: [Your height in cm or ft/in]
+
+Schedule
+Program length: [1 / 4 / 8 / 12] Weeks
 Frequency: [X] Days/Week | Duration: [X] Mins/Session
+
+Periodization (for 4+ week programs)
+Structure: [Linear / Undulating / Block]
+Phase Focus: [Hypertrophy / Strength / Power / General Fitness]
+Include Deload Weeks: [Yes / No]
 
 Constraints
 Split: [Full Body / Upper-Lower / Push Pull Legs / Other]
@@ -39,6 +61,12 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const { data: settings } = useSettings();
 
   const plan = generateMutation.data || existingPlan;
+
+  // Check if current week is a deload week
+  const isDeloadWeek = (weekIndex: number): boolean => {
+    if (!plan?.mesocycle_info?.deload_weeks) return false;
+    return plan.mesocycle_info.deload_weeks.includes(weekIndex + 1);
+  };
 
   // Calculate weeks from plan data
   const weeks = useMemo(() => {
@@ -77,7 +105,8 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   }, [todayIndex]);
 
   const handleGenerate = () => {
-    generateMutation.mutate({ customPrompt: programRequest });
+    const programWeeks = extractProgramWeeks(programRequest);
+    generateMutation.mutate({ customPrompt: programRequest, programWeeks });
     setShowForm(false);
   };
 
@@ -150,6 +179,12 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
         <div className='space-y-4'>
           <div className='text-sm text-gray-600 mb-4'>
             {format(parseISO(plan.valid_from), 'MMM d')} - {format(parseISO(plan.valid_until), 'MMM d, yyyy')}
+            {plan.mesocycle_info && (
+              <span className='ml-2 text-purple-600'>
+                • {plan.mesocycle_info.total_weeks}-week {plan.mesocycle_info.periodization_model} program
+                {plan.mesocycle_info.phase && ` • ${plan.mesocycle_info.phase} phase`}
+              </span>
+            )}
           </div>
 
           {/* Week Navigation */}
@@ -163,8 +198,15 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
                 ← Previous Week
               </button>
               <div className='text-center'>
-                <div className='text-sm font-semibold text-gray-900'>
-                  Week {currentWeek + 1} of {weeks.length}
+                <div className='flex items-center justify-center gap-2'>
+                  <span className='text-sm font-semibold text-gray-900'>
+                    Week {currentWeek + 1} of {weeks.length}
+                  </span>
+                  {isDeloadWeek(currentWeek) && (
+                    <span className='bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded font-medium'>
+                      DELOAD
+                    </span>
+                  )}
                 </div>
                 <div className='text-xs text-gray-600'>
                   {format(addDays(parseISO(plan.valid_from), currentWeek * 7), 'MMM d')} - {format(addDays(parseISO(plan.valid_from), Math.min(currentWeek * 7 + 6, plan.plan_data.length - 1)), 'MMM d')}

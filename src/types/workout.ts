@@ -64,12 +64,24 @@ export interface UpdateWorkoutInput extends Partial<CreateWorkoutInput> {
   id: string;
 }
 
+// Mesocycle info for multi-week periodized programs
+export type PeriodizationModel = 'linear' | 'undulating' | 'block';
+
+export interface MesocycleInfo {
+  total_weeks: number;
+  deload_weeks: number[]; // Week numbers that are deloads (e.g., [4, 8])
+  periodization_model: PeriodizationModel;
+  phase?: string; // e.g., "hypertrophy", "strength", "power"
+}
+
 // Program types
 export type ProgramType = 'next_session' | 'weekly_plan';
 export type ProgramStatus = 'pending' | 'active' | 'completed';
 
 export interface ProgramDay {
-  day: number;
+  day: number; // 1-84 (up to 12 weeks)
+  week?: number; // Optional: which week (1-12)
+  is_deload?: boolean; // Optional: flag for deload days
   data: WeightliftingData; // Always weightlifting data
   coaching_notes: string;
 }
@@ -78,6 +90,7 @@ export interface Program {
   id: string;
   user_id: string;
   program_type: ProgramType;
+  mesocycle_info?: MesocycleInfo; // Optional for multi-week programs
   plan_data: ProgramDay[];
   status: ProgramStatus;
   valid_from: string;
@@ -88,6 +101,7 @@ export interface Program {
 
 export interface CreateProgramInput {
   program_type: ProgramType;
+  mesocycle_info?: MesocycleInfo;
   plan_data: ProgramDay[];
   status: ProgramStatus;
   valid_from: string;
