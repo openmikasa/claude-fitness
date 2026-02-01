@@ -78,23 +78,23 @@ export function Autocomplete({
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
-        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 font-medium'
+        className='w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark font-medium transition-colors'
       />
 
       {isOpen && value.length >= 2 && (
-        <div className='absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto'>
+        <div className='absolute z-10 w-full mt-1 bg-card-light dark:bg-card-dark border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md max-h-60 overflow-y-auto'>
           {loading ? (
-            <div className='px-3 py-2 text-gray-500 text-sm'>Searching...</div>
+            <div className='px-3 py-2 text-subtext-light dark:text-subtext-dark text-sm'>Searching...</div>
           ) : exercises.length === 0 ? (
             <div>
-              <div className='px-3 py-2 text-gray-500 text-sm'>No exercises found</div>
+              <div className='px-3 py-2 text-subtext-light dark:text-subtext-dark text-sm'>No exercises found</div>
               {onCreateNew && (
                 <button
                   onClick={() => {
                     onCreateNew(value);
                     setIsOpen(false);
                   }}
-                  className='w-full px-3 py-2 text-left text-blue-600 hover:bg-blue-50 border-t border-gray-200 text-sm font-medium'
+                  className='w-full px-3 py-2 text-left text-primary hover:bg-accent-light dark:hover:bg-accent-dark border-t border-gray-200 dark:border-gray-700 text-sm font-medium transition-colors'
                 >
                   + Create &quot;{value}&quot; as custom exercise
                 </button>
@@ -105,11 +105,11 @@ export function Autocomplete({
               <div
                 key={exercise.id}
                 onClick={() => handleSelect(exercise)}
-                className='px-3 py-2 cursor-pointer hover:bg-gray-100'
+                className='px-3 py-2 cursor-pointer hover:bg-accent-light dark:hover:bg-accent-dark transition-colors'
               >
-                <div className='font-semibold text-gray-900'>{exercise.name}</div>
+                <div className='font-semibold text-text-light dark:text-text-dark'>{exercise.name}</div>
                 {exercise.muscle_groups.length > 0 && (
-                  <div className='text-xs text-gray-500 mt-1'>
+                  <div className='text-xs text-subtext-light dark:text-subtext-dark mt-1'>
                     {exercise.muscle_groups.join(', ')}
                   </div>
                 )}

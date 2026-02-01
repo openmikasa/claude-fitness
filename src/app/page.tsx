@@ -69,16 +69,16 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-0">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow">
+      <header className="bg-card-light dark:bg-card-dark shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">
             Claude Fitness
           </h1>
           <button
             onClick={() => signOut()}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            className="px-4 py-2 text-sm font-medium text-subtext-light dark:text-subtext-dark hover:text-primary transition-colors"
           >
             Sign out
           </button>
@@ -88,10 +88,10 @@ export default function Home() {
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-3xl font-bold text-text-light dark:text-text-dark mb-2">
             Welcome back!
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-subtext-light dark:text-subtext-dark">
             Your AI-powered fitness journey starts here.
           </p>
         </div>
@@ -99,29 +99,29 @@ export default function Home() {
         {/* Backfill Banner */}
         {unmigratedCount > 0 && (
           <div
-            className="mb-8 bg-blue-50 border-l-4 border-blue-600 p-4 rounded-lg"
+            className="mb-8 bg-accent-light dark:bg-accent-dark border-l-4 border-primary p-4 rounded-2xl"
             data-testid="backfill-banner"
           >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-blue-900 mb-1">
+                <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-1">
                   Enhance Your Workout Data
                 </h3>
-                <p className="text-sm text-blue-800 mb-3">
+                <p className="text-sm text-subtext-light dark:text-subtext-dark mb-3">
                   You have {unmigratedCount} workout{unmigratedCount !== 1 ? 's' : ''} that can be
                   enhanced with equipment and muscle group data. This enables advanced filtering
                   and better analytics.
                 </p>
                 <button
                   onClick={() => setShowBackfillModal(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 text-sm"
+                  className="px-4 py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all text-sm"
                 >
                   Start Migration
                 </button>
               </div>
               <button
                 onClick={() => setUnmigratedCount(0)}
-                className="text-blue-600 hover:text-blue-800 text-xl font-bold ml-4"
+                className="text-primary hover:text-primary/80 text-xl font-bold ml-4"
               >
                 ×
               </button>
@@ -177,15 +177,15 @@ export default function Home() {
         </div>
 
         {/* Recent workouts */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">
               Recent Workouts
             </h3>
             {workouts && workouts.length > 0 && (
               <Link
                 href="/workouts"
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
               >
                 View all →
               </Link>
@@ -194,10 +194,10 @@ export default function Home() {
 
           {workoutsLoading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
             </div>
           ) : !workouts || workouts.length === 0 ? (
-            <p className="text-gray-600 dark:text-gray-400 text-center py-8">
+            <p className="text-subtext-light dark:text-subtext-dark text-center py-8">
               No workouts yet. Start by logging your first session!
             </p>
           ) : (
@@ -213,18 +213,18 @@ export default function Home() {
                   <Link
                     key={workout.id}
                     href={`/workouts/${workout.id}/edit`}
-                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
+                    className="block p-4 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-primary hover:shadow-md transition-all"
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-text-light dark:text-text-dark">
                           {format(parseISO(workout.workout_date), 'EEEE, MMM d')}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-subtext-light dark:text-subtext-dark mt-1">
                           {exerciseCount} exercise{exerciseCount !== 1 ? 's' : ''} · {totalSets} set{totalSets !== 1 ? 's' : ''}
                         </p>
                       </div>
-                      <span className="text-gray-400 dark:text-gray-600">→</span>
+                      <span className="text-subtext-light dark:text-subtext-dark">→</span>
                     </div>
                   </Link>
                 );
@@ -235,7 +235,7 @@ export default function Home() {
       </main>
 
       {/* Bottom navigation for mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card-light/90 dark:bg-card-dark/90 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 md:hidden">
         <div className="grid grid-cols-4 gap-1">
           <NavButton href="/" label="Home" icon="🏠" />
           <NavButton href="/workouts/log" label="Log" icon="➕" />
@@ -256,13 +256,15 @@ function ActionCard({ title, description, href, icon }: {
   return (
     <a
       href={href}
-      className="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow"
+      className="block p-6 bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md hover:-translate-y-1 transition-all"
     >
-      <div className="text-4xl mb-3">{icon}</div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+      <div className="w-12 h-12 rounded-full bg-accent-light dark:bg-accent-dark flex items-center justify-center mb-4 border border-gray-100 dark:border-gray-700">
+        <span className="text-2xl">{icon}</span>
+      </div>
+      <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-1">
         {title}
       </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-sm text-subtext-light dark:text-subtext-dark">
         {description}
       </p>
     </a>
@@ -277,7 +279,7 @@ function NavButton({ href, label, icon }: {
   return (
     <a
       href={href}
-      className="flex flex-col items-center justify-center py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+      className="flex flex-col items-center justify-center py-3 text-subtext-light dark:text-subtext-dark hover:text-primary transition-colors"
     >
       <span className="text-2xl mb-1">{icon}</span>
       <span className="text-xs">{label}</span>

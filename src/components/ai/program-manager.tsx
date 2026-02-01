@@ -231,7 +231,7 @@ export function ProgramManager() {
 
   if (isLoading) {
     return (
-      <div className='bg-white rounded-lg shadow-md p-6'>
+      <div className='bg-white rounded-2xl shadow-md p-6'>
         <div className='text-center py-8'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4'></div>
           <p className='text-gray-600'>Loading programs...</p>
@@ -241,7 +241,7 @@ export function ProgramManager() {
   }
 
   return (
-    <div className='bg-white rounded-lg shadow-md p-6'>
+    <div className='bg-white rounded-2xl shadow-md p-6'>
       <div className='flex items-center justify-between mb-6'>
         <div className='flex items-center gap-2'>
           <span className='text-2xl'>📋</span>
@@ -255,7 +255,7 @@ export function ProgramManager() {
               }
             }}
             disabled={cleanupProgramsMutation.isPending}
-            className='text-xs px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors disabled:opacity-50 font-medium'
+            className='text-xs px-3 py-1.5 bg-blue-100 text-blue-800 rounded-2xl hover:bg-blue-200 transition-colors disabled:opacity-50 font-medium'
           >
             {cleanupProgramsMutation.isPending ? '🔄 Cleaning...' : '🧹 Clean Exercise Names'}
           </button>
@@ -278,7 +278,7 @@ export function ProgramManager() {
               return (
                 <div
                   key={program.id}
-                  className={`border-2 rounded-lg p-4 transition-all cursor-pointer ${
+                  className={`border-2 rounded-2xl p-4 transition-all cursor-pointer ${
                     isSelected
                       ? 'border-purple-500 bg-purple-50'
                       : isActive
@@ -368,11 +368,11 @@ export function ProgramManager() {
             <div className='border-t-2 border-gray-200 pt-6 space-y-4'>
               {/* Week Navigation */}
               {weeks.length > 1 && (
-                <div className='flex items-center justify-between mb-4 bg-gray-50 rounded-lg p-3'>
+                <div className='flex items-center justify-between mb-4 bg-gray-50 rounded-2xl p-3'>
                   <button
                     onClick={() => setCurrentWeek(Math.max(0, currentWeek - 1))}
                     disabled={currentWeek === 0}
-                    className='px-3 py-1.5 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+                    className='px-3 py-1.5 bg-white text-gray-700 rounded-2xl font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
                   >
                     ← Previous Week
                   </button>
@@ -391,7 +391,7 @@ export function ProgramManager() {
                   <button
                     onClick={() => setCurrentWeek(Math.min(weeks.length - 1, currentWeek + 1))}
                     disabled={currentWeek === weeks.length - 1}
-                    className='px-3 py-1.5 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+                    className='px-3 py-1.5 bg-white text-gray-700 rounded-2xl font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
                   >
                     Next Week →
                   </button>
@@ -428,7 +428,7 @@ export function ProgramManager() {
                       <button
                         key={`${weekNum}-${workoutIndex}`}
                         onClick={() => setSelectedWorkout(isSelected ? null : workout)}
-                        className={'p-3 rounded-lg border-2 transition-all relative ' + btnClass}
+                        className={'p-3 rounded-2xl border-2 transition-all relative ' + btnClass}
                       >
                         {isCurrent && (
                           <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
@@ -471,7 +471,7 @@ export function ProgramManager() {
                   });
 
                   return (
-                    <div className='bg-purple-50 rounded-lg p-4 border-2 border-purple-200'>
+                    <div className='bg-purple-50 rounded-2xl p-4 border-2 border-purple-200'>
                       <h3 className='font-semibold text-gray-900 mb-2'>
                         Week {displayWeek}, Workout {displayWorkout}
                       </h3>
@@ -490,7 +490,7 @@ export function ProgramManager() {
                         onClick={() => {
                           router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${arrayIndex}`);
                         }}
-                        className='w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
+                        className='w-full bg-purple-600 text-white px-4 py-3 rounded-2xl font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
                       >
                         <span>📝</span>
                         Log This Workout
@@ -500,7 +500,7 @@ export function ProgramManager() {
                 } catch (error) {
                   console.error('Error rendering workout details:', error, selectedWorkout);
                   return (
-                    <div className='bg-red-50 rounded-lg p-4 border-2 border-red-200'>
+                    <div className='bg-red-50 rounded-2xl p-4 border-2 border-red-200'>
                       <p className='text-sm text-red-700'>
                         Unable to display workout details. This program may be using an old format.
                       </p>
@@ -510,14 +510,14 @@ export function ProgramManager() {
               })()}
 
               {/* Plan Overview */}
-              <div className='bg-gray-50 rounded-lg p-4'>
+              <div className='bg-gray-50 rounded-2xl p-4'>
                 <h4 className='font-semibold text-gray-900 mb-2'>Plan Overview</h4>
                 <p className='text-sm text-gray-700'>{selectedProgram.rationale}</p>
               </div>
 
               {/* Refresh Program Section (only for active programs) */}
               {selectedProgram.status === 'active' && (
-                <div className='bg-blue-50 rounded-lg p-4 border-2 border-blue-200'>
+                <div className='bg-blue-50 rounded-2xl p-4 border-2 border-blue-200'>
                   <h4 className='font-semibold text-gray-900 mb-3 flex items-center gap-2'>
                     <span>🔄</span>
                     Refresh Program Based on Progress
@@ -531,13 +531,13 @@ export function ProgramManager() {
                     onChange={(e) => setRefreshNotes(e.target.value)}
                     placeholder='Optional: Add any specific adjustments or concerns (e.g., "Lower back feeling tight", "Want to focus more on upper body")'
                     rows={3}
-                    className='w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm bg-white'
+                    className='w-full px-3 py-2 border border-blue-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm bg-white'
                   />
 
                   <button
                     onClick={handleRefreshProgram}
                     disabled={refreshMutation.isPending}
-                    className='mt-3 w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50'
+                    className='mt-3 w-full bg-blue-600 text-white px-4 py-2 rounded-2xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50'
                   >
                     {refreshMutation.isPending ? 'Analyzing & Refreshing...' : 'Refresh Program'}
                   </button>

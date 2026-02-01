@@ -81,8 +81,8 @@ function GenerationProgress({ programWeeks }: { programWeeks: number }) {
         </div>
 
         <div className='text-center mb-4'>
-          <p className='text-lg font-medium text-gray-900 mb-1'>{currentStage.message}</p>
-          <p className='text-sm text-gray-500'>
+          <p className='text-lg font-medium text-text-light dark:text-text-dark mb-1'>{currentStage.message}</p>
+          <p className='text-sm text-subtext-light dark:text-subtext-dark'>
             Step {stage + 1} of {stages.length}
           </p>
         </div>
@@ -94,7 +94,7 @@ function GenerationProgress({ programWeeks }: { programWeeks: number }) {
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-        <p className='text-xs text-center text-gray-500'>{Math.round(progress)}% complete</p>
+        <p className='text-xs text-center text-subtext-light dark:text-subtext-dark'>{Math.round(progress)}% complete</p>
       </div>
     </div>
   );
@@ -154,7 +154,7 @@ export function WeeklyPlanView() {
     <div className='bg-white rounded-lg shadow-md p-6 border-2 border-purple-100'>
       <div className='flex items-center gap-2 mb-4'>
         <span className='text-2xl'>✨</span>
-        <h2 className='text-xl font-bold text-gray-900'>Generate New Program</h2>
+        <h2 className='text-xl font-bold text-text-light dark:text-text-dark'>Generate New Program</h2>
       </div>
 
       {generateMutation.isPending ? (
@@ -164,7 +164,7 @@ export function WeeklyPlanView() {
           {/* Prompt History Dropdown */}
           {!historyLoading && promptHistory.length > 0 && (
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
+              <label className='block text-sm font-medium text-text-light dark:text-text-dark mb-2'>
                 Load Previous Prompt (Optional)
               </label>
               <select
@@ -182,7 +182,7 @@ export function WeeklyPlanView() {
                     }
                   }
                 }}
-                className='w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none'
+                className='w-full px-4 py-2 bg-white text-text-light dark:text-text-dark border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none'
               >
                 <option value="">Start Fresh (Use Template)</option>
                 {promptHistory.map((entry) => {
@@ -212,9 +212,9 @@ export function WeeklyPlanView() {
             </div>
           )}
 
-          <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
-            <p className='text-sm text-blue-900 font-medium mb-2'>💡 Customize Your Program</p>
-            <p className='text-xs text-blue-700'>
+          <div className='bg-accent-light dark:bg-accent-dark border border-primary rounded-lg p-4 mb-4'>
+            <p className='text-sm text-text-light dark:text-text-dark font-medium mb-2'>💡 Customize Your Program</p>
+            <p className='text-xs text-primary'>
               Fill out the template below with your preferences. Update the schedule, constraints,
               and performance goals to create a personalized training plan.
             </p>
@@ -224,14 +224,14 @@ export function WeeklyPlanView() {
             value={programRequest}
             onChange={(e) => setProgramRequest(e.target.value)}
             rows={12}
-            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none font-mono text-sm text-gray-900'
+            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none font-mono text-sm text-text-light dark:text-text-dark'
             placeholder='Describe your training program requirements...'
           />
 
           <div className='flex gap-3'>
             <button
               onClick={() => setShowForm(false)}
-              className='flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors'
+              className='flex-1 bg-gray-200 text-text-light dark:text-text-dark px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors'
             >
               Cancel
             </button>
@@ -245,7 +245,7 @@ export function WeeklyPlanView() {
         </div>
       ) : (
         <div className='text-center py-8'>
-          <p className='text-gray-600 mb-4'>
+          <p className='text-subtext-light dark:text-subtext-dark mb-4'>
             Create a personalized training program tailored to your goals, equipment, and preferences.
           </p>
           <button

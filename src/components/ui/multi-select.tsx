@@ -45,20 +45,20 @@ export function MultiSelect({
 
   return (
     <div className='relative' ref={containerRef}>
-      <label className='block text-sm font-medium text-gray-700 mb-2'>{label}</label>
+      <label className='block text-sm font-medium text-text-light dark:text-text-dark mb-2'>{label}</label>
 
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className='w-full min-h-[42px] px-3 py-2 border border-gray-300 rounded-lg cursor-pointer bg-white hover:border-gray-400 transition-colors'
+        className='w-full min-h-[42px] px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer bg-card-light dark:bg-card-dark hover:border-primary transition-colors'
       >
         {selected.length === 0 ? (
-          <span className='text-gray-400'>{placeholder}</span>
+          <span className='text-subtext-light dark:text-subtext-dark'>{placeholder}</span>
         ) : (
           <div className='flex flex-wrap gap-1'>
             {selected.map((item) => (
               <span
                 key={item}
-                className='inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded font-medium'
+                className='inline-flex items-center gap-1 px-2 py-1 bg-accent-light dark:bg-accent-dark text-primary text-sm rounded-full font-medium'
               >
                 {item}
                 <button
@@ -67,7 +67,7 @@ export function MultiSelect({
                     e.stopPropagation();
                     removeOption(item);
                   }}
-                  className='hover:text-blue-900'
+                  className='hover:text-primary/80 transition-colors'
                 >
                   ×
                 </button>
@@ -78,18 +78,18 @@ export function MultiSelect({
       </div>
 
       {isOpen && (
-        <div className='absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto'>
+        <div className='absolute z-10 w-full mt-1 bg-card-light dark:bg-card-dark border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md max-h-60 overflow-y-auto'>
           {options.map((option) => (
             <div
               key={option}
               onClick={() => toggleOption(option)}
-              className={`px-3 py-2 cursor-pointer hover:bg-gray-100 flex items-center justify-between ${
-                selected.includes(option) ? 'bg-blue-50' : ''
+              className={`px-3 py-2 cursor-pointer hover:bg-accent-light dark:hover:bg-accent-dark flex items-center justify-between transition-colors ${
+                selected.includes(option) ? 'bg-accent-light dark:bg-accent-dark' : ''
               }`}
             >
-              <span className='text-gray-900 font-medium'>{option}</span>
+              <span className='text-text-light dark:text-text-dark font-medium'>{option}</span>
               {selected.includes(option) && (
-                <span className='text-blue-600 font-bold'>✓</span>
+                <span className='text-primary font-bold'>✓</span>
               )}
             </div>
           ))}

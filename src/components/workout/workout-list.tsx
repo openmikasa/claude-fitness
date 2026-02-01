@@ -198,11 +198,11 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
         {/* Mobile Filter Toggle */}
         <button
           onClick={() => setFiltersExpanded(!filtersExpanded)}
-          className="w-full lg:hidden flex items-center justify-between p-4 text-left font-medium text-gray-900 dark:text-white"
+          className="w-full lg:hidden flex items-center justify-between p-4 text-left font-medium text-text-light dark:text-text-dark"
         >
           <span>Filters</span>
           <svg
@@ -219,31 +219,31 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
         <div className={`${filtersExpanded ? 'block' : 'hidden lg:block'} p-4 space-y-4`}>
           {/* Quick Date Filters */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
               Quick Filters
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 onClick={() => handleQuickDateFilter('week')}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
               >
                 This Week
               </button>
               <button
                 onClick={() => handleQuickDateFilter('month')}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
               >
                 This Month
               </button>
               <button
                 onClick={() => handleQuickDateFilter('last30')}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
               >
                 Last 30 Days
               </button>
               <button
                 onClick={() => handleQuickDateFilter('all')}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
               >
                 All Time
               </button>
@@ -252,7 +252,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
           {/* Search */}
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="search" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
               Search Notes
             </label>
             <input
@@ -263,14 +263,14 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               onBlur={handleFilterChange}
               onKeyDown={(e) => e.key === 'Enter' && handleFilterChange()}
               placeholder="Search in notes..."
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400"
+              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark placeholder-gray-400"
             />
           </div>
 
           {/* Date Range */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="date-from" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="date-from" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
                 From Date
               </label>
               <input
@@ -281,11 +281,11 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                   setDateFrom(e.target.value);
                   handleFilterChange();
                 }}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark"
               />
             </div>
             <div>
-              <label htmlFor="date-to" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="date-to" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
                 To Date
               </label>
               <input
@@ -296,7 +296,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                   setDateTo(e.target.value);
                   handleFilterChange();
                 }}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark"
               />
             </div>
           </div>
@@ -333,7 +333,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Filters:</span>
               <button
                 onClick={clearAllFilters}
-                className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 Clear All
               </button>
@@ -342,7 +342,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {searchQuery && (
                 <button
                   onClick={() => removeFilter('search')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
                 >
                   <span>Search: {searchQuery}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,7 +353,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {(dateFrom || dateTo) && (
                 <button
                   onClick={() => removeFilter('dates')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
                 >
                   <span>
                     {dateFrom && dateTo
@@ -370,7 +370,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {equipmentFilter.length > 0 && (
                 <button
                   onClick={() => removeFilter('equipment')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
                 >
                   <span>Equipment: {equipmentFilter.join(', ')}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -381,7 +381,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {muscleGroupsFilter.length > 0 && (
                 <button
                   onClick={() => removeFilter('muscle_groups')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
                 >
                   <span>Muscles: {muscleGroupsFilter.join(', ')}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,7 +400,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 animate-pulse"
+              className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 animate-pulse"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0" />
@@ -433,12 +433,12 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Empty State */}
       {!loading && !error && workouts.length === 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
+        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-12 text-center">
           <div className="text-6xl mb-4">🏋️</div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-2">
             No workouts found
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-subtext-light dark:text-subtext-dark mb-4">
             {searchQuery || dateFrom || dateTo
               ? 'Try adjusting your filters'
               : 'Start by logging your first workout'}
@@ -453,7 +453,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
             <button
               key={workout.id}
               onClick={() => setSelectedWorkout(workout)}
-              className="w-full bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow p-4 text-left"
+              className="w-full bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow p-4 text-left"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}
@@ -464,7 +464,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                 {/* Content */}
                 <div className="flex-grow min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">
                       Workout
                     </h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
@@ -472,7 +472,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  <p className="text-sm text-subtext-light dark:text-subtext-dark mb-2">
                     {getWorkoutSummary(workout)}
                   </p>
 
@@ -490,10 +490,10 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Pagination */}
       {!loading && !error && totalPages > 1 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Results Info */}
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-subtext-light dark:text-subtext-dark">
               Showing {startItem}-{endItem} of {total} workout{total !== 1 ? 's' : ''}
             </div>
 
@@ -502,7 +502,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
+                className="px-4 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
                 aria-label="Previous page"
               >
                 Previous
@@ -515,7 +515,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
+                className="px-4 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
                 aria-label="Next page"
               >
                 Next
@@ -527,7 +527,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Results Summary for Single Page */}
       {!loading && !error && workouts.length > 0 && totalPages === 1 && (
-        <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="text-center text-sm text-subtext-light dark:text-subtext-dark">
           Showing all {total} workout{total !== 1 ? 's' : ''}
         </div>
       )}
