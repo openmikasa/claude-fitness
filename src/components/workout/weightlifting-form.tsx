@@ -6,7 +6,8 @@ import { z } from 'zod';
 import { WeightliftingData } from '@/types/workout';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { MultiSelect } from '@/components/ui/multi-select';
-import { useState, useMemo } from 'react';
+import { CreateExerciseModal } from './create-exercise-modal';
+import { useState, useMemo, useEffect } from 'react';
 import type { Exercise } from '@/types/workout';
 import { useSettings } from '@/lib/hooks/useSettings';
 import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conversion';
@@ -70,11 +71,19 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<WeightliftingFormData>({
     resolver: zodResolver(weightliftingFormSchema),
     defaultValues: convertedInitialData,
   });
+
+  // Reset form when initialData changes (for program prefilling)
+  useEffect(() => {
+    if (initialData) {
+      reset(convertedInitialData);
+    }
+  }, [initialData, convertedInitialData, reset]);
 
   const { fields: exercises, append: appendExercise, remove: removeExercise } = useFieldArray({
     control,
@@ -169,6 +178,9 @@ function ExerciseField({
   watch,
   weightUnit,
 }: ExerciseFieldProps) {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [suggestedExerciseName, setSuggestedExerciseName] = useState('');
+
   const { fields: sets, append: appendSet, remove: removeSet } = useFieldArray({
     control,
     name: `exercises.${exerciseIndex}.sets`,
@@ -182,6 +194,21 @@ function ExerciseField({
     setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
     setValue(`exercises.${exerciseIndex}.equipment`, exercise.equipment || []);
     setValue(`exercises.${exerciseIndex}.muscle_groups`, exercise.muscle_groups || []);
+  };
+
+  const handleCreateNew = (name: string) => {
+    setSuggestedExerciseName(name);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleExerciseCreated = (exercise: any) => {
+    // Auto-populate the form with the new exercise
+    setValue(`exercises.${exerciseIndex}.name`, exercise.name);
+    setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
+    setValue(`exercises.${exerciseIndex}.equipment`, exercise.equipment || []);
+    setValue(`exercises.${exerciseIndex}.muscle_groups`,
+      [...(exercise.primary_muscles || []), ...(exercise.secondary_muscles || [])]
+    );
   };
 
   const equipmentOptions = [
@@ -224,6 +251,7 @@ function ExerciseField({
             value={exerciseName || ''}
             onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
             onExerciseSelect={handleExerciseSelect}
+            onCreateNew={handleCreateNew}
             placeholder="e.g., Bench Press"
           />
           {errors.exercises?.[exerciseIndex]?.name && (
@@ -252,14 +280,34 @@ function ExerciseField({
           onChange={(value) => setValue(`exercises.${exerciseIndex}.equipment`, value)}
           placeholder="Select equipment..."
         />
-        <MultiSelect
-          label="Muscle Groups"
-          options={muscleGroupOptions}
-          selected={muscleGroups}
-          onChange={(value) => setValue(`exercises.${exerciseIndex}.muscle_groups`, value)}
-          placeholder="Select muscle groups..."
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">
+            Muscle Groups
+          </label>
+          <div className="w-full px-3 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md min-h-[42px] flex flex-wrap gap-2 items-center">
+            {muscleGroups.length > 0 ? (
+              muscleGroups.map((muscle: string, idx: number) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"
+                >
+                  {muscle}
+                </span>
+              ))
+            ) : (
+              <span className="text-sm text-gray-500">Auto-filled from exercise selection</span>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* Create Exercise Modal */}
+      <CreateExerciseModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onExerciseCreated={handleExerciseCreated}
+        suggestedName={suggestedExerciseName}
+      />
 
       {/* Sets */}
       <div className="space-y-3">
