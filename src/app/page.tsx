@@ -14,12 +14,13 @@ export default function Home() {
   const [unmigratedCount, setUnmigratedCount] = useState<number>(0);
   const [showBackfillModal, setShowBackfillModal] = useState(false);
 
-  // Fetch recent workouts (limit to 3)
-  const { data: workouts, isLoading: workoutsLoading } = useWorkouts({
-    limit: 3,
-    sortBy: 'workout_date',
-    sortOrder: 'desc',
+  // Fetch recent workouts (limit to 3 most recent)
+  const { data: workoutsResponse, isLoading: workoutsLoading } = useWorkouts({
+    pageSize: 3,
+    page: 1,
   });
+
+  const workouts = workoutsResponse?.workouts || [];
 
   useEffect(() => {
     if (!loading && !user) {
