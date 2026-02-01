@@ -157,6 +157,7 @@ Must include:
 - Maintain periodization structure (don't remove deload weeks)
 - Be conservative with weight increases if notes indicate form issues
 - Reference user's actual performance: "You hit 110kg for 8 reps on Day 5 with 'felt light' note..."
+- Always be extremely brief and concise but also very precise
 
 ### 9. Form & Technique
 - Quality movement > heavy weight

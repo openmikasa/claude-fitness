@@ -10,24 +10,36 @@ export const anthropic = new Anthropic({
  * @param prompt User prompt/question
  * @param systemPrompt Optional system instructions
  * @param maxTokens Maximum tokens for response (default: 4096)
+ * @param expectJson Whether to expect JSON response and use prefilling (default: false)
  * @returns Claude's response as text
  */
 export async function askClaude(
   prompt: string,
   systemPrompt?: string,
-  maxTokens: number = 4096
+  maxTokens: number = 4096,
+  expectJson: boolean = false
 ): Promise<string> {
+  const messages: Anthropic.MessageCreateParams['messages'] = [
+    {
+      role: 'user',
+      content: prompt,
+    }
+  ];
+
+  // Prefill with { to force JSON start without markdown
+  if (expectJson) {
+    messages.push({
+      role: 'assistant',
+      content: '{',
+    });
+  }
+
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
     max_tokens: maxTokens,
     temperature: 0.3, // Lower temperature for more consistent JSON formatting
     system: systemPrompt,
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
+    messages,
   });
 
   // Extract text from content blocks
@@ -36,5 +48,6 @@ export async function askClaude(
     throw new Error('No text response from Claude');
   }
 
-  return textContent.text;
+  // If prefilled, prepend the { we started with
+  return expectJson ? '{' + textContent.text : textContent.text;
 }

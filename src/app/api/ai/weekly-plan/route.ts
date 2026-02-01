@@ -116,6 +116,18 @@ export async function POST(request: Request) {
       prompt += ` Make sure to follow all the user's requirements listed above including their equipment preferences, training focus, preferred split, and training frequency.`;
     }
 
+    // Explicit format enforcement (last thing Claude reads)
+    prompt += `
+
+CRITICAL OUTPUT FORMAT:
+Your response must start with { and end with }.
+Do NOT add:
+- Markdown fences (no \`\`\`json)
+- Explanatory text before or after the JSON
+- Comments or notes outside the JSON structure
+
+Return ONLY the JSON object. Nothing else.`;
+
     let aiResponse: string;
     try {
       const coachingSkill = loadCoachingSkill();
@@ -125,7 +137,7 @@ export async function POST(request: Request) {
       // 1 week: 3548 tokens, 4 weeks: 8048 tokens, 12 weeks: 20048 tokens
       const maxTokens = 2048 + (programWeeks * 1500);
 
-      aiResponse = await askClaude(prompt, coachingSkill, maxTokens);
+      aiResponse = await askClaude(prompt, coachingSkill, maxTokens, true);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       console.error('Error details:', JSON.stringify(aiError, null, 2));

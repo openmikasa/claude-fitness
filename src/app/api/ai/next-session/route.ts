@@ -70,12 +70,24 @@ export async function POST() {
     }
 
     const historyText = formatWorkoutHistory(workouts as Workout[]);
-    const prompt = `Here is the user's recent workout history:\n\n${historyText}\n\nGenerate the optimal next training session based on this history.`;
+    let prompt = `Here is the user's recent workout history:\n\n${historyText}\n\nGenerate the optimal next training session based on this history.`;
+
+    // Explicit format enforcement (last thing Claude reads)
+    prompt += `
+
+CRITICAL OUTPUT FORMAT:
+Your response must start with { and end with }.
+Do NOT add:
+- Markdown fences (no \`\`\`json)
+- Explanatory text before or after the JSON
+- Comments or notes outside the JSON structure
+
+Return ONLY the JSON object. Nothing else.`;
 
     let aiResponse: string;
     try {
       // Single workout session: 6144 tokens should be more than enough
-      aiResponse = await askClaude(prompt, COACHING_SKILL, 6144);
+      aiResponse = await askClaude(prompt, COACHING_SKILL, 6144, true);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(

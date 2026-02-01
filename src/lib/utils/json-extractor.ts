@@ -67,6 +67,30 @@ export function extractJson(
     }
   }
 
+  // Strategy 5: Aggressive cleanup - find last valid closing brace
+  // Handles cases where Claude adds explanatory text after the JSON
+  const stripped = trimmed
+    .replace(/^```(?:json)?\s*\n?/, '') // Remove opening fence
+    .replace(/\n?```$/, ''); // Remove closing fence
+
+  let jsonCandidate = stripped.trim();
+
+  // Try progressive truncation from the end to find last complete }
+  for (let i = jsonCandidate.length - 1; i >= 0; i--) {
+    if (jsonCandidate[i] === '}') {
+      const candidate = jsonCandidate.substring(0, i + 1);
+      try {
+        const data = JSON.parse(candidate);
+        if (logErrors) {
+          console.log('Aggressive cleanup: truncated response from', jsonCandidate.length, 'to', candidate.length, 'chars');
+        }
+        return { success: true, data, extractionMethod: 'aggressive_cleanup' };
+      } catch {
+        // Try next } from the end
+      }
+    }
+  }
+
   // All strategies failed
   return {
     success: false,

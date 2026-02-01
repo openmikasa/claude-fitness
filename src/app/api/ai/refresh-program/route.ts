@@ -178,6 +178,15 @@ Return ONLY valid JSON matching this exact format:
 }
 
 Include a detailed rationale explaining all major adjustments with references to specific workout notes.
+
+CRITICAL OUTPUT FORMAT:
+Your response must start with { and end with }.
+Do NOT add:
+- Markdown fences (no \`\`\`json)
+- Explanatory text before or after the JSON
+- Comments or notes outside the JSON structure
+
+Return ONLY the JSON object. Nothing else.
 `;
 
     // Call Claude API using helper
@@ -188,7 +197,7 @@ Include a detailed rationale explaining all major adjustments with references to
       // Same formula as weekly-plan: Base 2048 + 1500 per week
       const maxTokens = 2048 + (totalWeeks * 1500);
 
-      aiResponse = await askClaude(prompt, systemPrompt, maxTokens);
+      aiResponse = await askClaude(prompt, systemPrompt, maxTokens, true);
     } catch (aiError) {
       console.error('Claude API error:', aiError);
       return NextResponse.json(
