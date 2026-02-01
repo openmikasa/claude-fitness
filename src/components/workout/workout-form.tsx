@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { format } from 'date-fns';
 import WeightliftingForm from './weightlifting-form';
 import ProgramDaySelector from './program-day-selector';
 import type {
@@ -99,22 +101,35 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
     }
   };
 
+  const formattedDate = (() => {
+    const date = new Date(workoutDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const workoutDateObj = new Date(date);
+    workoutDateObj.setHours(0, 0, 0, 0);
+
+    if (workoutDateObj.getTime() === today.getTime()) {
+      return 'Today, ' + format(date, 'MMM d');
+    }
+    return format(date, 'EEEE, MMM d');
+  })();
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transition-opacity ${
+          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-md transition-opacity ${
             toast.type === 'success'
-              ? 'bg-green-600 text-white'
-              : 'bg-red-600 text-white'
+              ? 'bg-accent-light dark:bg-accent-dark border-2 border-primary text-text-light dark:text-text-dark'
+              : 'bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
           }`}
         >
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium">{toast.message}</span>
             <button
               onClick={() => setToast(null)}
-              className="text-white hover:text-gray-200"
+              className="hover:opacity-70 transition-opacity"
               aria-label="Close"
             >
               ×
@@ -124,105 +139,82 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
       )}
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          {workoutId ? 'Edit Workout' : 'Log Workout'}
-        </h1>
-        <p className="text-gray-300">
-          {workoutId
-            ? 'Update your workout details'
-            : 'Track your weightlifting progress'}
-        </p>
-      </div>
-
-      {/* Program Day Selector - Only show when creating new workout */}
-      {!workoutId && (
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-200 mb-2">
-            Following a Program? (Optional)
-          </label>
-          <ProgramDaySelector
-            onSelect={(selection) => {
-              // Auto-populate date
-              setWorkoutDate(selection.scheduledDate.split('T')[0]);
-              // Store program selection for submission
-              setProgramSelection({
-                programId: selection.programId,
-                dayIndex: selection.dayIndex,
-                exercises: selection.exercises,
-              });
-              // Pre-fill exercises
-              setWorkoutData(selection.exercises);
-            }}
-            activeOnly={true}
-            initialSelection={initialProgramSelection}
-          />
-          {programSelection && (
-            <p className="text-sm text-gray-300 mt-2">
-              Pre-filled from: Week{' '}
-              {Math.floor(programSelection.dayIndex / 7) + 1}, Day{' '}
-              {(programSelection.dayIndex % 7) + 1}
-            </p>
-          )}
+      <header className="bg-card-light dark:bg-card-dark border-b border-gray-100 dark:border-gray-800">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/workouts"
+              className="p-2 hover:bg-accent-light dark:hover:bg-accent-dark rounded-full transition-colors"
+            >
+              <svg className="w-6 h-6 text-text-light dark:text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </Link>
+            <h1 className="text-xl font-bold text-text-light dark:text-text-dark">
+              Log Workout
+            </h1>
+          </div>
+          <Link
+            href="/workouts"
+            className="text-primary hover:text-primary/80 font-medium transition-colors"
+          >
+            Cancel
+          </Link>
         </div>
-      )}
+      </header>
 
-      {/* Date Picker */}
-      <div className="mb-6">
-        <label
-          htmlFor="workoutDate"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Workout Date
-        </label>
-        <input
-          id="workoutDate"
-          type="date"
-          value={workoutDate}
-          onChange={(e) => setWorkoutDate(e.target.value)}
-          max={new Date().toISOString().split('T')[0]}
-          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base text-gray-900"
-        />
-      </div>
-
-      {/* Weightlifting Form - Always Rendered */}
-      <div className="mb-6">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
-            Workout Details
-          </h2>
-
-          <WeightliftingForm
-            onSubmit={handleWorkoutDataSubmit}
-            initialData={workoutData || initialData?.data}
+      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Date Display */}
+        <div className="flex items-center justify-center gap-3 py-4">
+          <svg className="w-5 h-5 text-subtext-light dark:text-subtext-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <input
+            type="date"
+            value={workoutDate}
+            onChange={(e) => setWorkoutDate(e.target.value)}
+            max={new Date().toISOString().split('T')[0]}
+            className="text-lg font-medium text-text-light dark:text-text-dark bg-transparent border-none focus:outline-none cursor-pointer"
           />
         </div>
-      </div>
 
-      {/* Notes Field */}
-      <div className="mb-6">
-        <label
-          htmlFor="notes"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Notes (Optional)
-        </label>
-        <textarea
-          id="notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={4}
-          placeholder="Add any additional notes about your workout..."
-          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base text-gray-900 resize-none"
+        {/* Program Selector - Only show when creating new workout */}
+        {!workoutId && (
+          <div>
+            <label className="block text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wide mb-2">
+              Program (Optional)
+            </label>
+            <ProgramDaySelector
+              onSelect={(selection) => {
+                setWorkoutDate(selection.scheduledDate.split('T')[0]);
+                setProgramSelection({
+                  programId: selection.programId,
+                  dayIndex: selection.dayIndex,
+                  exercises: selection.exercises,
+                });
+                setWorkoutData(selection.exercises);
+              }}
+              activeOnly={true}
+              initialSelection={initialProgramSelection}
+            />
+          </div>
+        )}
+
+        {/* Weightlifting Form */}
+        <WeightliftingForm
+          onSubmit={handleWorkoutDataSubmit}
+          initialData={workoutData || initialData?.data}
+          notes={notes}
+          onNotesChange={setNotes}
         />
       </div>
 
       {/* Loading Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-          <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-700 font-medium">
+          <div className="bg-card-light dark:bg-card-dark rounded-2xl p-8 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-text-light dark:text-text-dark font-medium">
               {workoutId ? 'Updating workout...' : 'Saving workout...'}
             </p>
           </div>

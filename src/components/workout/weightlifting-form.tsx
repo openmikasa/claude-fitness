@@ -15,7 +15,6 @@ import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conve
 const weightliftingSetSchema = z.object({
   weight: z.number().min(0, 'Weight must be 0 or greater'),
   reps: z.number().int().min(1, 'Reps must be at least 1'),
-  notes: z.string().optional(),
 });
 
 const weightliftingExerciseSchema = z.object({
@@ -35,9 +34,11 @@ type WeightliftingFormData = z.infer<typeof weightliftingFormSchema>;
 interface WeightliftingFormProps {
   onSubmit: (data: WeightliftingData) => void;
   initialData?: WeightliftingData;
+  notes: string;
+  onNotesChange: (notes: string) => void;
 }
 
-export default function WeightliftingForm({ onSubmit, initialData }: WeightliftingFormProps) {
+export default function WeightliftingForm({ onSubmit, initialData, notes, onNotesChange }: WeightliftingFormProps) {
   const { data: settings } = useSettings();
 
   // Convert initial data from kg to user's preferred unit
@@ -57,8 +58,8 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
       exercises: initialData.exercises.map(ex => ({
         ...ex,
         sets: ex.sets.map(set => ({
-          ...set,
           weight: kgToInput(set.weight, settings?.units || 'metric'),
+          reps: set.reps,
         })),
       })),
     };
@@ -105,7 +106,7 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 pb-24">
       {/* Exercises */}
       <div className="space-y-4">
         {exercises.map((exercise, exerciseIndex) => (
@@ -133,23 +134,44 @@ export default function WeightliftingForm({ onSubmit, initialData }: Weightlifti
             sets: [{ weight: 0, reps: 0 }],
           })
         }
-        className="w-full px-4 py-3 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        className="w-full px-4 py-4 text-sm font-medium text-subtext-light dark:text-subtext-dark bg-transparent border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl hover:border-primary hover:text-primary transition-colors"
       >
         + Add Exercise
       </button>
+
+      {/* Workout Notes */}
+      <div>
+        <label className="block text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wide mb-2">
+          Workout Notes
+        </label>
+        <textarea
+          value={notes}
+          onChange={(e) => onNotesChange(e.target.value)}
+          rows={3}
+          placeholder="How was the session? e.g. Felt strong on bench..."
+          className="w-full px-4 py-3 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors resize-none text-sm"
+        />
+      </div>
 
       {/* Form Error */}
       {errors.exercises?.root && (
         <p className="text-sm text-red-600">{errors.exercises.root.message}</p>
       )}
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-      >
-        Save Workout
-      </button>
+      {/* Submit Button - Fixed at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800">
+        <div className="max-w-2xl mx-auto">
+          <button
+            type="submit"
+            className="w-full px-4 py-4 text-base font-semibold text-white bg-primary rounded-2xl hover:bg-primary/90 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Finish Workout
+          </button>
+        </div>
+      </div>
     </form>
   );
 }
@@ -186,8 +208,6 @@ function ExerciseField({
   });
 
   const exerciseName = watch(`exercises.${exerciseIndex}.name`);
-  const equipment = watch(`exercises.${exerciseIndex}.equipment`) || [];
-  const muscleGroups = watch(`exercises.${exerciseIndex}.muscle_groups`) || [];
 
   const handleExerciseSelect = (exercise: Exercise) => {
     setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
@@ -211,23 +231,26 @@ function ExerciseField({
   };
 
   return (
-    <div className="p-4 border border-gray-200 rounded-lg bg-white space-y-4">
+    <div className="bg-card-light dark:bg-card-dark border border-gray-100 dark:border-gray-800 rounded-2xl p-5 space-y-4">
       {/* Exercise Header */}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <label
-            htmlFor={`exercises.${exerciseIndex}.name`}
-            className="block text-sm font-medium text-gray-900 mb-1"
-          >
+          <label className="block text-xs font-medium text-subtext-light dark:text-subtext-dark mb-2">
             Exercise Name
           </label>
-          <Autocomplete
-            value={exerciseName || ''}
-            onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
-            onExerciseSelect={handleExerciseSelect}
-            onCreateNew={handleCreateNew}
-            placeholder="e.g., Bench Press"
-          />
+          {exerciseName ? (
+            <h3 className="text-xl font-bold text-text-light dark:text-text-dark">
+              {exerciseName}
+            </h3>
+          ) : (
+            <Autocomplete
+              value={exerciseName || ''}
+              onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
+              onExerciseSelect={handleExerciseSelect}
+              onCreateNew={handleCreateNew}
+              placeholder="Search exercise..."
+            />
+          )}
           {errors.exercises?.[exerciseIndex]?.name && (
             <p className="mt-1 text-sm text-red-600">
               {errors.exercises[exerciseIndex].name.message}
@@ -238,48 +261,14 @@ function ExerciseField({
           <button
             type="button"
             onClick={() => removeExercise(exerciseIndex)}
-            className="px-3 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+            className="p-2 text-subtext-light dark:text-subtext-dark hover:text-red-600 transition-colors"
+            aria-label="Remove exercise"
           >
-            Remove Exercise
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         )}
-      </div>
-
-      {/* Equipment and Muscle Groups */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">
-            Equipment
-          </label>
-          <div className="w-full px-3 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md min-h-[42px] flex items-center">
-            {equipment.length > 0 ? (
-              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
-                {equipment[0]}
-              </span>
-            ) : (
-              <span className="text-sm text-gray-500">Auto-filled from exercise selection</span>
-            )}
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">
-            Muscle Groups
-          </label>
-          <div className="w-full px-3 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md min-h-[42px] flex flex-wrap gap-2 items-center">
-            {muscleGroups.length > 0 ? (
-              muscleGroups.map((muscle: string, idx: number) => (
-                <span
-                  key={idx}
-                  className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"
-                >
-                  {muscle}
-                </span>
-              ))
-            ) : (
-              <span className="text-sm text-gray-500">Auto-filled from exercise selection</span>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Create Exercise Modal */}
@@ -290,94 +279,92 @@ function ExerciseField({
         suggestedName={suggestedExerciseName}
       />
 
-      {/* Sets */}
-      <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-900">Sets</h4>
-        {sets.map((set, setIndex) => (
-          <div key={set.id} className="space-y-2">
-            <div className="flex items-start gap-3">
-              <div className="flex items-center gap-2 text-sm text-gray-900 min-w-[3rem]">
-                Set {setIndex + 1}
+      {/* Sets Table */}
+      {exerciseName && (
+        <div className="space-y-3">
+          {/* Table Header */}
+          <div className="grid grid-cols-[60px_1fr_1fr_40px] gap-3 px-2">
+            <div className="text-xs font-semibold text-subtext-light dark:text-subtext-dark uppercase tracking-wide">
+              SET
+            </div>
+            <div className="text-xs font-semibold text-subtext-light dark:text-subtext-dark uppercase tracking-wide">
+              {weightUnit}
+            </div>
+            <div className="text-xs font-semibold text-subtext-light dark:text-subtext-dark uppercase tracking-wide">
+              REPS
+            </div>
+            <div></div>
+          </div>
+
+          {/* Set Rows */}
+          {sets.map((set, setIndex) => (
+            <div key={set.id} className="grid grid-cols-[60px_1fr_1fr_40px] gap-3 items-center">
+              <div className="text-center">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-accent-light dark:bg-accent-dark text-text-light dark:text-text-dark text-sm font-medium">
+                  {setIndex + 1}
+                </span>
               </div>
-              <div className="flex-1 grid grid-cols-2 gap-3">
-                <div>
-                  <label
-                    htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.weight`}
-                    className="block text-xs font-medium text-gray-900 mb-1"
-                  >
-                    Weight ({weightUnit})
-                  </label>
-                  <input
-                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
-                      valueAsNumber: true,
-                    })}
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="0"
-                    className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.weight && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {errors.exercises[exerciseIndex].sets[setIndex].weight.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label
-                    htmlFor={`exercises.${exerciseIndex}.sets.${setIndex}.reps`}
-                    className="block text-xs font-medium text-gray-900 mb-1"
-                  >
-                    Reps
-                  </label>
-                  <input
-                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
-                      valueAsNumber: true,
-                    })}
-                    type="number"
-                    min="1"
-                    placeholder="0"
-                    className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.exercises?.[exerciseIndex]?.sets?.[setIndex]?.reps && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {errors.exercises[exerciseIndex].sets[setIndex].reps.message}
-                    </p>
-                  )}
-                </div>
+              <input
+                {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
+                  valueAsNumber: true,
+                })}
+                type="number"
+                step="0.1"
+                min="0"
+                placeholder="-"
+                className="w-full px-3 py-3 bg-accent-light dark:bg-accent-dark text-text-light dark:text-text-dark text-center border-none rounded-xl focus:ring-2 focus:ring-primary outline-none font-medium"
+              />
+              <input
+                {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
+                  valueAsNumber: true,
+                })}
+                type="number"
+                min="1"
+                placeholder="-"
+                className="w-full px-3 py-3 bg-accent-light dark:bg-accent-dark text-text-light dark:text-text-dark text-center border-none rounded-xl focus:ring-2 focus:ring-primary outline-none font-medium"
+              />
+              <div className="flex items-center justify-center">
+                {watch(`exercises.${exerciseIndex}.sets.${setIndex}.weight`) > 0 &&
+                 watch(`exercises.${exerciseIndex}.sets.${setIndex}.reps`) > 0 ? (
+                  <svg className="w-6 h-6 text-subtext-light dark:text-subtext-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                )}
               </div>
-              {sets.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeSet(setIndex)}
-                  className="px-2 py-2 text-sm text-red-600 hover:text-red-700 focus:outline-none"
-                  aria-label="Remove set"
-                >
-                  ×
-                </button>
+            </div>
+          ))}
+
+          {/* Error messages */}
+          {errors.exercises?.[exerciseIndex]?.sets?.map((setError: any, setIndex: number) => (
+            <div key={setIndex}>
+              {setError?.weight && (
+                <p className="text-xs text-red-600 px-2">
+                  Set {setIndex + 1}: {setError.weight.message}
+                </p>
+              )}
+              {setError?.reps && (
+                <p className="text-xs text-red-600 px-2">
+                  Set {setIndex + 1}: {setError.reps.message}
+                </p>
               )}
             </div>
-            {/* Per-set notes */}
-            <div className="ml-[3rem] mr-8">
-              <input
-                {...register(`exercises.${exerciseIndex}.sets.${setIndex}.notes`)}
-                type="text"
-                placeholder="Notes for this set (optional)"
-                className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
 
-      {/* Add Set Button */}
-      <button
-        type="button"
-        onClick={() => appendSet({ weight: 0, reps: 0 })}
-        className="w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-      >
-        + Add Set
-      </button>
+          {/* Add Set Button */}
+          <button
+            type="button"
+            onClick={() => appendSet({ weight: 0, reps: 0 })}
+            className="w-full px-4 py-2.5 text-sm font-medium text-primary hover:bg-accent-light dark:hover:bg-accent-dark rounded-xl transition-colors"
+          >
+            + Add Set
+          </button>
+        </div>
+      )}
 
       {/* Exercise-level errors */}
       {errors.exercises?.[exerciseIndex]?.sets?.root && (

@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import WorkoutForm from '@/components/workout/workout-form';
 
@@ -38,18 +37,7 @@ function LogWorkoutContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-8">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-          <div className="px-4 py-6 sm:px-6">
-            <Link href="/" className="hover:opacity-80 transition-opacity inline-block mb-4">
-              <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">Log Workout</h1>
-            </Link>
-          </div>
-          <WorkoutForm initialProgramSelection={initialProgramSelection} />
-        </div>
-      </main>
-    </div>
+    <WorkoutForm initialProgramSelection={initialProgramSelection} />
   );
 }
 
