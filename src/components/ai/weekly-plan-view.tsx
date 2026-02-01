@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { format, addDays, parseISO, differenceInDays, startOfDay } from 'date-fns';
 import {
   useGenerateWeeklyPlan,
@@ -40,6 +40,84 @@ const extractProgramWeeks = (prompt: string): number => {
   return 1; // Default to 1 week
 };
 
+// Progress stages for AI generation
+function GenerationProgress({ programWeeks }: { programWeeks: number }) {
+  const [stage, setStage] = useState(0);
+
+  // Define stages based on program length
+  const stages = useMemo(() => {
+    const baseStages = [
+      { message: 'Analyzing your workout history...', emoji: '📊' },
+      { message: 'Identifying patterns and progress...', emoji: '🔍' },
+    ];
+
+    // Add week generation stages
+    const weekStages = [];
+    for (let i = 1; i <= programWeeks; i++) {
+      weekStages.push({
+        message: `Planning week ${i} of ${programWeeks}...`,
+        emoji: '💡'
+      });
+    }
+
+    baseStages.push(...weekStages);
+    baseStages.push(
+      { message: 'Optimizing periodization...', emoji: '⚙️' },
+      { message: 'Finalizing your program...', emoji: '✨' }
+    );
+
+    return baseStages;
+  }, [programWeeks]);
+
+  // Progress through stages based on time
+  useEffect(() => {
+    // Estimate total time: 2-3 seconds per week + 4 seconds base
+    const totalTime = (programWeeks * 2500) + 4000;
+    const timePerStage = totalTime / stages.length;
+
+    const interval = setInterval(() => {
+      setStage((prev) => {
+        if (prev < stages.length - 1) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, timePerStage);
+
+    return () => clearInterval(interval);
+  }, [stages.length, programWeeks]);
+
+  const currentStage = stages[stage];
+  const progress = ((stage + 1) / stages.length) * 100;
+
+  return (
+    <div className='py-8'>
+      <div className='max-w-md mx-auto'>
+        <div className='flex items-center justify-center gap-3 mb-6'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600'></div>
+          <span className='text-4xl animate-pulse'>{currentStage.emoji}</span>
+        </div>
+
+        <div className='text-center mb-4'>
+          <p className='text-lg font-medium text-gray-900 mb-1'>{currentStage.message}</p>
+          <p className='text-sm text-gray-500'>
+            Step {stage + 1} of {stages.length}
+          </p>
+        </div>
+
+        {/* Progress bar */}
+        <div className='w-full bg-gray-200 rounded-full h-2 mb-2 overflow-hidden'>
+          <div
+            className='bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500 ease-out'
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className='text-xs text-center text-gray-500'>{Math.round(progress)}% complete</p>
+      </div>
+    </div>
+  );
+}
+
 const DEFAULT_PROGRAM_REQUEST = `User Profile
 Age: [Your age in years]
 Sex: [Male / Female / Other]
@@ -73,6 +151,7 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [showRefreshModal, setShowRefreshModal] = useState(false);
   const [refreshResult, setRefreshResult] = useState<RefreshProgramResponse | null>(null);
   const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(null);
+  const [generatingWeeks, setGeneratingWeeks] = useState(1); // Track program weeks during generation
   const generateMutation = useGenerateWeeklyPlan();
   const updateStatusMutation = useUpdateProgramStatus();
   const refreshMutation = useRefreshProgram();
@@ -130,6 +209,7 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
 
   const handleGenerate = () => {
     const programWeeks = extractProgramWeeks(programRequest);
+    setGeneratingWeeks(programWeeks); // Track for progress display
 
     // Save to history before generating
     savePromptMutation.mutate({
@@ -189,10 +269,7 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
       </div>
 
       {generateMutation.isPending ? (
-        <div className='py-8 text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4'></div>
-          <p className='text-gray-600'>Creating your personalized plan...</p>
-        </div>
+        <GenerationProgress programWeeks={generatingWeeks} />
       ) : showForm ? (
         <div className='space-y-4'>
           {/* Prompt History Dropdown */}
