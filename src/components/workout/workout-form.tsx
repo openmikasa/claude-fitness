@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import WeightliftingForm from './weightlifting-form';
+import ProgramDaySelector from './program-day-selector';
 import type {
   WeightliftingData,
   CreateWorkoutInput,
@@ -28,6 +29,14 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
   const [notes, setNotes] = useState<string>(initialData?.notes || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<Toast | null>(null);
+  const [programSelection, setProgramSelection] = useState<{
+    programId: string;
+    dayIndex: number;
+    exercises: WeightliftingData;
+  } | null>(null);
+  const [workoutData, setWorkoutData] = useState<WeightliftingData | undefined>(
+    initialData?.data
+  );
 
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
@@ -42,6 +51,8 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
         workout_date: workoutDate,
         data, // Always WeightliftingData
         notes: notes.trim() || undefined,
+        program_id: programSelection?.programId,
+        program_day_index: programSelection?.dayIndex,
       };
 
       const url = workoutId ? `/api/workouts/${workoutId}` : '/api/workouts';
@@ -120,6 +131,37 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
         </p>
       </div>
 
+      {/* Program Day Selector - Only show when creating new workout */}
+      {!workoutId && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Following a Program? (Optional)
+          </label>
+          <ProgramDaySelector
+            onSelect={(selection) => {
+              // Auto-populate date
+              setWorkoutDate(selection.scheduledDate.split('T')[0]);
+              // Store program selection for submission
+              setProgramSelection({
+                programId: selection.programId,
+                dayIndex: selection.dayIndex,
+                exercises: selection.exercises,
+              });
+              // Pre-fill exercises
+              setWorkoutData(selection.exercises);
+            }}
+            activeOnly={true}
+          />
+          {programSelection && (
+            <p className="text-sm text-gray-600 mt-2">
+              Pre-filled from: Week{' '}
+              {Math.floor(programSelection.dayIndex / 7) + 1}, Day{' '}
+              {(programSelection.dayIndex % 7) + 1}
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Date Picker */}
       <div className="mb-6">
         <label
@@ -147,7 +189,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
 
           <WeightliftingForm
             onSubmit={handleWorkoutDataSubmit}
-            initialData={initialData?.data}
+            initialData={workoutData || initialData?.data}
           />
         </div>
       </div>

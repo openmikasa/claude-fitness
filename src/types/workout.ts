@@ -47,6 +47,8 @@ export interface Workout {
   workout_date: string; // ISO date string
   data: WeightliftingData; // No longer a union
   notes?: string;
+  program_id?: string; // Link to AI program
+  program_day_index?: number; // Zero-based index into program.plan_data
   created_at: string;
   updated_at: string;
   workout_exercises?: WorkoutExercise[];  // Optional for backward compat
@@ -57,6 +59,8 @@ export interface CreateWorkoutInput {
   workout_date: string;
   data: WeightliftingData; // Direct type, not unknown
   notes?: string;
+  program_id?: string; // Optional link to program
+  program_day_index?: number; // Optional day index (0-based)
   // workout_type removed - always 'weightlifting'
 }
 
@@ -133,4 +137,25 @@ export interface WorkoutListResponse {
   total: number;
   page: number;
   pageSize: number;
+}
+
+// Program refresh types
+export interface RefreshProgramRequest {
+  program_id: string;
+  from_today?: boolean; // Default true, regenerate from current day forward
+}
+
+export interface RefreshProgramResponse {
+  updated_program: Program;
+  changes_summary: {
+    days_analyzed: number; // How many completed workouts
+    days_regenerated: number; // How many future days updated
+    key_adjustments: string[]; // ["Bench Press: 100kg → 110kg", ...]
+  };
+  rationale: string; // AI explanation of changes
+}
+
+export interface ProgramWithProgress extends Program {
+  completed_days: number[]; // Indices of days with logged workouts
+  completion_rate: number; // Percentage (0-100)
 }

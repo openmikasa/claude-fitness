@@ -99,6 +99,12 @@ export async function PUT(
     if (workoutInput.notes !== undefined) {
       updateData.notes = workoutInput.notes;
     }
+    if (workoutInput.program_id !== undefined) {
+      updateData.program_id = workoutInput.program_id;
+    }
+    if (workoutInput.program_day_index !== undefined) {
+      updateData.program_day_index = workoutInput.program_day_index;
+    }
 
     // Update workout (RLS will enforce ownership)
     const { data, error } = await supabase

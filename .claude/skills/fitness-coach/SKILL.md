@@ -101,6 +101,63 @@ When generating programs of 4+ weeks:
 
 For programs of 4+ weeks, include `mesocycle_info` and `week`/`is_deload` fields:
 
+## Program Refresh Based on Actual Performance
+
+When refreshing an existing program based on user's completed workouts:
+
+### Analysis Framework
+
+1. **Performance Signals**:
+   - **Overperforming**:
+     - Completed all prescribed reps with "felt easy", "light", "had more in tank"
+     - Consistently exceeding prescribed weights
+     - → Increase weight 5-10% or add volume
+
+   - **Underperforming**:
+     - Failed reps with "struggled", "too heavy", "form breakdown"
+     - Missing prescribed reps by 2+
+     - → Reduce weight 5-10% or maintain for technique work
+
+   - **Cheating/Form Issues**:
+     - Notes like "cheated last 2 reps", "used momentum", "poor form"
+     - → Weight is at limit, maintain or add volume before weight increase
+     - → Add form cues in coaching notes
+
+   - **Fatigue Signals**:
+     - Notes like "very tired", "couldn't finish", "skipped last exercise"
+     - Missing workouts
+     - → Reduce volume, consider early deload
+
+2. **Adherence Patterns**:
+   - Completed all scheduled days → aggressive progression
+   - Missed 1-2 days → maintain conservative progression
+   - Missed 3+ days → reduce volume, reassess recovery capacity
+
+3. **Progressive Overload Adjustments**:
+   - If user consistently hits targets → increase weight
+   - If user struggles → increase volume before weight (add sets/reps)
+   - If user shows fatigue → reduce volume, maintain intensity on compounds
+
+### Refresh Response Format
+
+Must include:
+```json
+{
+  "program_type": "weekly_plan",
+  "mesocycle_info": { /* maintain original structure */ },
+  "plan_data": [ /* regenerated future days only */ ],
+  "rationale": "Detailed explanation of all adjustments based on actual performance and notes...",
+  "valid_from": "original date",
+  "valid_until": "original date"
+}
+```
+
+**Critical**:
+- Explain EVERY major weight/volume change with reference to specific workout notes
+- Maintain periodization structure (don't remove deload weeks)
+- Be conservative with weight increases if notes indicate form issues
+- Reference user's actual performance: "You hit 110kg for 8 reps on Day 5 with 'felt light' note..."
+
 ### 9. Form & Technique
 - Quality movement > heavy weight
 - Provide specific form cues in coaching notes

@@ -234,6 +234,8 @@ export async function POST(request: NextRequest) {
         workout_date: workoutInput.workout_date,
         data: workoutInput.data,
         notes: workoutInput.notes,
+        program_id: workoutInput.program_id || null,
+        program_day_index: workoutInput.program_day_index ?? null,
       })
       .select()
       .single();

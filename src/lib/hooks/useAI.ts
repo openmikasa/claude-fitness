@@ -5,7 +5,7 @@ import {
   UseQueryResult,
   UseMutationResult,
 } from '@tanstack/react-query';
-import type { Program } from '@/types/workout';
+import type { Program, RefreshProgramRequest, RefreshProgramResponse, Workout } from '@/types/workout';
 
 // Query keys
 export const aiKeys = {
@@ -186,5 +186,62 @@ export function useDeleteProgram(): UseMutationResult<void, Error, string, unkno
       queryClient.removeQueries({ queryKey: aiKeys.program(deletedId) });
       queryClient.invalidateQueries({ queryKey: aiKeys.programs() });
     },
+  });
+}
+
+async function refreshProgram(request: RefreshProgramRequest): Promise<RefreshProgramResponse> {
+  const response = await fetch('/api/ai/refresh-program', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || error.error || 'Failed to refresh program');
+  }
+
+  return response.json();
+}
+
+async function fetchProgramWorkouts(programId: string): Promise<Workout[]> {
+  const response = await fetch(`/api/programs/${programId}/workouts`, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to fetch program workouts');
+  }
+
+  return response.json();
+}
+
+export function useRefreshProgram(): UseMutationResult<
+  RefreshProgramResponse,
+  Error,
+  RefreshProgramRequest,
+  unknown
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: refreshProgram,
+    onSuccess: (data) => {
+      // Invalidate program queries to refetch updated data
+      queryClient.invalidateQueries({ queryKey: aiKeys.programs() });
+      queryClient.setQueryData(aiKeys.program(data.updated_program.id), data.updated_program);
+    },
+  });
+}
+
+export function useProgramWorkouts(
+  programId: string | undefined
+): UseQueryResult<Workout[], Error> {
+  return useQuery({
+    queryKey: ['program-workouts', programId],
+    queryFn: () => fetchProgramWorkouts(programId!),
+    enabled: !!programId,
   });
 }

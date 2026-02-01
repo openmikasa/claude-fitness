@@ -65,6 +65,20 @@ export const createWorkoutInputSchema = z.object({
       invalid_type_error: 'Notes must be a string',
     })
     .optional(),
+  program_id: z
+    .string({
+      invalid_type_error: 'Program ID must be a string',
+    })
+    .uuid('Program ID must be a valid UUID')
+    .optional(),
+  program_day_index: z
+    .number({
+      invalid_type_error: 'Program day index must be a number',
+    })
+    .int('Program day index must be a whole number')
+    .min(0, 'Program day index must be 0 or greater')
+    .max(83, 'Program day index must be 83 or less (12 weeks)')
+    .optional(),
 }) satisfies z.ZodType<CreateWorkoutInput>;
 
 // Update Workout Input Schema
@@ -86,6 +100,20 @@ export const updateWorkoutInputSchema = z.object({
     .string({
       invalid_type_error: 'Notes must be a string',
     })
+    .optional(),
+  program_id: z
+    .string({
+      invalid_type_error: 'Program ID must be a string',
+    })
+    .uuid('Program ID must be a valid UUID')
+    .optional(),
+  program_day_index: z
+    .number({
+      invalid_type_error: 'Program day index must be a number',
+    })
+    .int('Program day index must be a whole number')
+    .min(0, 'Program day index must be 0 or greater')
+    .max(83, 'Program day index must be 83 or less (12 weeks)')
     .optional(),
 }) satisfies z.ZodType<UpdateWorkoutInput>;
 

@@ -2,12 +2,19 @@
 
 import { useState, useMemo } from 'react';
 import { format, addDays, parseISO, differenceInDays, startOfDay } from 'date-fns';
-import { useGenerateWeeklyPlan, useUpdateProgramStatus } from '@/lib/hooks/useAI';
+import {
+  useGenerateWeeklyPlan,
+  useUpdateProgramStatus,
+  useRefreshProgram,
+  useProgramWorkouts,
+} from '@/lib/hooks/useAI';
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
+import RefreshChangesModal from './refresh-changes-modal';
 import type {
   Program,
   ProgramDay,
+  RefreshProgramResponse,
 } from '@/types/workout';
 
 interface WeeklyPlanViewProps {
@@ -56,11 +63,17 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [currentWeek, setCurrentWeek] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [programRequest, setProgramRequest] = useState(DEFAULT_PROGRAM_REQUEST);
+  const [showRefreshModal, setShowRefreshModal] = useState(false);
+  const [refreshResult, setRefreshResult] = useState<RefreshProgramResponse | null>(null);
   const generateMutation = useGenerateWeeklyPlan();
   const updateStatusMutation = useUpdateProgramStatus();
+  const refreshMutation = useRefreshProgram();
   const { data: settings } = useSettings();
 
   const plan = generateMutation.data || existingPlan;
+
+  // Fetch workouts for the current program
+  const { data: programWorkouts } = useProgramWorkouts(plan?.id);
 
   // Check if current week is a deload week
   const isDeloadWeek = (weekIndex: number): boolean => {
@@ -114,6 +127,26 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
     if (plan) {
       updateStatusMutation.mutate({ id: plan.id, status: 'active' });
     }
+  };
+
+  const handleRefreshProgram = async () => {
+    if (!plan) return;
+    try {
+      const result = await refreshMutation.mutateAsync({
+        program_id: plan.id,
+        from_today: true,
+      });
+      setRefreshResult(result);
+      setShowRefreshModal(true);
+    } catch (error) {
+      // Error is handled by the mutation
+      console.error('Failed to refresh program:', error);
+    }
+  };
+
+  const isCompletedDay = (dayIndex: number): boolean => {
+    if (!programWorkouts) return false;
+    return programWorkouts.some((w) => w.program_day_index === dayIndex);
   };
 
   const getWorkoutEmoji = () => '💪'; // Always weightlifting
@@ -229,12 +262,15 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
               const dayDate = addDays(parseISO(plan.valid_from), absoluteDayIndex);
               const isSelected = selectedDay === day.day;
               const isToday = todayIndex === absoluteDayIndex;
+              const isCompleted = isCompletedDay(absoluteDayIndex);
 
               let btnClass = 'border-gray-200 hover:border-purple-300';
               if (isSelected) {
                 btnClass = 'border-purple-600 bg-purple-50';
               } else if (isToday) {
                 btnClass = 'border-green-500 bg-green-50';
+              } else if (isCompleted) {
+                btnClass = 'border-gray-200 bg-green-50';
               }
 
               return (
@@ -246,6 +282,11 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
                   {isToday && (
                     <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
                       TODAY
+                    </div>
+                  )}
+                  {isCompleted && !isToday && (
+                    <div className='absolute top-1 right-1 text-green-600 text-sm font-bold'>
+                      ✓
                     </div>
                   )}
                   <div className='text-xs font-medium text-gray-600 mb-1'>{format(dayDate, 'EEE')}</div>
@@ -289,9 +330,18 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
               </button>
             )}
             {plan.status === 'active' && (
-              <div className='flex-1 bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium text-center'>
-                ✓ Active Plan
-              </div>
+              <>
+                <div className='flex-1 bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium text-center'>
+                  ✓ Active Plan
+                </div>
+                <button
+                  onClick={handleRefreshProgram}
+                  disabled={refreshMutation.isPending}
+                  className='flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50'
+                >
+                  {refreshMutation.isPending ? 'Refreshing...' : '🔄 Refresh Program'}
+                </button>
+              </>
             )}
             <button
               onClick={() => setShowForm(true)}
@@ -319,6 +369,14 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
         <div className='mt-4 bg-red-50 border-l-4 border-red-400 p-4'>
           <p className='text-sm text-red-700'>{generateMutation.error.message}</p>
         </div>
+      )}
+
+      {showRefreshModal && refreshResult && (
+        <RefreshChangesModal
+          changes={refreshResult.changes_summary}
+          rationale={refreshResult.rationale}
+          onClose={() => setShowRefreshModal(false)}
+        />
       )}
     </div>
   );
