@@ -40,6 +40,9 @@ export const weightliftingExerciseSchema = z.object({
       invalid_type_error: 'Sets must be an array',
     })
     .min(1, 'At least one set is required'),
+  exercise_id: z.string().optional(), // Optional: linked exercise ID
+  equipment: z.array(z.string()).optional(), // Optional: equipment used
+  muscle_groups: z.array(z.string()).optional(), // Optional: muscles worked
 });
 
 export const weightliftingDataSchema = z.object({

@@ -33,6 +33,9 @@ export interface WeightliftingSet {
 export interface WeightliftingExercise {
   name: string;
   sets: WeightliftingSet[];
+  exercise_id?: string; // Optional: linked exercise ID
+  equipment?: string[]; // Optional: equipment used
+  muscle_groups?: string[]; // Optional: muscles worked
 }
 
 export interface WeightliftingData {

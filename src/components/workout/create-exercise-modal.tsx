@@ -20,7 +20,7 @@ export function CreateExerciseModal({
   const [category, setCategory] = useState<'strength' | 'cardio'>('strength');
   const [primaryMuscles, setPrimaryMuscles] = useState<string[]>([]);
   const [secondaryMuscles, setSecondaryMuscles] = useState<string[]>([]);
-  const [equipment, setEquipment] = useState<string[]>([]);
+  const [equipment, setEquipment] = useState<string>(''); // Single value, not array
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -73,8 +73,8 @@ export function CreateExerciseModal({
       return;
     }
 
-    if (equipment.length !== 1) {
-      setError('Please select exactly one equipment type');
+    if (!equipment) {
+      setError('Please select an equipment type');
       return;
     }
 
@@ -89,7 +89,7 @@ export function CreateExerciseModal({
           category,
           primary_muscles: primaryMuscles,
           secondary_muscles: secondaryMuscles,
-          equipment: equipment,
+          equipment: [equipment], // Convert to array for API
         }),
         credentials: 'include',
       });
@@ -114,7 +114,7 @@ export function CreateExerciseModal({
       setCategory('strength');
       setPrimaryMuscles([]);
       setSecondaryMuscles([]);
-      setEquipment([]);
+      setEquipment('');
       onClose();
     } catch (err) {
       setError('Failed to create exercise. Please try again.');
@@ -231,13 +231,25 @@ export function CreateExerciseModal({
           </div>
 
           {/* Equipment */}
-          <MultiSelect
-            label='Equipment * (select exactly one)'
-            options={equipmentOptions}
-            selected={equipment}
-            onChange={setEquipment}
-            placeholder='Select equipment...'
-          />
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              Equipment *
+            </label>
+            <select
+              value={equipment}
+              onChange={(e) => setEquipment(e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white'
+              disabled={loading}
+              required
+            >
+              <option value=''>Select equipment...</option>
+              {equipmentOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Footer */}
           <div className='flex gap-3 pt-4'>
