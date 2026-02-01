@@ -67,23 +67,13 @@ export function ProgramManager() {
 
     const weekMap = new Map<number, ProgramDay[]>();
 
-    selectedProgram.plan_data.forEach((workout, index) => {
+    selectedProgram.plan_data.forEach((workout) => {
       // Use week field if available, otherwise fallback to computing from day (backward compat)
       const weekNum = workout.week || (workout.day ? Math.floor((workout.day - 1) / 7) + 1 : 1);
       if (!weekMap.has(weekNum)) {
         weekMap.set(weekNum, []);
       }
       weekMap.get(weekNum)!.push(workout);
-
-      // Debug: log first few to understand data structure
-      if (index < 3) {
-        console.log(`[Program Manager] Workout ${index}:`, {
-          week: workout.week,
-          workout_index: workout.workout_index,
-          day: workout.day,
-          computedWeek: weekNum
-        });
-      }
     });
 
     // Sort workouts within each week by workout_index (or day for backward compat)
@@ -96,13 +86,9 @@ export function ProgramManager() {
     });
 
     // Convert to array of weeks
-    const weeksArray = Array.from(weekMap.entries())
+    return Array.from(weekMap.entries())
       .sort((a, b) => a[0] - b[0])
       .map(([_, workouts]) => workouts);
-
-    console.log('[Program Manager] Weeks array:', weeksArray.map((w, i) => `Week ${i + 1}: ${w.length} workouts`));
-
-    return weeksArray;
   }, [selectedProgram]);
 
   // Check if current week is a deload week

@@ -35,12 +35,20 @@ export async function POST(request: Request) {
     }
 
     const planData = program.plan_data as ProgramDay[];
-    const workoutsPerWeek = program.mesocycle_info?.workouts_per_week || 4;
+    const totalWeeks = program.mesocycle_info?.total_weeks || 4;
+
+    // Auto-detect workouts per week from the actual data
+    // This is more reliable than trusting mesocycle_info
+    const actualWorkoutsPerWeek = Math.ceil(planData.length / totalWeeks);
+
+    console.log(`[Fix Program] Program ${programId}: ${planData.length} workouts, ${totalWeeks} weeks = ${actualWorkoutsPerWeek} workouts/week`);
 
     // Fix week numbers based on position in array
     const correctedPlanData = planData.map((workout, index) => {
-      const correctWeek = Math.floor(index / workoutsPerWeek) + 1;
-      const correctWorkoutIndex = (index % workoutsPerWeek) + 1;
+      const correctWeek = Math.floor(index / actualWorkoutsPerWeek) + 1;
+      const correctWorkoutIndex = (index % actualWorkoutsPerWeek) + 1;
+
+      console.log(`[Fix Program] Workout ${index}: ${workout.week}/${workout.workout_index} → ${correctWeek}/${correctWorkoutIndex}`);
 
       return {
         ...workout,
@@ -49,10 +57,20 @@ export async function POST(request: Request) {
       };
     });
 
+    // Update mesocycle_info with correct workouts_per_week
+    const updatedMesocycleInfo = {
+      ...program.mesocycle_info,
+      workouts_per_week: actualWorkoutsPerWeek,
+      total_weeks: totalWeeks,
+    };
+
     // Update the program
     const { error: updateError } = await supabase
       .from('programs')
-      .update({ plan_data: correctedPlanData })
+      .update({
+        plan_data: correctedPlanData,
+        mesocycle_info: updatedMesocycleInfo,
+      })
       .eq('id', programId)
       .eq('user_id', user.id);
 
@@ -65,7 +83,8 @@ export async function POST(request: Request) {
       success: true,
       message: 'Program week numbers corrected',
       totalWorkouts: correctedPlanData.length,
-      workoutsPerWeek,
+      workoutsPerWeek: actualWorkoutsPerWeek,
+      totalWeeks: totalWeeks,
     });
   } catch (error) {
     console.error('Unexpected error in POST /api/ai/fix-program-weeks:', error);
