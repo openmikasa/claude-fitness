@@ -31,6 +31,13 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true, initia
       const program = programs.find((p) => p.id === initialSelection.programId);
       if (program && program.plan_data[initialSelection.dayIndex]) {
         const day = program.plan_data[initialSelection.dayIndex];
+
+        // Validate data structure before calling onSelect
+        if (!day.data || !day.data.exercises || day.data.exercises.length === 0) {
+          console.warn('Program workout has invalid data structure:', day);
+          return; // Don't call onSelect if data is malformed
+        }
+
         const scheduledDate = new Date().toISOString(); // Use today's date
 
         onSelect({
@@ -70,6 +77,12 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true, initia
     if (!program || !program.plan_data[dayIndex]) return;
 
     const day = program.plan_data[dayIndex];
+
+    // Validate data structure before calling onSelect
+    if (!day.data || !day.data.exercises || day.data.exercises.length === 0) {
+      console.warn('Program workout has invalid data structure:', day);
+      return; // Don't call onSelect if data is malformed
+    }
 
     // Use today's date as the scheduled date
     const scheduledDate = new Date().toISOString();

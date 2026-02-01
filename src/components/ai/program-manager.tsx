@@ -345,38 +345,64 @@ export function ProgramManager() {
               )}
 
               {/* Selected Workout Details */}
-              {selectedWorkout !== null && (
-                <div className='bg-purple-50 rounded-lg p-4 border-2 border-purple-200'>
-                  <h3 className='font-semibold text-gray-900 mb-2'>
-                    Week {selectedWorkout.week}, Workout {selectedWorkout.workout_index}
-                  </h3>
-                  <div className='space-y-2 mb-3'>
-                    {formatDayDetails(selectedWorkout)}
-                  </div>
-                  <div className='bg-white rounded p-3 border border-purple-200 mb-3'>
-                    <p className='text-xs font-medium text-gray-600 mb-1'>Coaching Notes:</p>
-                    <p className='text-sm text-gray-700'>
-                      {selectedWorkout.coaching_notes}
-                    </p>
-                  </div>
+              {selectedWorkout !== null && (() => {
+                try {
+                  // Compute backward-compatible values for display
+                  const displayWeek = selectedWorkout.week ||
+                    (selectedWorkout.day ? Math.floor((selectedWorkout.day - 1) / 7) + 1 : currentWeek + 1);
+                  const displayWorkout = selectedWorkout.workout_index ||
+                    (selectedWorkout.day ? ((selectedWorkout.day - 1) % 7) + 1 : 1);
 
-                  {/* Log This Workout Button */}
-                  <button
-                    onClick={() => {
-                      // Find the actual array index for this workout
-                      const workoutIndex = selectedProgram.plan_data.findIndex(
-                        (w) => w.week === selectedWorkout.week &&
-                               w.workout_index === selectedWorkout.workout_index
-                      );
-                      router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${workoutIndex}`);
-                    }}
-                    className='w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
-                  >
-                    <span>📝</span>
-                    Log This Workout
-                  </button>
-                </div>
-              )}
+                  // Find array index using either new fields or old day field
+                  const arrayIndex = selectedProgram.plan_data.findIndex((w) => {
+                    if (w.week && w.workout_index) {
+                      // New format: match by week + workout_index
+                      return w.week === selectedWorkout.week &&
+                             w.workout_index === selectedWorkout.workout_index;
+                    } else {
+                      // Old format: match by day
+                      return w.day === selectedWorkout.day;
+                    }
+                  });
+
+                  return (
+                    <div className='bg-purple-50 rounded-lg p-4 border-2 border-purple-200'>
+                      <h3 className='font-semibold text-gray-900 mb-2'>
+                        Week {displayWeek}, Workout {displayWorkout}
+                      </h3>
+                      <div className='space-y-2 mb-3'>
+                        {formatDayDetails(selectedWorkout)}
+                      </div>
+                      <div className='bg-white rounded p-3 border border-purple-200 mb-3'>
+                        <p className='text-xs font-medium text-gray-600 mb-1'>Coaching Notes:</p>
+                        <p className='text-sm text-gray-700'>
+                          {selectedWorkout.coaching_notes}
+                        </p>
+                      </div>
+
+                      {/* Log This Workout Button */}
+                      <button
+                        onClick={() => {
+                          router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${arrayIndex}`);
+                        }}
+                        className='w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
+                      >
+                        <span>📝</span>
+                        Log This Workout
+                      </button>
+                    </div>
+                  );
+                } catch (error) {
+                  console.error('Error rendering workout details:', error, selectedWorkout);
+                  return (
+                    <div className='bg-red-50 rounded-lg p-4 border-2 border-red-200'>
+                      <p className='text-sm text-red-700'>
+                        Unable to display workout details. This program may be using an old format.
+                      </p>
+                    </div>
+                  );
+                }
+              })()}
 
               {/* Plan Overview */}
               <div className='bg-gray-50 rounded-lg p-4'>
