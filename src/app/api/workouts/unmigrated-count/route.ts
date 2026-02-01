@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
 
+// Force dynamic rendering (uses cookies for auth)
+export const dynamic = 'force-dynamic';
+
 // GET /api/workouts/unmigrated-count
 export async function GET() {
   try {

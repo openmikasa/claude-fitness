@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import WorkoutForm from '@/components/workout/workout-form';
 
-export default function LogWorkoutPage() {
+function LogWorkoutContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,5 +50,20 @@ export default function LogWorkoutPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function LogWorkoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+          <div className="text-lg text-gray-700 dark:text-gray-300">Loading...</div>
+        </div>
+      </div>
+    }>
+      <LogWorkoutContent />
+    </Suspense>
   );
 }
