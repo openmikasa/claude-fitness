@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import {
@@ -25,6 +25,7 @@ export function ProgramManager() {
   const [refreshNotes, setRefreshNotes] = useState('');
   const [showRefreshModal, setShowRefreshModal] = useState(false);
   const [refreshResult, setRefreshResult] = useState<RefreshProgramResponse | null>(null);
+  const [fixedPrograms, setFixedPrograms] = useState<Set<string>>(new Set());
 
   const { data: programs = [], isLoading } = usePrograms();
   const updateStatusMutation = useUpdateProgramStatus();
@@ -34,7 +35,7 @@ export function ProgramManager() {
 
   // Fix program week numbers mutation
   const fixWeeksMutation = useMutation({
-    mutationFn: async (programId: string) => {
+    mutationFn: async ({ programId, silent }: { programId: string; silent?: boolean }) => {
       const response = await fetch('/api/ai/fix-program-weeks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,15 +45,21 @@ export function ProgramManager() {
         const error = await response.json();
         throw new Error(error.error || 'Failed to fix program weeks');
       }
-      return response.json();
+      const data = await response.json();
+      return { ...data, silent, programId };
     },
     onSuccess: async (data) => {
       console.log('[Fix Success]', data);
+      // Mark this program as fixed
+      setFixedPrograms(prev => new Set(prev).add(data.programId));
       // Invalidate and refetch programs
       await queryClient.invalidateQueries({ queryKey: ['programs'] });
       await queryClient.refetchQueries({ queryKey: ['programs'] });
-      alert(`Success! Fixed ${data.totalWorkouts} workouts:\n- ${data.totalWeeks} weeks\n- ${data.workoutsPerWeek} workouts per week\n\nRefreshing page...`);
-      window.location.reload();
+
+      if (!data.silent) {
+        alert(`Success! Fixed ${data.totalWorkouts} workouts:\n- ${data.totalWeeks} weeks\n- ${data.workoutsPerWeek} workouts per week\n\nRefreshing page...`);
+        window.location.reload();
+      }
     },
     onError: (error) => {
       console.error('Failed to fix program weeks:', error);
@@ -65,6 +72,33 @@ export function ProgramManager() {
 
   // Fetch workouts for selected program
   const { data: programWorkouts } = useProgramWorkouts(selectedProgramId || undefined);
+
+  // Auto-fix week numbers if they're incorrect
+  useEffect(() => {
+    if (!selectedProgram || !selectedProgram.plan_data) return;
+    if (fixedPrograms.has(selectedProgram.id)) return; // Skip if already fixed
+    if (fixWeeksMutation.isPending) return; // Skip if already fixing
+
+    const planData = selectedProgram.plan_data;
+    const totalWeeks = selectedProgram.mesocycle_info?.total_weeks || 4;
+    const expectedWorkoutsPerWeek = Math.ceil(planData.length / totalWeeks);
+
+    // Check if week numbers are sequential and correct
+    let needsFix = false;
+    planData.forEach((workout, index) => {
+      const expectedWeek = Math.floor(index / expectedWorkoutsPerWeek) + 1;
+      const expectedWorkoutIndex = (index % expectedWorkoutsPerWeek) + 1;
+
+      if (workout.week !== expectedWeek || workout.workout_index !== expectedWorkoutIndex) {
+        needsFix = true;
+      }
+    });
+
+    if (needsFix) {
+      console.log('[Auto-Fix] Detected incorrect week numbers, auto-fixing...');
+      fixWeeksMutation.mutate({ programId: selectedProgram.id, silent: true });
+    }
+  }, [selectedProgram?.id, selectedProgram?.plan_data, fixedPrograms]);
 
   // Calculate weeks from plan data - group by week field instead of slicing by 7
   const weeks = useMemo(() => {
@@ -438,24 +472,6 @@ export function ProgramManager() {
               <div className='bg-gray-50 rounded-lg p-4'>
                 <h4 className='font-semibold text-gray-900 mb-2'>Plan Overview</h4>
                 <p className='text-sm text-gray-700'>{selectedProgram.rationale}</p>
-              </div>
-
-              {/* Fix Week Numbers Button */}
-              <div className='bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200'>
-                <h4 className='font-semibold text-gray-900 mb-2 flex items-center gap-2'>
-                  <span>🔧</span>
-                  Fix Week Organization
-                </h4>
-                <p className='text-sm text-gray-700 mb-3'>
-                  If weeks are showing incorrect workouts, click below to reorganize them properly.
-                </p>
-                <button
-                  onClick={() => fixWeeksMutation.mutate(selectedProgram.id)}
-                  disabled={fixWeeksMutation.isPending}
-                  className='w-full bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 transition-colors disabled:opacity-50'
-                >
-                  {fixWeeksMutation.isPending ? 'Fixing...' : 'Fix Week Numbers'}
-                </button>
               </div>
 
               {/* Refresh Program Section (only for active programs) */}
