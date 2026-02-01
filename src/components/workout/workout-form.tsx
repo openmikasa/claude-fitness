@@ -121,10 +121,10 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-white mb-2">
           {workoutId ? 'Edit Workout' : 'Log Workout'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-300">
           {workoutId
             ? 'Update your workout details'
             : 'Track your weightlifting progress'}
@@ -134,7 +134,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
       {/* Program Day Selector - Only show when creating new workout */}
       {!workoutId && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-200 mb-2">
             Following a Program? (Optional)
           </label>
           <ProgramDaySelector
@@ -153,7 +153,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
             activeOnly={true}
           />
           {programSelection && (
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-300 mt-2">
               Pre-filled from: Week{' '}
               {Math.floor(programSelection.dayIndex / 7) + 1}, Day{' '}
               {(programSelection.dayIndex % 7) + 1}
@@ -166,7 +166,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
       <div className="mb-6">
         <label
           htmlFor="workoutDate"
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-medium text-gray-200 mb-2"
         >
           Workout Date
         </label>
@@ -176,14 +176,14 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
           value={workoutDate}
           onChange={(e) => setWorkoutDate(e.target.value)}
           max={new Date().toISOString().split('T')[0]}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base"
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base text-gray-900"
         />
       </div>
 
       {/* Weightlifting Form - Always Rendered */}
       <div className="mb-6">
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">
             Workout Details
           </h2>
 
@@ -198,7 +198,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
       <div className="mb-6">
         <label
           htmlFor="notes"
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-medium text-gray-200 mb-2"
         >
           Notes (Optional)
         </label>
@@ -208,7 +208,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
           placeholder="Add any additional notes about your workout..."
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base resize-none"
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-base text-gray-900 resize-none"
         />
       </div>
 

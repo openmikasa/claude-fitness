@@ -20,7 +20,7 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true }: Prog
 
   if (isLoading) {
     return (
-      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg" disabled>
+      <select className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg" disabled>
         <option>Loading programs...</option>
       </select>
     );
@@ -28,7 +28,7 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true }: Prog
 
   if (!programs || programs.length === 0) {
     return (
-      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg" disabled>
+      <select className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg" disabled>
         <option>No active programs</option>
       </select>
     );
@@ -62,7 +62,7 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true }: Prog
   return (
     <select
       onChange={handleChange}
-      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+      className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
       defaultValue=""
     >
       <option value="">Select a program day (optional)</option>
