@@ -11,6 +11,13 @@ import {
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
 import RefreshChangesModal from './refresh-changes-modal';
+import {
+  usePromptHistory,
+  useSavePrompt,
+  useDeletePrompt,
+  formatHistoryTimestamp,
+  getHistoryLabel,
+} from '@/lib/hooks/usePromptHistory';
 import type {
   Program,
   ProgramDay,
@@ -65,10 +72,14 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
   const [programRequest, setProgramRequest] = useState(DEFAULT_PROGRAM_REQUEST);
   const [showRefreshModal, setShowRefreshModal] = useState(false);
   const [refreshResult, setRefreshResult] = useState<RefreshProgramResponse | null>(null);
+  const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(null);
   const generateMutation = useGenerateWeeklyPlan();
   const updateStatusMutation = useUpdateProgramStatus();
   const refreshMutation = useRefreshProgram();
   const { data: settings } = useSettings();
+  const { data: promptHistory = [], isLoading: historyLoading } = usePromptHistory();
+  const savePromptMutation = useSavePrompt();
+  const deletePromptMutation = useDeletePrompt();
 
   const plan = generateMutation.data || existingPlan;
 
@@ -119,6 +130,13 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
 
   const handleGenerate = () => {
     const programWeeks = extractProgramWeeks(programRequest);
+
+    // Save to history before generating
+    savePromptMutation.mutate({
+      prompt: programRequest,
+      programWeeks,
+    });
+
     generateMutation.mutate({ customPrompt: programRequest, programWeeks });
     setShowForm(false);
   };
@@ -177,6 +195,59 @@ export function WeeklyPlanView({ existingPlan }: WeeklyPlanViewProps) {
         </div>
       ) : showForm ? (
         <div className='space-y-4'>
+          {/* Prompt History Dropdown */}
+          {!historyLoading && promptHistory.length > 0 && (
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-2'>
+                Load Previous Prompt (Optional)
+              </label>
+              <select
+                value={selectedHistoryId || ''}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  if (!id) {
+                    // "Start Fresh" selected
+                    setProgramRequest(DEFAULT_PROGRAM_REQUEST);
+                    setSelectedHistoryId(null);
+                  } else {
+                    const entry = promptHistory.find((e) => e.id === id);
+                    if (entry) {
+                      setProgramRequest(entry.prompt);
+                      setSelectedHistoryId(id);
+                    }
+                  }
+                }}
+                className='w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none'
+              >
+                <option value="">Start Fresh (Use Template)</option>
+                {promptHistory.map((entry) => {
+                  const date = formatHistoryTimestamp(entry.created_at);
+                  const label = getHistoryLabel(entry);
+                  return (
+                    <option key={entry.id} value={entry.id}>
+                      {date} - {label}
+                    </option>
+                  );
+                })}
+              </select>
+
+              {/* Clear History Button */}
+              <button
+                onClick={() => {
+                  if (confirm('Clear all saved prompts? This cannot be undone.')) {
+                    deletePromptMutation.mutate(undefined);
+                    setSelectedHistoryId(null);
+                    setProgramRequest(DEFAULT_PROGRAM_REQUEST);
+                  }
+                }}
+                disabled={deletePromptMutation.isPending}
+                className='mt-2 text-sm text-red-600 hover:text-red-700 transition-colors disabled:opacity-50'
+              >
+                {deletePromptMutation.isPending ? 'Clearing...' : `Clear History (${promptHistory.length} saved)`}
+              </button>
+            </div>
+          )}
+
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
             <p className='text-sm text-blue-900 font-medium mb-2'>💡 Customize Your Program</p>
             <p className='text-xs text-blue-700'>
