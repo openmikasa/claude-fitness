@@ -4,6 +4,7 @@ import { askClaude } from '@/lib/ai/claude-client';
 import { z } from 'zod';
 import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
 import { extractJson } from '@/lib/utils/json-extractor';
+import { normalizeAIExercises } from '@/lib/utils/exercise-parser';
 import type {
   RefreshProgramRequest,
   RefreshProgramResponse,
@@ -250,10 +251,19 @@ Return ONLY the JSON object. Nothing else.
 
     const validatedResponse = aiValidation.data;
 
+    // Normalize exercise names in refreshed workouts
+    const normalizedRefreshedData = validatedResponse.plan_data.map((workout) => ({
+      ...workout,
+      data: {
+        ...workout.data,
+        exercises: normalizeAIExercises(workout.data.exercises),
+      },
+    }));
+
     // Build updated plan_data: keep past days, replace future days
     const updatedPlanData = [
       ...program.plan_data.slice(0, todayIndex),
-      ...validatedResponse.plan_data,
+      ...normalizedRefreshedData,
     ];
 
     // Update program in database

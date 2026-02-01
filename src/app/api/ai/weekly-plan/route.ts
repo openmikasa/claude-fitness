@@ -14,6 +14,7 @@ import {
 import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
 import type { Workout } from '@/types/workout';
 import { extractJson } from '@/lib/utils/json-extractor';
+import { normalizeAIExercises } from '@/lib/utils/exercise-parser';
 
 export const dynamic = 'force-dynamic';
 
@@ -223,15 +224,28 @@ Return ONLY the JSON object. Nothing else.`;
       const expectedWeek = Math.floor(index / workoutsPerWeek) + 1;
       const expectedWorkoutIndex = (index % workoutsPerWeek) + 1;
 
+      // Normalize exercise names (extract equipment from names like "Hax Deadlift")
+      const normalizedExercises = normalizeAIExercises(workout.data.exercises);
+
       if (workout.week !== expectedWeek || workout.workout_index !== expectedWorkoutIndex) {
         console.warn(`[Week Correction] Workout ${index}: Correcting week ${workout.week} → ${expectedWeek}, workout_index ${workout.workout_index} → ${expectedWorkoutIndex}`);
         return {
           ...workout,
           week: expectedWeek,
           workout_index: expectedWorkoutIndex,
+          data: {
+            ...workout.data,
+            exercises: normalizedExercises,
+          },
         };
       }
-      return workout;
+      return {
+        ...workout,
+        data: {
+          ...workout.data,
+          exercises: normalizedExercises,
+        },
+      };
     });
 
     const { data: program, error: saveError } = await supabase

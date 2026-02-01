@@ -14,6 +14,7 @@ import {
 import { nextSessionResponseSchema } from '@/lib/validation/ai-schemas';
 import type { Workout } from '@/types/workout';
 import { extractJson } from '@/lib/utils/json-extractor';
+import { normalizeAIExercises } from '@/lib/utils/exercise-parser';
 
 export const dynamic = 'force-dynamic';
 
@@ -143,6 +144,9 @@ Return ONLY the JSON object. Nothing else.`;
 
     const nextSession = validation.data;
 
+    // Normalize exercise names (extract equipment from names like "Hax Deadlift")
+    const normalizedExercises = normalizeAIExercises(nextSession.data.exercises);
+
     const { data: program, error: saveError } = await supabase
       .from('programs')
       .insert({
@@ -152,7 +156,10 @@ Return ONLY the JSON object. Nothing else.`;
           {
             week: 1,
             workout_index: 1,
-            data: nextSession.data, // Always weightlifting data
+            data: {
+              ...nextSession.data,
+              exercises: normalizedExercises,
+            },
             coaching_notes: nextSession.coaching_notes,
           },
         ],
