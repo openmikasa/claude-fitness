@@ -41,17 +41,22 @@ export function ProgramManager() {
         body: JSON.stringify({ programId }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fix program weeks');
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fix program weeks');
       }
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['programs'] });
-      alert('Program week numbers have been corrected! Please refresh the page to see the changes.');
+    onSuccess: async (data) => {
+      console.log('[Fix Success]', data);
+      // Invalidate and refetch programs
+      await queryClient.invalidateQueries({ queryKey: ['programs'] });
+      await queryClient.refetchQueries({ queryKey: ['programs'] });
+      alert(`Success! Fixed ${data.totalWorkouts} workouts:\n- ${data.totalWeeks} weeks\n- ${data.workoutsPerWeek} workouts per week\n\nRefreshing page...`);
+      window.location.reload();
     },
     onError: (error) => {
       console.error('Failed to fix program weeks:', error);
-      alert('Failed to fix program weeks. Please try again.');
+      alert(`Error: ${error.message}\n\nCheck the console for details.`);
     },
   });
 
