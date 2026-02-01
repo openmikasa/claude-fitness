@@ -115,10 +115,16 @@ export async function POST(request: Request) {
     prompt += `Generate a ${programWeeks}-week training program with ${workoutsPerWeek} workouts per week.
 
 IMPORTANT STRUCTURE:
-- Each workout should have: week (1-${programWeeks}), workout_index (1-${workoutsPerWeek})
+- DISTRIBUTE workouts across ALL weeks: Week 1 has ${workoutsPerWeek} workouts, Week 2 has ${workoutsPerWeek} workouts, etc.
+- Each workout MUST have: week (1-${programWeeks}), workout_index (1-${workoutsPerWeek})
+- Week numbers must be SEQUENTIAL: first ${workoutsPerWeek} workouts use week: 1, next ${workoutsPerWeek} workouts use week: 2, and so on
+- Example for 4-week program with 4 workouts/week:
+  * Workouts 1-4: week: 1, workout_index: 1-4
+  * Workouts 5-8: week: 2, workout_index: 1-4
+  * Workouts 9-12: week: 3, workout_index: 1-4
+  * Workouts 13-16: week: 4, workout_index: 1-4
 - Do NOT use calendar dates or day-of-week (no "Monday", "Tuesday")
-- Label workouts as "Week X, Workout Y" (e.g., "Week 1, Workout 1")
-- Return ${totalWorkouts} total workouts
+- Return ${totalWorkouts} total workouts (${programWeeks} weeks × ${workoutsPerWeek} workouts/week)
 - Include mesocycle_info.workouts_per_week: ${workoutsPerWeek}`;
 
     if (programWeeks >= 4) {
@@ -211,13 +217,30 @@ Return ONLY the JSON object. Nothing else.`;
 
     const weeklyPlan = validation.data;
 
+    // POST-PROCESSING: Validate and correct week numbers
+    // Ensure workouts are properly distributed across weeks
+    const correctedPlanData = weeklyPlan.plan_data.map((workout, index) => {
+      const expectedWeek = Math.floor(index / workoutsPerWeek) + 1;
+      const expectedWorkoutIndex = (index % workoutsPerWeek) + 1;
+
+      if (workout.week !== expectedWeek || workout.workout_index !== expectedWorkoutIndex) {
+        console.warn(`[Week Correction] Workout ${index}: Correcting week ${workout.week} → ${expectedWeek}, workout_index ${workout.workout_index} → ${expectedWorkoutIndex}`);
+        return {
+          ...workout,
+          week: expectedWeek,
+          workout_index: expectedWorkoutIndex,
+        };
+      }
+      return workout;
+    });
+
     const { data: program, error: saveError } = await supabase
       .from('programs')
       .insert({
         user_id: user.id,
         program_type: 'weekly_plan',
         mesocycle_info: weeklyPlan.mesocycle_info || null,
-        plan_data: weeklyPlan.plan_data,
+        plan_data: correctedPlanData,
         status: 'pending',
         rationale: weeklyPlan.rationale,
       })

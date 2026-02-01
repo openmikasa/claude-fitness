@@ -14,9 +14,11 @@ import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
 import RefreshChangesModal from './refresh-changes-modal';
 import type { Program, ProgramDay, RefreshProgramResponse } from '@/types/workout';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function ProgramManager() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
   const [selectedWorkout, setSelectedWorkout] = useState<ProgramDay | null>(null);
   const [currentWeek, setCurrentWeek] = useState(0);
@@ -30,6 +32,29 @@ export function ProgramManager() {
   const deleteMutation = useDeleteProgram();
   const { data: settings } = useSettings();
 
+  // Fix program week numbers mutation
+  const fixWeeksMutation = useMutation({
+    mutationFn: async (programId: string) => {
+      const response = await fetch('/api/ai/fix-program-weeks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ programId }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fix program weeks');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      alert('Program week numbers have been corrected! Please refresh the page to see the changes.');
+    },
+    onError: (error) => {
+      console.error('Failed to fix program weeks:', error);
+      alert('Failed to fix program weeks. Please try again.');
+    },
+  });
+
   // Get selected program
   const selectedProgram = programs.find((p) => p.id === selectedProgramId);
 
@@ -42,13 +67,23 @@ export function ProgramManager() {
 
     const weekMap = new Map<number, ProgramDay[]>();
 
-    selectedProgram.plan_data.forEach((workout) => {
+    selectedProgram.plan_data.forEach((workout, index) => {
       // Use week field if available, otherwise fallback to computing from day (backward compat)
       const weekNum = workout.week || (workout.day ? Math.floor((workout.day - 1) / 7) + 1 : 1);
       if (!weekMap.has(weekNum)) {
         weekMap.set(weekNum, []);
       }
       weekMap.get(weekNum)!.push(workout);
+
+      // Debug: log first few to understand data structure
+      if (index < 3) {
+        console.log(`[Program Manager] Workout ${index}:`, {
+          week: workout.week,
+          workout_index: workout.workout_index,
+          day: workout.day,
+          computedWeek: weekNum
+        });
+      }
     });
 
     // Sort workouts within each week by workout_index (or day for backward compat)
@@ -61,9 +96,13 @@ export function ProgramManager() {
     });
 
     // Convert to array of weeks
-    return Array.from(weekMap.entries())
+    const weeksArray = Array.from(weekMap.entries())
       .sort((a, b) => a[0] - b[0])
       .map(([_, workouts]) => workouts);
+
+    console.log('[Program Manager] Weeks array:', weeksArray.map((w, i) => `Week ${i + 1}: ${w.length} workouts`));
+
+    return weeksArray;
   }, [selectedProgram]);
 
   // Check if current week is a deload week
@@ -408,6 +447,24 @@ export function ProgramManager() {
               <div className='bg-gray-50 rounded-lg p-4'>
                 <h4 className='font-semibold text-gray-900 mb-2'>Plan Overview</h4>
                 <p className='text-sm text-gray-700'>{selectedProgram.rationale}</p>
+              </div>
+
+              {/* Fix Week Numbers Button */}
+              <div className='bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200'>
+                <h4 className='font-semibold text-gray-900 mb-2 flex items-center gap-2'>
+                  <span>🔧</span>
+                  Fix Week Organization
+                </h4>
+                <p className='text-sm text-gray-700 mb-3'>
+                  If weeks are showing incorrect workouts, click below to reorganize them properly.
+                </p>
+                <button
+                  onClick={() => fixWeeksMutation.mutate(selectedProgram.id)}
+                  disabled={fixWeeksMutation.isPending}
+                  className='w-full bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 transition-colors disabled:opacity-50'
+                >
+                  {fixWeeksMutation.isPending ? 'Fixing...' : 'Fix Week Numbers'}
+                </button>
               </div>
 
               {/* Refresh Program Section (only for active programs) */}
