@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/route-handler';
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
-import { weeklyPlanResponseSchema } from '@/lib/validation/ai-response-schemas';
+import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
 import type {
   RefreshProgramRequest,
   RefreshProgramResponse,
