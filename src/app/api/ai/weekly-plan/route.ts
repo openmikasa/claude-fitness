@@ -14,6 +14,7 @@ import {
 } from '@/lib/ai/rate-limiter';
 import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
 import type { Workout } from '@/types/workout';
+import { extractJson } from '@/lib/utils/json-extractor';
 
 export const dynamic = 'force-dynamic';
 
@@ -131,29 +132,39 @@ export async function POST(request: Request) {
       );
     }
 
-    let jsonText = aiResponse.trim();
-    if (jsonText.startsWith('```')) {
-      jsonText = jsonText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-    }
+    // Extract and parse JSON with robust extraction
+    const extraction = extractJson(aiResponse, true);
 
-    let parsedResponse: unknown;
-    try {
-      parsedResponse = JSON.parse(jsonText);
-    } catch (parseError) {
-      console.error('JSON parse error:', parseError);
-      console.error('AI Response:', aiResponse);
+    if (!extraction.success) {
+      console.error('=== JSON EXTRACTION FAILURE ===');
+      console.error('Extraction error:', extraction.error);
+      console.error('Raw AI response (first 500 chars):', aiResponse.substring(0, 500));
+      console.error('Raw AI response (last 500 chars):', aiResponse.substring(Math.max(0, aiResponse.length - 500)));
+      console.error('Response length:', aiResponse.length);
+      console.error('=== END EXTRACTION FAILURE ===');
+
       return NextResponse.json(
         {
           error: 'Invalid AI response',
           message: 'AI returned an invalid response format. Please try again.',
+          debug: process.env.NODE_ENV === 'development' ? {
+            extractionError: extraction.error,
+            responsePreview: aiResponse.substring(0, 200),
+          } : undefined,
         },
         { status: 500 }
       );
     }
 
+    console.log(`JSON extracted successfully using method: ${extraction.extractionMethod}`);
+    const parsedResponse = extraction.data;
+
     const validation = weeklyPlanResponseSchema.safeParse(parsedResponse);
     if (!validation.success) {
+      console.error('=== VALIDATION FAILURE ===');
       console.error('Validation error:', validation.error);
+      console.error('Parsed response keys:', Object.keys(parsedResponse as object));
+      console.error('=== END VALIDATION FAILURE ===');
       return NextResponse.json(
         {
           error: 'Invalid AI response structure',

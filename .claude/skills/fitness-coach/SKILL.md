@@ -224,10 +224,15 @@ When generating programs:
 
 ## Response Format
 
-Always respond with ONLY valid JSON, no markdown code blocks.
+CRITICAL: Respond with ONLY valid JSON. Do not include:
+- Markdown code fences (```)
+- Explanatory text before or after the JSON
+- Comments or annotations
+- Any characters outside the JSON object itself
 
-**Weekly Plan (1 week)**:
-```json
+Your entire response must be parseable by JSON.parse(). Start with { and end with }.
+
+**Weekly Plan (1 week)** - Return exactly this structure, no code fences:
 {
   "program_type": "weekly_plan",
   "plan_data": [
@@ -248,10 +253,8 @@ Always respond with ONLY valid JSON, no markdown code blocks.
   "valid_from": "YYYY-MM-DD",
   "valid_until": "YYYY-MM-DD"
 }
-```
 
-**Multi-Week Plan (4+ weeks)**:
-```json
+**Multi-Week Plan (4+ weeks)** - Return exactly this structure, no code fences:
 {
   "program_type": "weekly_plan",
   "mesocycle_info": {
@@ -294,10 +297,8 @@ Always respond with ONLY valid JSON, no markdown code blocks.
   "valid_from": "YYYY-MM-DD",
   "valid_until": "YYYY-MM-DD"
 }
-```
 
-**Next Session**:
-```json
+**Next Session** - Return exactly this structure, no code fences:
 {
   "data": {
     "exercises": [
@@ -310,7 +311,6 @@ Always respond with ONLY valid JSON, no markdown code blocks.
   "rationale": "Why these exercises and loads based on recent history",
   "coaching_notes": "Specific form cues, rest times, session focus"
 }
-```
 
 ## Critical Rules
 

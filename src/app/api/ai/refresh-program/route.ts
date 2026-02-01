@@ -3,6 +3,7 @@ import { createRouteHandlerClient, getAuthenticatedUser } from '@/lib/supabase/r
 import { askClaude } from '@/lib/ai/claude-client';
 import { z } from 'zod';
 import { weeklyPlanResponseSchema } from '@/lib/validation/ai-schemas';
+import { extractJson } from '@/lib/utils/json-extractor';
 import type {
   RefreshProgramRequest,
   RefreshProgramResponse,
@@ -192,22 +193,49 @@ Include a detailed rationale explaining all major adjustments with references to
       );
     }
 
-    // Parse JSON response
-    let jsonText = aiResponse.trim();
-    if (jsonText.startsWith('```')) {
-      jsonText = jsonText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+    // Extract and parse JSON with robust extraction
+    const extraction = extractJson(aiResponse, true);
+
+    if (!extraction.success) {
+      console.error('=== JSON EXTRACTION FAILURE ===');
+      console.error('Extraction error:', extraction.error);
+      console.error('Raw AI response (first 500 chars):', aiResponse.substring(0, 500));
+      console.error('Raw AI response (last 500 chars):', aiResponse.substring(Math.max(0, aiResponse.length - 500)));
+      console.error('Response length:', aiResponse.length);
+      console.error('=== END EXTRACTION FAILURE ===');
+
+      return NextResponse.json(
+        {
+          error: 'Invalid AI response',
+          message: 'AI returned an invalid response format. Please try again.',
+          debug: process.env.NODE_ENV === 'development' ? {
+            extractionError: extraction.error,
+            responsePreview: aiResponse.substring(0, 200),
+          } : undefined,
+        },
+        { status: 500 }
+      );
     }
 
-    let aiResponseParsed;
-    try {
-      aiResponseParsed = JSON.parse(jsonText);
-    } catch (parseError) {
-      console.error('Failed to parse AI response:', aiResponse);
-      throw new Error('AI returned invalid JSON');
-    }
+    console.log(`JSON extracted successfully using method: ${extraction.extractionMethod}`);
 
     // Validate response
-    const validatedResponse = weeklyPlanResponseSchema.parse(aiResponseParsed);
+    const validation = weeklyPlanResponseSchema.safeParse(extraction.data);
+    if (!validation.success) {
+      console.error('=== VALIDATION FAILURE ===');
+      console.error('Validation error:', validation.error);
+      console.error('Parsed response keys:', Object.keys(extraction.data as object));
+      console.error('=== END VALIDATION FAILURE ===');
+      return NextResponse.json(
+        {
+          error: 'Invalid AI response structure',
+          details: validation.error.flatten(),
+        },
+        { status: 500 }
+      );
+    }
+
+    const validatedResponse = validation.data;
 
     // Build updated plan_data: keep past days, replace future days
     const updatedPlanData = [
