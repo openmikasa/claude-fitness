@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { WeightliftingData } from '@/types/workout';
 import { Autocomplete } from '@/components/ui/autocomplete';
-import { MultiSelect } from '@/components/ui/multi-select';
 import { CreateExerciseModal } from './create-exercise-modal';
 import { useState, useMemo, useEffect } from 'react';
 import type { Exercise } from '@/types/workout';
@@ -211,31 +210,6 @@ function ExerciseField({
     );
   };
 
-  const equipmentOptions = [
-    'Barbell',
-    'Hax Barbell',
-    'Dumbbell',
-    'Cable',
-    'Machine',
-    'Bodyweight',
-    'Kettlebell',
-    'Resistance Band',
-    'Medicine Ball',
-  ];
-
-  const muscleGroupOptions = [
-    'Chest',
-    'Back',
-    'Legs',
-    'Shoulders',
-    'Arms',
-    'Core',
-    'Glutes',
-    'Hamstrings',
-    'Quadriceps',
-    'Calves',
-  ];
-
   return (
     <div className="p-4 border border-gray-200 rounded-lg bg-white space-y-4">
       {/* Exercise Header */}
@@ -273,13 +247,20 @@ function ExerciseField({
 
       {/* Equipment and Muscle Groups */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MultiSelect
-          label="Equipment"
-          options={equipmentOptions}
-          selected={equipment}
-          onChange={(value) => setValue(`exercises.${exerciseIndex}.equipment`, value)}
-          placeholder="Select equipment..."
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">
+            Equipment
+          </label>
+          <div className="w-full px-3 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md min-h-[42px] flex items-center">
+            {equipment.length > 0 ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                {equipment[0]}
+              </span>
+            ) : (
+              <span className="text-sm text-gray-500">Auto-filled from exercise selection</span>
+            )}
+          </div>
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">
             Muscle Groups
