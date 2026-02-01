@@ -47,14 +47,23 @@ npm install
 
 ### 2. Configure Environment
 
-Create `.env.local`:
+**Important**: Never commit `.env.local` to the repository. Get credentials from the [secrets repository](https://github.com/openmikasa/claude-fitness-secrets).
 
 ```bash
+# Copy from secrets repo (private)
+cp ../claude-fitness-secrets/.env.local .env.local
+
+# OR manually create .env.local with these variables:
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ANTHROPIC_API_KEY=sk-ant-your-key
 ```
+
+**Security**:
+- `.env.local` is gitignored and will never be committed
+- Production credentials are in the private [claude-fitness-secrets](https://github.com/openmikasa/claude-fitness-secrets) repository
+- Use `.env.example` as a reference for required variables
 
 ### 3. Set Up Database
 

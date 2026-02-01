@@ -164,6 +164,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * **[RLS] Policy Testing** | New RLS policies can silently hide data. Always test with non-owner user to verify policies work correctly.
 * **[Drag-Drop] Nested Elements** | Use counter pattern for drag-and-drop with nested elements. Increment counter on `dragEnter`, decrement on `dragLeave`, only clear state when counter reaches 0. Prevents flickering when dragging over child elements.
 
+### Security & Secrets Management
+* **[Security] Secrets Repository Pattern** | All production credentials live in a separate private repository (`claude-fitness-secrets`). The main repository has NO `.env.local` file checked in or committed. Developers copy `.env.local` from the secrets repo to their local main repo directory. This ensures a clear security boundary and single source of truth for credentials.
+* **[Security] .env.local Never Committed** | The `.env.local` file is strictly gitignored and must never be committed to the main repository. Use `.env.example` as a template. Vercel production uses environment variables configured in the dashboard, not .env files.
+
 ---
 
 ## 🔄 Updating Progress

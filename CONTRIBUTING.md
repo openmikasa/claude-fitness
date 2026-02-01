@@ -36,6 +36,21 @@ npm run dev
 # Open http://localhost:3000
 ```
 
+## Secrets Management
+
+**Source of Truth**: The private `claude-fitness-secrets` repository contains all production credentials.
+
+**Setup Workflow**:
+1. Clone the secrets repository: `git clone https://github.com/openmikasa/claude-fitness-secrets.git`
+2. Copy credentials: `cp ../claude-fitness-secrets/.env.local .env.local`
+3. Verify `.env.local` is gitignored (it should be by default)
+
+**Important**:
+- NEVER commit `.env.local` to the main repository
+- Keep secrets repo private at all times
+- If credentials change, update the secrets repo and notify team members
+- Vercel production uses environment variables configured in the dashboard
+
 ## Running Tests
 
 ```bash
