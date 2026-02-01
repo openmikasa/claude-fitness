@@ -1,13 +1,24 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import WorkoutForm from '@/components/workout/workout-form';
 
 export default function LogWorkoutPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get program selection from query params
+  const programId = searchParams.get('programId');
+  const dayIndex = searchParams.get('dayIndex');
+
+  const initialProgramSelection = programId && dayIndex ? {
+    programId,
+    dayIndex: parseInt(dayIndex, 10),
+  } : undefined;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -30,7 +41,12 @@ export default function LogWorkoutPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-          <WorkoutForm />
+          <div className="px-4 py-6 sm:px-6">
+            <Link href="/" className="hover:opacity-80 transition-opacity inline-block mb-4">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Log Workout</h1>
+            </Link>
+          </div>
+          <WorkoutForm initialProgramSelection={initialProgramSelection} />
         </div>
       </main>
     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { usePrograms } from '@/lib/hooks/useAI';
 import type { Program, WeightliftingData } from '@/types/workout';
 
@@ -11,12 +12,36 @@ interface ProgramDaySelectorProps {
     exercises: WeightliftingData;
   }) => void;
   activeOnly?: boolean;
+  initialSelection?: {
+    programId: string;
+    dayIndex: number;
+  };
 }
 
-export default function ProgramDaySelector({ onSelect, activeOnly = true }: ProgramDaySelectorProps) {
+export default function ProgramDaySelector({ onSelect, activeOnly = true, initialSelection }: ProgramDaySelectorProps) {
   const { data: programs, isLoading } = usePrograms(
     activeOnly ? { status: 'active' } : {}
   );
+
+  // Auto-select if initial selection is provided
+  useEffect(() => {
+    if (initialSelection && programs && programs.length > 0) {
+      const value = `${initialSelection.programId}|${initialSelection.dayIndex}`;
+      // Find the program and workout
+      const program = programs.find((p) => p.id === initialSelection.programId);
+      if (program && program.plan_data[initialSelection.dayIndex]) {
+        const day = program.plan_data[initialSelection.dayIndex];
+        const scheduledDate = new Date().toISOString(); // Use today's date
+
+        onSelect({
+          programId: initialSelection.programId,
+          dayIndex: initialSelection.dayIndex,
+          scheduledDate,
+          exercises: day.data,
+        });
+      }
+    }
+  }, [initialSelection, programs, onSelect]);
 
   if (isLoading) {
     return (
@@ -46,15 +71,13 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true }: Prog
 
     const day = program.plan_data[dayIndex];
 
-    // Calculate scheduled date based on valid_from and day index
-    const validFrom = new Date(program.valid_from);
-    const scheduledDate = new Date(validFrom);
-    scheduledDate.setDate(validFrom.getDate() + dayIndex);
+    // Use today's date as the scheduled date
+    const scheduledDate = new Date().toISOString();
 
     onSelect({
       programId,
       dayIndex,
-      scheduledDate: scheduledDate.toISOString(),
+      scheduledDate,
       exercises: day.data,
     });
   };
@@ -63,42 +86,34 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true }: Prog
     <select
       onChange={handleChange}
       className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-      defaultValue=""
+      defaultValue={initialSelection ? `${initialSelection.programId}|${initialSelection.dayIndex}` : ""}
     >
-      <option value="">Select a program day (optional)</option>
+      <option value="">Select a program workout (optional)</option>
       {programs.map((program) => {
         const totalWeeks = program.mesocycle_info?.total_weeks || 1;
         const programLabel = `${totalWeeks}-week ${program.mesocycle_info?.periodization_model || 'Program'}`;
 
         return (
           <optgroup key={program.id} label={programLabel}>
-            {program.plan_data.map((day, index) => {
-              const weekNum = Math.floor(index / 7) + 1;
-              const dayNum = (index % 7) + 1;
+            {program.plan_data.map((workout, index) => {
+              // Use week and workout_index if available, otherwise compute from index (backward compat)
+              const weekNum = workout.week || Math.floor(index / 7) + 1;
+              const workoutNum = workout.workout_index || (index % 7) + 1;
 
               // Get first 2-3 exercise names for preview
-              const exerciseNames = day.data.exercises
+              const exerciseNames = workout.data.exercises
                 .slice(0, 3)
                 .map((ex) => ex.name)
                 .join(', ');
 
               const exercisePreview =
-                day.data.exercises.length > 3
+                workout.data.exercises.length > 3
                   ? `${exerciseNames}, ...`
                   : exerciseNames;
 
-              // Calculate scheduled date
-              const validFrom = new Date(program.valid_from);
-              const scheduledDate = new Date(validFrom);
-              scheduledDate.setDate(validFrom.getDate() + index);
-              const dateStr = scheduledDate.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-              });
-
               return (
                 <option key={index} value={`${program.id}|${index}`}>
-                  Week {weekNum}, Day {dayNum} ({dateStr}) - {exercisePreview}
+                  Week {weekNum}, Workout {workoutNum} - {exercisePreview}
                 </option>
               );
             })}

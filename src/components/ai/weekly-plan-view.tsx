@@ -108,7 +108,8 @@ Height: [Your height in cm or ft/in]
 
 Schedule
 Program length: [1 / 4 / 8 / 12] Weeks
-Frequency: [X] Days/Week | Duration: [X] Mins/Session
+Frequency: [3 / 4 / 5 / 6] Days/Week
+Duration: [X] Mins/Session
 
 Periodization (for 4+ week programs)
 Structure: [Linear / Undulating / Block]

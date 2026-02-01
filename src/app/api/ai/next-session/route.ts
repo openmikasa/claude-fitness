@@ -143,7 +143,6 @@ Return ONLY the JSON object. Nothing else.`;
 
     const nextSession = validation.data;
 
-    const today = new Date().toISOString().split('T')[0];
     const { data: program, error: saveError } = await supabase
       .from('programs')
       .insert({
@@ -151,14 +150,13 @@ Return ONLY the JSON object. Nothing else.`;
         program_type: 'next_session',
         plan_data: [
           {
-            day: 1,
+            week: 1,
+            workout_index: 1,
             data: nextSession.data, // Always weightlifting data
             coaching_notes: nextSession.coaching_notes,
           },
         ],
         status: 'pending',
-        valid_from: today,
-        valid_until: today,
         rationale: nextSession.rationale,
       })
       .select()

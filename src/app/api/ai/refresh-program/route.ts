@@ -11,7 +11,6 @@ import type {
   Workout,
   WeightliftingExercise,
 } from '@/types/workout';
-import { startOfDay, parseISO, differenceInDays } from 'date-fns';
 
 // Rate limiting (simple in-memory store - use Redis in production)
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
@@ -111,39 +110,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch workouts' }, { status: 500 });
     }
 
-    // Calculate which days to regenerate
-    const today = startOfDay(new Date());
-    const planStart = startOfDay(parseISO(program.valid_from));
-    const daysDiff = differenceInDays(today, planStart);
+    // Calculate which workouts to regenerate
+    // Find the highest completed workout index
+    const completedIndices = (workouts || []).map(w => w.program_day_index || 0);
+    const lastCompletedIndex = completedIndices.length > 0 ? Math.max(...completedIndices) : -1;
 
-    let todayIndex = daysDiff;
+    let todayIndex = lastCompletedIndex + 1; // Start from next uncompleted workout
     if (!from_today) {
       todayIndex = 0; // Regenerate entire program
     }
 
-    // Ensure we don't regenerate past days
+    // Ensure we don't regenerate past workouts
     if (todayIndex < 0) {
       todayIndex = 0;
     }
     if (todayIndex >= program.plan_data.length) {
       return NextResponse.json(
-        { error: 'Program has already ended. Cannot refresh future days.' },
+        { error: 'All workouts completed. Cannot refresh future workouts.' },
         { status: 400 }
       );
     }
 
     // Build AI prompt
     const totalWeeks = program.mesocycle_info?.total_weeks || 1;
-    const totalDays = program.plan_data.length;
+    const workoutsPerWeek = program.mesocycle_info?.workouts_per_week || 4;
+    const totalWorkouts = program.plan_data.length;
     const completedWorkoutsText = (workouts || [])
-      .map((w) => `Day ${(w.program_day_index || 0) + 1}:\n${formatWorkoutForAI(w)}`)
+      .map((w) => `Workout ${(w.program_day_index || 0) + 1}:\n${formatWorkoutForAI(w)}`)
       .join('\n\n');
 
     const prompt = `You are refreshing a ${totalWeeks}-week ${program.mesocycle_info?.periodization_model || 'training'} program.
 
 ORIGINAL PROGRAM STRUCTURE:
-- Valid from: ${program.valid_from}
-- Valid until: ${program.valid_until}
+- Workouts per week: ${workoutsPerWeek}
 - Periodization: ${program.mesocycle_info?.periodization_model || 'N/A'}
 - Phase: ${program.mesocycle_info?.phase || 'N/A'}
 - Deload weeks: ${program.mesocycle_info?.deload_weeks?.join(', ') || 'None'}
@@ -158,23 +157,24 @@ IMPORTANT NOTES TO CONSIDER:
 - Missing days = user skipped, consider recovery needs
 
 TASK:
-Regenerate Days ${todayIndex + 1} through ${totalDays} based on actual performance.
+Regenerate Workouts ${todayIndex + 1} through ${totalWorkouts} based on actual performance.
 Keep the same periodization structure and deload weeks.
 Adjust weights, volume, and intensity based on user's notes and performance.
+Structure: Week X, Workout Y format (${workoutsPerWeek} workouts per week)
+Do NOT use calendar dates.
 
 Return ONLY valid JSON matching this exact format:
 {
   "program_type": "weekly_plan",
   "mesocycle_info": {
     "total_weeks": ${totalWeeks},
+    "workouts_per_week": ${workoutsPerWeek},
     "deload_weeks": [${program.mesocycle_info?.deload_weeks?.join(', ') || ''}],
     "periodization_model": "${program.mesocycle_info?.periodization_model || 'linear'}",
     "phase": "${program.mesocycle_info?.phase || 'hypertrophy'}"
   },
-  "plan_data": [/* array of day objects with day, week, is_deload, data, coaching_notes */],
-  "rationale": "Detailed explanation of all adjustments...",
-  "valid_from": "${program.valid_from}",
-  "valid_until": "${program.valid_until}"
+  "plan_data": [/* array of workout objects with week, workout_index, is_deload, data, coaching_notes */],
+  "rationale": "Detailed explanation of all adjustments..."
 }
 
 Include a detailed rationale explaining all major adjustments with references to specific workout notes.

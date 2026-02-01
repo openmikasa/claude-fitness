@@ -19,9 +19,13 @@ interface WorkoutFormProps {
   initialData?: Workout;
   workoutId?: string;
   onSuccess?: () => void;
+  initialProgramSelection?: {
+    programId: string;
+    dayIndex: number;
+  };
 }
 
-export default function WorkoutForm({ initialData, workoutId, onSuccess }: WorkoutFormProps) {
+export default function WorkoutForm({ initialData, workoutId, onSuccess, initialProgramSelection }: WorkoutFormProps) {
   const router = useRouter();
   const [workoutDate, setWorkoutDate] = useState<string>(
     initialData?.workout_date || new Date().toISOString().split('T')[0]
@@ -151,6 +155,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess }: Worko
               setWorkoutData(selection.exercises);
             }}
             activeOnly={true}
+            initialSelection={initialProgramSelection}
           />
           {programSelection && (
             <p className="text-sm text-gray-300 mt-2">

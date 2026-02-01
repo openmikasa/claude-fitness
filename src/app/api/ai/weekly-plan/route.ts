@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { addDays } from 'date-fns';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import {
@@ -35,6 +34,15 @@ function loadCoachingSkill(): string {
     console.error('Failed to load coaching skill file:', error);
     return ''; // Fallback to empty string if file can't be read
   }
+}
+
+// Extract workouts per week from custom prompt
+function extractWorkoutsPerWeek(prompt: string): number {
+  const match = prompt.match(/frequency[:\s]*(\d+)\s*days?\/week/i);
+  if (match) {
+    return Math.min(Math.max(parseInt(match[1], 10), 1), 7);
+  }
+  return 4; // Default to 4 workouts per week
 }
 
 export async function POST(request: Request) {
@@ -91,11 +99,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate dates based on program length
-    const today = new Date();
-    const validFrom = today.toISOString().split('T')[0];
-    const totalDays = programWeeks * 7;
-    const validUntil = addDays(today, totalDays - 1).toISOString().split('T')[0];
+    // Calculate total workouts based on weeks and workouts per week
+    const workoutsPerWeek = extractWorkoutsPerWeek(customPrompt);
+    const totalWorkouts = programWeeks * workoutsPerWeek;
 
     const historyText = formatWorkoutHistory(workouts as Workout[]);
 
@@ -106,14 +112,25 @@ export async function POST(request: Request) {
       prompt += `USER'S CUSTOM REQUIREMENTS:\n${customPrompt}\n\n`;
     }
 
-    prompt += `Generate a ${programWeeks}-week periodized training program starting from ${validFrom} and ending on ${validUntil}. Include exactly ${totalDays} days (day 1 through day ${totalDays}).`;
+    prompt += `Generate a ${programWeeks}-week training program with ${workoutsPerWeek} workouts per week.
+
+IMPORTANT STRUCTURE:
+- Each workout should have: week (1-${programWeeks}), workout_index (1-${workoutsPerWeek})
+- Do NOT use calendar dates or day-of-week (no "Monday", "Tuesday")
+- Label workouts as "Week X, Workout Y" (e.g., "Week 1, Workout 1")
+- Return ${totalWorkouts} total workouts
+- Include mesocycle_info.workouts_per_week: ${workoutsPerWeek}`;
 
     if (programWeeks >= 4) {
-      prompt += ` Include strategic deload week(s) approximately every 4 weeks with reduced volume (50-60% of normal). Mark deload days with is_deload: true and include "week" field (1-${programWeeks}) for each day. Include mesocycle_info in your response.`;
+      prompt += `\n\nPERIODIZATION:
+- Include strategic deload week(s) approximately every 4 weeks
+- DELOAD WEEKS: Keep same number of workouts (${workoutsPerWeek}), but reduce volume/intensity to 50-60%
+- Mark deload workouts with is_deload: true
+- Include mesocycle_info in your response`;
     }
 
     if (customPrompt.trim()) {
-      prompt += ` Make sure to follow all the user's requirements listed above including their equipment preferences, training focus, preferred split, and training frequency.`;
+      prompt += `\n\nMake sure to follow all the user's requirements listed above including their equipment preferences, training focus, preferred split, and training frequency.`;
     }
 
     // Explicit format enforcement (last thing Claude reads)
@@ -202,8 +219,6 @@ Return ONLY the JSON object. Nothing else.`;
         mesocycle_info: weeklyPlan.mesocycle_info || null,
         plan_data: weeklyPlan.plan_data,
         status: 'pending',
-        valid_from: weeklyPlan.valid_from,
-        valid_until: weeklyPlan.valid_until,
         rationale: weeklyPlan.rationale,
       })
       .select()

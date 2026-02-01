@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { format, addDays, parseISO, differenceInDays, startOfDay } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import { format, parseISO } from 'date-fns';
 import {
   usePrograms,
   useUpdateProgramStatus,
@@ -15,8 +16,9 @@ import RefreshChangesModal from './refresh-changes-modal';
 import type { Program, ProgramDay, RefreshProgramResponse } from '@/types/workout';
 
 export function ProgramManager() {
+  const router = useRouter();
   const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedWorkout, setSelectedWorkout] = useState<ProgramDay | null>(null);
   const [currentWeek, setCurrentWeek] = useState(0);
   const [refreshNotes, setRefreshNotes] = useState('');
   const [showRefreshModal, setShowRefreshModal] = useState(false);
@@ -34,18 +36,34 @@ export function ProgramManager() {
   // Fetch workouts for selected program
   const { data: programWorkouts } = useProgramWorkouts(selectedProgramId || undefined);
 
-  // Calculate weeks from plan data
+  // Calculate weeks from plan data - group by week field instead of slicing by 7
   const weeks = useMemo(() => {
     if (!selectedProgram || !selectedProgram.plan_data) return [];
 
-    const totalDays = selectedProgram.plan_data.length;
-    const weeksArray: ProgramDay[][] = [];
+    const weekMap = new Map<number, ProgramDay[]>();
 
-    for (let i = 0; i < totalDays; i += 7) {
-      weeksArray.push(selectedProgram.plan_data.slice(i, i + 7));
-    }
+    selectedProgram.plan_data.forEach((workout) => {
+      // Use week field if available, otherwise fallback to computing from day (backward compat)
+      const weekNum = workout.week || (workout.day ? Math.floor((workout.day - 1) / 7) + 1 : 1);
+      if (!weekMap.has(weekNum)) {
+        weekMap.set(weekNum, []);
+      }
+      weekMap.get(weekNum)!.push(workout);
+    });
 
-    return weeksArray;
+    // Sort workouts within each week by workout_index (or day for backward compat)
+    weekMap.forEach((workouts) => {
+      workouts.sort((a, b) => {
+        const aIndex = a.workout_index || (a.day ? ((a.day - 1) % 7) + 1 : 0);
+        const bIndex = b.workout_index || (b.day ? ((b.day - 1) % 7) + 1 : 0);
+        return aIndex - bIndex;
+      });
+    });
+
+    // Convert to array of weeks
+    return Array.from(weekMap.entries())
+      .sort((a, b) => a[0] - b[0])
+      .map(([_, workouts]) => workouts);
   }, [selectedProgram]);
 
   // Check if current week is a deload week
@@ -54,18 +72,16 @@ export function ProgramManager() {
     return selectedProgram.mesocycle_info.deload_weeks.includes(weekIndex + 1);
   };
 
-  // Calculate which day we're on (if plan is active)
-  const todayIndex = useMemo(() => {
-    if (!selectedProgram) return -1;
+  // Calculate which workout index we're on (based on completed workouts)
+  const currentWorkoutIndex = useMemo(() => {
+    if (!selectedProgram || !programWorkouts) return -1;
 
-    const today = startOfDay(new Date());
-    const planStart = startOfDay(parseISO(selectedProgram.valid_from));
-    const daysDiff = differenceInDays(today, planStart);
+    const completedIndices = programWorkouts.map(w => w.program_day_index || 0);
+    if (completedIndices.length === 0) return 0;
 
-    if (daysDiff < 0 || daysDiff >= selectedProgram.plan_data.length) return -1;
-
-    return daysDiff;
-  }, [selectedProgram]);
+    const lastCompletedIndex = Math.max(...completedIndices);
+    return lastCompletedIndex + 1; // Next uncompleted workout
+  }, [selectedProgram, programWorkouts]);
 
   const handleActivateProgram = (programId: string) => {
     updateStatusMutation.mutate({ id: programId, status: 'active' });
@@ -99,9 +115,16 @@ export function ProgramManager() {
     }
   };
 
-  const isCompletedDay = (dayIndex: number): boolean => {
-    if (!programWorkouts) return false;
-    return programWorkouts.some((w) => w.program_day_index === dayIndex);
+  const isCompletedWorkout = (week: number, workoutIndex: number): boolean => {
+    if (!programWorkouts || !selectedProgram) return false;
+
+    // Find the array index for this week/workout combination
+    const workoutArrayIndex = selectedProgram.plan_data.findIndex(
+      (w) => w.week === week && w.workout_index === workoutIndex
+    );
+
+    if (workoutArrayIndex === -1) return false;
+    return programWorkouts.some((w) => w.program_day_index === workoutArrayIndex);
   };
 
   const formatDayDetails = (day: ProgramDay) => {
@@ -180,11 +203,6 @@ export function ProgramManager() {
 
                       <div className='text-sm text-gray-600 space-y-1'>
                         <p>Created {format(parseISO(program.created_at), 'MMM d, yyyy')}</p>
-                        {program.valid_from && (
-                          <p>
-                            {format(parseISO(program.valid_from), 'MMM d')} - {format(parseISO(program.valid_until), 'MMM d, yyyy')}
-                          </p>
-                        )}
                         {program.mesocycle_info && (
                           <p className='text-purple-600'>
                             {program.mesocycle_info.total_weeks}-week {program.mesocycle_info.periodization_model} • {program.mesocycle_info.phase} phase
@@ -232,7 +250,7 @@ export function ProgramManager() {
 
                   {!isSelected && program.plan_data && (
                     <p className='text-xs text-gray-500 mt-2'>
-                      {program.plan_data.length} day{program.plan_data.length !== 1 ? 's' : ''} • Click to view details
+                      {program.plan_data.length} workout{program.plan_data.length !== 1 ? 's' : ''} • Click to view details
                     </p>
                   )}
                 </div>
@@ -264,10 +282,6 @@ export function ProgramManager() {
                         </span>
                       )}
                     </div>
-                    <div className='text-xs text-gray-600'>
-                      {format(addDays(parseISO(selectedProgram.valid_from), currentWeek * 7), 'MMM d')} -{' '}
-                      {format(addDays(parseISO(selectedProgram.valid_from), Math.min(currentWeek * 7 + 6, selectedProgram.plan_data.length - 1)), 'MMM d')}
-                    </div>
                   </div>
                   <button
                     onClick={() => setCurrentWeek(Math.min(weeks.length - 1, currentWeek + 1))}
@@ -279,61 +293,88 @@ export function ProgramManager() {
                 </div>
               )}
 
-              {/* Current Week Days Grid */}
-              <div className='grid grid-cols-7 gap-2 mb-4'>
-                {weeks[currentWeek]?.map((day, weekDayIndex) => {
-                  const absoluteDayIndex = currentWeek * 7 + weekDayIndex;
-                  const dayDate = addDays(parseISO(selectedProgram.valid_from), absoluteDayIndex);
-                  const isSelected = selectedDay === day.day;
-                  const isToday = todayIndex === absoluteDayIndex;
-                  const isCompleted = isCompletedDay(absoluteDayIndex);
+              {/* Current Week Workouts Grid */}
+              {weeks[currentWeek] && (
+                <div
+                  className='grid gap-2 mb-4'
+                  style={{
+                    gridTemplateColumns: `repeat(${Math.min(weeks[currentWeek].length, 7)}, minmax(0, 1fr))`
+                  }}
+                >
+                  {weeks[currentWeek].map((workout) => {
+                    const weekNum = workout.week || currentWeek + 1;
+                    const workoutIndex = workout.workout_index || 1;
+                    const isSelected = selectedWorkout?.week === weekNum && selectedWorkout?.workout_index === workoutIndex;
+                    const isCurrent = currentWorkoutIndex === selectedProgram.plan_data.findIndex(
+                      (w) => w.week === weekNum && w.workout_index === workoutIndex
+                    );
+                    const isCompleted = isCompletedWorkout(weekNum, workoutIndex);
 
-                  let btnClass = 'border-gray-200 hover:border-purple-300';
-                  if (isSelected) {
-                    btnClass = 'border-purple-600 bg-purple-50';
-                  } else if (isToday) {
-                    btnClass = 'border-green-500 bg-green-50';
-                  } else if (isCompleted) {
-                    btnClass = 'border-gray-200 bg-green-50';
-                  }
+                    let btnClass = 'border-gray-200 hover:border-purple-300';
+                    if (isSelected) {
+                      btnClass = 'border-purple-600 bg-purple-50';
+                    } else if (isCurrent) {
+                      btnClass = 'border-green-500 bg-green-50';
+                    } else if (isCompleted) {
+                      btnClass = 'border-gray-200 bg-green-50';
+                    }
 
-                  return (
-                    <button
-                      key={day.day}
-                      onClick={() => setSelectedDay(isSelected ? null : day.day)}
-                      className={'p-3 rounded-lg border-2 transition-all relative ' + btnClass}
-                    >
-                      {isToday && (
-                        <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
-                          TODAY
+                    return (
+                      <button
+                        key={`${weekNum}-${workoutIndex}`}
+                        onClick={() => setSelectedWorkout(isSelected ? null : workout)}
+                        className={'p-3 rounded-lg border-2 transition-all relative ' + btnClass}
+                      >
+                        {isCurrent && (
+                          <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
+                            NEXT
+                          </div>
+                        )}
+                        {isCompleted && !isCurrent && (
+                          <div className='absolute top-1 right-1 text-green-600 text-sm font-bold'>✓</div>
+                        )}
+                        <div className='text-xs font-medium text-gray-600 mb-1'>
+                          Workout {workoutIndex}
                         </div>
-                      )}
-                      {isCompleted && !isToday && (
-                        <div className='absolute top-1 right-1 text-green-600 text-sm font-bold'>✓</div>
-                      )}
-                      <div className='text-xs font-medium text-gray-600 mb-1'>{format(dayDate, 'EEE')}</div>
-                      <div className='text-2xl mb-1'>💪</div>
-                      <div className='text-xs text-gray-700 truncate'>Strength</div>
-                    </button>
-                  );
-                })}
-              </div>
+                        <div className='text-2xl mb-1'>💪</div>
+                        <div className='text-xs text-gray-700 truncate'>Strength</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
-              {/* Selected Day Details */}
-              {selectedDay !== null && (
+              {/* Selected Workout Details */}
+              {selectedWorkout !== null && (
                 <div className='bg-purple-50 rounded-lg p-4 border-2 border-purple-200'>
                   <h3 className='font-semibold text-gray-900 mb-2'>
-                    Day {selectedDay} - {format(addDays(parseISO(selectedProgram.valid_from), selectedDay - 1), 'EEEE, MMM d')}
+                    Week {selectedWorkout.week}, Workout {selectedWorkout.workout_index}
                   </h3>
                   <div className='space-y-2 mb-3'>
-                    {formatDayDetails(selectedProgram.plan_data.find((d) => d.day === selectedDay)!)}
+                    {formatDayDetails(selectedWorkout)}
                   </div>
-                  <div className='bg-white rounded p-3 border border-purple-200'>
+                  <div className='bg-white rounded p-3 border border-purple-200 mb-3'>
                     <p className='text-xs font-medium text-gray-600 mb-1'>Coaching Notes:</p>
                     <p className='text-sm text-gray-700'>
-                      {selectedProgram.plan_data.find((d) => d.day === selectedDay)?.coaching_notes}
+                      {selectedWorkout.coaching_notes}
                     </p>
                   </div>
+
+                  {/* Log This Workout Button */}
+                  <button
+                    onClick={() => {
+                      // Find the actual array index for this workout
+                      const workoutIndex = selectedProgram.plan_data.findIndex(
+                        (w) => w.week === selectedWorkout.week &&
+                               w.workout_index === selectedWorkout.workout_index
+                      );
+                      router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${workoutIndex}`);
+                    }}
+                    className='w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
+                  >
+                    <span>📝</span>
+                    Log This Workout
+                  </button>
                 </div>
               )}
 
