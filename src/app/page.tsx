@@ -2,14 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { BulkMigrationModal } from '@/components/workout/bulk-migration-modal';
+import { useWorkouts } from '@/lib/hooks/useWorkouts';
+import { format, parseISO } from 'date-fns';
 
 export default function Home() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [unmigratedCount, setUnmigratedCount] = useState<number>(0);
   const [showBackfillModal, setShowBackfillModal] = useState(false);
+
+  // Fetch recent workouts (limit to 3)
+  const { data: workouts, isLoading: workoutsLoading } = useWorkouts({
+    limit: 3,
+    sortBy: 'workout_date',
+    sortOrder: 'desc',
+  });
 
   useEffect(() => {
     if (!loading && !user) {
@@ -165,14 +175,61 @@ export default function Home() {
           />
         </div>
 
-        {/* Recent activity placeholder */}
+        {/* Recent workouts */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Recent Activity
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-            No workouts yet. Start by logging your first session!
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Recent Workouts
+            </h3>
+            {workouts && workouts.length > 0 && (
+              <Link
+                href="/workouts"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                View all →
+              </Link>
+            )}
+          </div>
+
+          {workoutsLoading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : !workouts || workouts.length === 0 ? (
+            <p className="text-gray-600 dark:text-gray-400 text-center py-8">
+              No workouts yet. Start by logging your first session!
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {workouts.map((workout) => {
+                const exerciseCount = workout.data.exercises.length;
+                const totalSets = workout.data.exercises.reduce(
+                  (sum, ex) => sum + ex.sets.length,
+                  0
+                );
+
+                return (
+                  <Link
+                    key={workout.id}
+                    href={`/workouts/${workout.id}/edit`}
+                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {format(parseISO(workout.workout_date), 'EEEE, MMM d')}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {exerciseCount} exercise{exerciseCount !== 1 ? 's' : ''} · {totalSets} set{totalSets !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                      <span className="text-gray-400 dark:text-gray-600">→</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
 
