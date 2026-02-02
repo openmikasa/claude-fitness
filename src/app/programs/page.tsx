@@ -31,11 +31,8 @@ export default function ProgramsPage() {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <Link href="/" className="hover:opacity-80 transition-opacity inline-block mb-8">
-          <h1 className="text-3xl font-bold text-text-light dark:text-text-dark">
-            <span className="heading-underline">AI Programs</span>
-          </h1>
-        </Link>
+        <h1 className="text-3xl font-black text-black mb-2">AI Programs</h1>
+        <div className="w-full h-[3px] bg-black mb-8" />
 
         <div className="space-y-6">
           {/* Program Generation Section */}

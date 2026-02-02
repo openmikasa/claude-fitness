@@ -151,10 +151,10 @@ export function WeeklyPlanView() {
   };
 
   return (
-    <div className='bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6'>
+    <div className='bg-white border-3 border-black rounded-sm p-6'>
       <div className='flex items-center gap-2 mb-4'>
         <span className='text-2xl'>✨</span>
-        <h2 className='text-xl font-bold uppercase text-text-light dark:text-text-dark'>Generate New Program</h2>
+        <h2 className='text-xl font-bold text-black'>Generate New Program</h2>
       </div>
 
       {generateMutation.isPending ? (
@@ -245,12 +245,12 @@ export function WeeklyPlanView() {
         </div>
       ) : (
         <div className='text-center py-8'>
-          <p className='text-subtext-light dark:text-subtext-dark mb-4'>
+          <p className='text-gray-500 mb-4'>
             Create a personalized training program tailored to your goals, equipment, and preferences.
           </p>
           <button
             onClick={() => setShowForm(true)}
-            className='bg-primary text-white px-6 py-4 rounded-sm font-bold uppercase border-3 border-black dark:border-white shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
+            className='bg-[#FDE047] text-black px-6 py-4 rounded-sm font-bold uppercase border-3 border-black shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
           >
             Create Training Program
           </button>

@@ -241,11 +241,11 @@ export function ProgramManager() {
   }
 
   return (
-    <div className='bg-white rounded-2xl shadow-md p-6'>
+    <div className='bg-white border-3 border-black rounded-sm p-6'>
       <div className='flex items-center justify-between mb-6'>
         <div className='flex items-center gap-2'>
-          <span className='text-2xl'>📋</span>
-          <h2 className='text-xl font-bold text-gray-900'>My Programs</h2>
+          <span className='text-xl'>📁</span>
+          <h2 className='text-xl font-bold text-black'>My Programs</h2>
         </div>
         {programs.length > 0 && (
           <button
@@ -255,9 +255,9 @@ export function ProgramManager() {
               }
             }}
             disabled={cleanupProgramsMutation.isPending}
-            className='text-xs px-3 py-1.5 bg-blue-100 text-blue-800 rounded-2xl hover:bg-blue-200 transition-colors disabled:opacity-50 font-medium'
+            className='flex items-center gap-1 px-3 py-1.5 text-[#22FF00] border-2 border-[#22FF00] rounded-sm text-sm font-bold hover:bg-[#22FF00] hover:text-black transition-colors disabled:opacity-50'
           >
-            {cleanupProgramsMutation.isPending ? '🔄 Cleaning...' : '🧹 Clean Exercise Names'}
+            <span>✏️</span> {cleanupProgramsMutation.isPending ? 'Cleaning...' : 'Clean Names'}
           </button>
         )}
       </div>
@@ -278,38 +278,30 @@ export function ProgramManager() {
               return (
                 <div
                   key={program.id}
-                  className={`border-2 rounded-2xl p-4 transition-all cursor-pointer ${
-                    isSelected
-                      ? 'border-purple-500 bg-purple-50'
-                      : isActive
-                      ? 'border-green-500 bg-green-50 hover:border-green-600'
-                      : 'border-gray-200 hover:border-gray-300'
+                  className={`bg-white border-3 border-black ${
+                    isActive ? 'border-l-[6px] border-l-[#FDE047]' : ''
+                  } rounded-sm p-5 transition-all cursor-pointer ${
+                    isSelected ? 'shadow-brutal-lg' : 'hover:shadow-brutal'
                   }`}
                   onClick={() => setSelectedProgramId(isSelected ? null : program.id)}
                 >
                   <div className='flex items-start justify-between'>
                     <div className='flex-1'>
-                      <div className='flex items-center gap-2 mb-1'>
-                        <h3 className='font-semibold text-gray-900 capitalize'>
+                      <div className='flex items-center gap-2 mb-2'>
+                        <h3 className='font-bold text-black capitalize'>
                           {program.program_type.replace('_', ' ')}
                         </h3>
-                        <span
-                          className={`px-2 py-0.5 rounded text-xs font-medium ${
-                            program.status === 'active'
-                              ? 'bg-green-100 text-green-800'
-                              : program.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {program.status}
-                        </span>
+                        {isActive && (
+                          <span className='px-2 py-0.5 bg-[#FDE047] text-black text-xs font-bold uppercase border-2 border-black'>
+                            ACTIVE
+                          </span>
+                        )}
                       </div>
 
-                      <div className='text-sm text-gray-600 space-y-1'>
-                        <p>Created {format(parseISO(program.created_at), 'MMM d, yyyy')}</p>
+                      <div className='text-sm space-y-1'>
+                        <p className='text-gray-500 font-mono'>Created {format(parseISO(program.created_at), 'MMM d, yyyy')}</p>
                         {program.mesocycle_info && (
-                          <p className='text-purple-600'>
+                          <p className='text-[#8B5CF6] font-medium'>
                             {program.mesocycle_info.total_weeks}-week {program.mesocycle_info.periodization_model} • {program.mesocycle_info.phase} phase
                           </p>
                         )}
@@ -324,7 +316,7 @@ export function ProgramManager() {
                             handleDeactivateProgram(program.id);
                           }}
                           disabled={updateStatusMutation.isPending}
-                          className='text-xs px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors disabled:opacity-50'
+                          className='px-3 py-1.5 text-sm font-bold border-2 border-black rounded-sm hover:bg-gray-100 transition-colors disabled:opacity-50'
                         >
                           Deactivate
                         </button>
@@ -335,7 +327,7 @@ export function ProgramManager() {
                             handleActivateProgram(program.id);
                           }}
                           disabled={updateStatusMutation.isPending}
-                          className='text-xs px-3 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors disabled:opacity-50'
+                          className='px-3 py-1.5 text-sm font-bold border-2 border-black rounded-sm hover:bg-gray-100 transition-colors disabled:opacity-50'
                         >
                           Activate
                         </button>
@@ -346,7 +338,7 @@ export function ProgramManager() {
                           handleDeleteProgram(program.id);
                         }}
                         disabled={deleteMutation.isPending}
-                        className='text-xs px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors disabled:opacity-50'
+                        className='px-3 py-1.5 text-sm font-bold border-2 border-black rounded-sm hover:bg-gray-100 transition-colors disabled:opacity-50'
                       >
                         Delete
                       </button>
@@ -368,32 +360,30 @@ export function ProgramManager() {
             <div className='border-t-2 border-gray-200 pt-6 space-y-4'>
               {/* Week Navigation */}
               {weeks.length > 1 && (
-                <div className='flex items-center justify-between mb-4 bg-gray-50 rounded-2xl p-3'>
+                <div className='flex items-center justify-between py-4 border-b-3 border-black mb-4'>
                   <button
                     onClick={() => setCurrentWeek(Math.max(0, currentWeek - 1))}
                     disabled={currentWeek === 0}
-                    className='px-3 py-1.5 bg-white text-gray-700 rounded-2xl font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+                    className='text-sm font-bold text-black hover:text-[#22FF00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                   >
-                    ← Previous Week
+                    ← Prev
                   </button>
-                  <div className='text-center'>
-                    <div className='flex items-center justify-center gap-2'>
-                      <span className='text-sm font-semibold text-gray-900'>
-                        Week {currentWeek + 1} of {weeks.length}
+                  <div className='flex items-center gap-2'>
+                    <span className='font-bold text-black uppercase'>
+                      WEEK {currentWeek + 1} OF {weeks.length}
+                    </span>
+                    {isDeloadWeek(currentWeek) && (
+                      <span className='bg-[#FDE047] text-black text-xs px-2 py-0.5 font-bold uppercase border-2 border-black'>
+                        DELOAD
                       </span>
-                      {isDeloadWeek(currentWeek) && (
-                        <span className='bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded font-medium'>
-                          DELOAD
-                        </span>
-                      )}
-                    </div>
+                    )}
                   </div>
                   <button
                     onClick={() => setCurrentWeek(Math.min(weeks.length - 1, currentWeek + 1))}
                     disabled={currentWeek === weeks.length - 1}
-                    className='px-3 py-1.5 bg-white text-gray-700 rounded-2xl font-medium hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm border border-gray-200'
+                    className='text-sm font-bold text-black hover:text-[#22FF00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                   >
-                    Next Week →
+                    Next →
                   </button>
                 </div>
               )}
@@ -415,34 +405,37 @@ export function ProgramManager() {
                     );
                     const isCompleted = isCompletedWorkout(weekNum, workoutIndex);
 
-                    let btnClass = 'border-gray-200 hover:border-purple-300';
+                    let btnClass = 'bg-white border-2 border-black hover:border-[#8B5CF6] transition-colors';
+                    let borderLeft = '';
+
                     if (isSelected) {
-                      btnClass = 'border-purple-600 bg-purple-50';
-                    } else if (isCurrent) {
-                      btnClass = 'border-green-500 bg-green-50';
+                      btnClass = 'bg-white border-2 border-[#8B5CF6]';
+                      borderLeft = 'border-l-4 border-l-[#8B5CF6]';
                     } else if (isCompleted) {
-                      btnClass = 'border-gray-200 bg-green-50';
+                      btnClass = 'bg-white border-2 border-black';
+                      borderLeft = 'border-l-4 border-l-[#8B5CF6]';
+                    } else {
+                      borderLeft = 'border-l-4 border-l-[#8B5CF6]';
                     }
 
                     return (
                       <button
                         key={`${weekNum}-${workoutIndex}`}
                         onClick={() => setSelectedWorkout(isSelected ? null : workout)}
-                        className={'p-3 rounded-2xl border-2 transition-all relative ' + btnClass}
+                        className={`relative p-4 text-left ${btnClass} ${borderLeft}`}
                       >
                         {isCurrent && (
-                          <div className='absolute top-1 right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded'>
+                          <span className='absolute -top-2 -right-2 bg-[#22FF00] text-black text-[10px] font-bold px-2 py-0.5 border-2 border-black'>
                             NEXT
-                          </div>
+                          </span>
                         )}
                         {isCompleted && !isCurrent && (
                           <div className='absolute top-1 right-1 text-green-600 text-sm font-bold'>✓</div>
                         )}
-                        <div className='text-xs font-medium text-gray-600 mb-1'>
-                          Workout {workoutIndex}
-                        </div>
-                        <div className='text-2xl mb-1'>💪</div>
-                        <div className='text-xs text-gray-700 truncate'>Strength</div>
+                        <p className='text-xs font-bold text-gray-400 uppercase tracking-wider font-mono mb-1'>
+                          WORKOUT {workoutIndex}
+                        </p>
+                        <p className='text-base font-bold'>💪 Strength</p>
                       </button>
                     );
                   })}
@@ -471,30 +464,48 @@ export function ProgramManager() {
                   });
 
                   return (
-                    <div className='bg-purple-50 rounded-2xl p-4 border-2 border-purple-200'>
-                      <h3 className='font-semibold text-gray-900 mb-2'>
-                        Week {displayWeek}, Workout {displayWorkout}
-                      </h3>
-                      <div className='space-y-2 mb-3'>
-                        {formatDayDetails(selectedWorkout)}
+                    <div className='border-3 border-black rounded-sm overflow-hidden'>
+                      {/* Purple Header */}
+                      <div className='bg-[#8B5CF6] px-4 py-3'>
+                        <h3 className='text-white font-bold uppercase'>WEEK {displayWeek}, WORKOUT {displayWorkout}</h3>
                       </div>
-                      <div className='bg-white rounded p-3 border border-purple-200 mb-3'>
-                        <p className='text-xs font-medium text-gray-600 mb-1'>Coaching Notes:</p>
-                        <p className='text-sm text-gray-700'>
+
+                      {/* Exercise List */}
+                      <div className='bg-white p-4 space-y-2 font-mono text-sm'>
+                        {selectedWorkout.data.exercises.map((ex) => {
+                          const { value, unit } = displayWeight(ex.sets[0].weight, settings?.units || 'metric');
+                          return (
+                            <p key={ex.name}>
+                              <span className='font-bold'>{ex.name}:</span> {ex.sets.length} sets × {ex.sets[0].reps} reps @ {value}{unit}
+                            </p>
+                          );
+                        })}
+                      </div>
+
+                      {/* Coaching Notes */}
+                      <div className='mx-4 mb-4 p-3 bg-[#FDE047] border-2 border-dashed border-black'>
+                        <p className='text-xs font-bold uppercase tracking-wider text-black mb-1 border-2 border-black bg-white inline-block px-2'>
+                          COACHING NOTES
+                        </p>
+                        <p className='text-sm text-black mt-2'>
                           {selectedWorkout.coaching_notes}
                         </p>
                       </div>
 
-                      {/* Log This Workout Button */}
-                      <button
-                        onClick={() => {
-                          router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${arrayIndex}`);
-                        }}
-                        className='w-full bg-purple-600 text-white px-4 py-3 rounded-2xl font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2'
-                      >
-                        <span>📝</span>
-                        Log This Workout
-                      </button>
+                      {/* Log Button */}
+                      <div className='p-4 pt-0'>
+                        <button
+                          onClick={() => {
+                            router.push(`/workouts/log?programId=${selectedProgram.id}&dayIndex=${arrayIndex}`);
+                          }}
+                          className='w-full bg-[#8B5CF6] text-white px-4 py-4 border-3 border-black rounded-sm font-bold uppercase flex items-center justify-center gap-2 shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
+                        >
+                          <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24' strokeWidth={2.5}>
+                            <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' />
+                          </svg>
+                          LOG THIS WORKOUT
+                        </button>
+                      </div>
                     </div>
                   );
                 } catch (error) {
