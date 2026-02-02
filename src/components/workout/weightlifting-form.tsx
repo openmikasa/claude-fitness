@@ -106,7 +106,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 pb-32">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 pb-48">
       {/* Exercises */}
       <div className="space-y-4">
         {exercises.map((exercise, exerciseIndex) => (
