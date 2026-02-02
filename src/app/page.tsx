@@ -5,22 +5,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { BulkMigrationModal } from '@/components/workout/bulk-migration-modal';
-import { useWorkouts } from '@/lib/hooks/useWorkouts';
-import { format, parseISO } from 'date-fns';
 
 export default function Home() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [unmigratedCount, setUnmigratedCount] = useState<number>(0);
   const [showBackfillModal, setShowBackfillModal] = useState(false);
-
-  // Fetch recent workouts (limit to 3 most recent)
-  const { data: workoutsResponse, isLoading: workoutsLoading } = useWorkouts({
-    pageSize: 3,
-    page: 1,
-  });
-
-  const workouts = workoutsResponse?.workouts || [];
 
   useEffect(() => {
     if (!loading && !user) {
@@ -43,7 +33,6 @@ export default function Home() {
         const data = await response.json();
         setUnmigratedCount(data.count || 0);
       } else if (response.status !== 401) {
-        // Only log non-auth errors
         console.error('Failed to fetch unmigrated count:', response.statusText);
       }
     } catch (error) {
@@ -58,7 +47,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#F5F5F5]">
         <div className="text-lg font-bold uppercase">Loading...</div>
       </div>
     );
@@ -69,13 +58,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-0">
+    <div className="min-h-screen bg-[#F5F5F5] pb-24 md:pb-8">
       {/* Header */}
-      <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white">
+      <header className="bg-white border-b-3 border-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-end items-center">
           <button
             onClick={() => signOut()}
-            className="px-4 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark underline hover:text-primary transition-colors"
+            className="text-sm font-bold text-black hover:text-[#22FF00] transition-colors"
           >
             Sign out
           </button>
@@ -83,19 +72,33 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Heading */}
         <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-text-light dark:text-text-dark mb-4 leading-tight">
-            <span className="heading-underline block">YOUR WINTER</span>
-            <span className="heading-underline block mt-2">ARC STARTS</span>
-            <span className="heading-underline block mt-2">HERE</span>
-          </h2>
+          <h1 className="text-4xl md:text-5xl font-black text-black leading-tight">
+            <span className="inline">YOUR </span>
+            <span className="inline relative">
+              WINTER
+              <span className="absolute bottom-1 left-0 w-full h-2 bg-[#22FF00] -z-10"></span>
+            </span>
+            <br />
+            <span className="inline relative">
+              ARC
+              <span className="absolute bottom-1 left-0 w-full h-2 bg-[#22FF00] -z-10"></span>
+            </span>
+            <span className="inline"> STARTS</span>
+            <br />
+            <span className="inline relative">
+              HERE
+              <span className="absolute bottom-1 left-0 w-full h-2 bg-[#22FF00] -z-10"></span>
+            </span>
+          </h1>
         </div>
 
         {/* System Ready Callout */}
-        <div className="bg-card-light dark:bg-card-dark border-3 border-black dark:border-white border-l-6 border-l-accent rounded-sm p-4 shadow-brutal mb-8">
-          <p className="font-bold text-accent">&gt;&gt;&gt; SYSTEM READY</p>
-          <p className="text-subtext-light dark:text-subtext-dark">
+        <div className="border-l-4 border-[#22FF00] pl-4 mb-8">
+          <p className="font-bold text-[#22FF00] font-mono text-sm">&gt;&gt;&gt; SYSTEM READY</p>
+          <p className="text-gray-600 text-sm font-mono">
             Start by uploading your training history, then generate a new AI-powered program.
           </p>
         </div>
@@ -103,29 +106,28 @@ export default function Home() {
         {/* Backfill Banner */}
         {unmigratedCount > 0 && (
           <div
-            className="mb-8 bg-card-light dark:bg-card-dark border-3 border-black dark:border-white border-l-6 border-l-primary p-4 rounded-sm shadow-brutal"
+            className="mb-8 bg-white border-3 border-black border-l-6 border-l-[#22FF00] p-4 rounded-sm shadow-brutal"
             data-testid="backfill-banner"
           >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-1">
+                <h3 className="text-lg font-bold uppercase text-black mb-1">
                   Enhance Your Workout Data
                 </h3>
-                <p className="text-sm text-subtext-light dark:text-subtext-dark mb-3">
+                <p className="text-sm text-gray-600 mb-3">
                   You have {unmigratedCount} workout{unmigratedCount !== 1 ? 's' : ''} that can be
-                  enhanced with equipment and muscle group data. This enables advanced filtering
-                  and better analytics.
+                  enhanced with equipment and muscle group data.
                 </p>
                 <button
                   onClick={() => setShowBackfillModal(true)}
-                  className="px-4 py-3 bg-primary text-white border-3 border-black dark:border-white rounded-sm font-bold uppercase shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-sm"
+                  className="px-4 py-3 bg-[#22FF00] text-black border-3 border-black rounded-sm font-bold uppercase shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-sm"
                 >
                   Start Migration
                 </button>
               </div>
               <button
                 onClick={() => setUnmigratedCount(0)}
-                className="text-text-light dark:text-text-dark hover:text-primary text-2xl font-bold ml-4"
+                className="text-black hover:text-[#22FF00] text-2xl font-bold ml-4"
               >
                 ×
               </button>
@@ -140,106 +142,49 @@ export default function Home() {
           onComplete={handleBackfillComplete}
         />
 
-        {/* Quick actions */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+        {/* Action Cards Grid - 2 columns */}
+        <div className="grid grid-cols-2 gap-4">
           <ActionCard
-            title="Log Workout"
-            description="Record your training session"
+            title={["LOG", "WORKOUT"]}
+            subtitle="RECORD SESSION"
             href="/workouts/log"
-            icon="💪"
+            icon={<DumbbellIcon />}
           />
           <ActionCard
-            title="View History"
-            description="Browse past workouts"
+            title={["VIEW", "HISTORY"]}
+            subtitle="BROWSE PAST"
             href="/workouts"
-            icon="📊"
+            icon={<ChartIcon />}
           />
           <ActionCard
-            title="AI Program"
-            description="Get your training plan"
+            title={["AI PROGRAM"]}
+            subtitle="GENERATE NEW"
             href="/programs"
-            icon="🤖"
+            icon={<RobotIcon />}
           />
           <ActionCard
-            title="Import Data"
-            description="Upload CSV history"
+            title={["IMPORT DATA"]}
+            subtitle="CSV UPLOAD"
             href="/workouts/import"
-            icon="📥"
+            icon={<DownloadIcon />}
           />
           <ActionCard
-            title="Settings"
-            description="Preferences & account"
+            title={["SETTINGS"]}
+            subtitle="PREFERENCES"
             href="/settings"
-            icon="⚙️"
+            icon={<GearIcon />}
           />
           <ActionCard
-            title="Help"
-            description="Guides & documentation"
+            title={["HELP"]}
+            subtitle="GUIDES & DOCS"
             href="/help"
-            icon="❓"
+            icon={<HelpIcon />}
           />
-        </div>
-
-        {/* Recent workouts */}
-        <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark">
-              Recent Workouts
-            </h3>
-            {workouts && workouts.length > 0 && (
-              <Link
-                href="/workouts"
-                className="text-sm text-primary hover:underline font-bold uppercase transition-colors"
-              >
-                View all →
-              </Link>
-            )}
-          </div>
-
-          {workoutsLoading ? (
-            <div className="text-center py-8">
-              <div className="w-8 h-8 border-3 border-black dark:border-white border-t-primary mx-auto animate-spin"></div>
-            </div>
-          ) : !workouts || workouts.length === 0 ? (
-            <p className="text-subtext-light dark:text-subtext-dark text-center py-8 uppercase">
-              No workouts yet. Start by logging your first session!
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {workouts.map((workout) => {
-                const exerciseCount = workout.data.exercises.length;
-                const totalSets = workout.data.exercises.reduce(
-                  (sum, ex) => sum + ex.sets.length,
-                  0
-                );
-
-                return (
-                  <Link
-                    key={workout.id}
-                    href={`/workouts/${workout.id}/edit`}
-                    className="block p-4 rounded-sm border-3 border-black dark:border-white hover:border-accent hover:shadow-brutal-sm transition-all bg-card-light dark:bg-card-dark"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-bold text-text-light dark:text-text-dark">
-                          {format(parseISO(workout.workout_date), 'EEEE, MMM d')}
-                        </p>
-                        <p className="text-sm text-subtext-light dark:text-subtext-dark mt-1">
-                          {exerciseCount} exercise{exerciseCount !== 1 ? 's' : ''} · {totalSets} set{totalSets !== 1 ? 's' : ''}
-                        </p>
-                      </div>
-                      <span className="text-text-light dark:text-text-dark font-bold">→</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
         </div>
       </main>
 
       {/* Bottom navigation for mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card-light dark:bg-card-dark border-t-3 border-black dark:border-white md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-3 border-black md:hidden">
         <div className="grid grid-cols-4 gap-1">
           <NavButton href="/" label="Home" icon="🏠" />
           <NavButton href="/workouts/log" label="Log" icon="➕" />
@@ -251,27 +196,31 @@ export default function Home() {
   );
 }
 
-function ActionCard({ title, description, href, icon }: {
-  title: string;
-  description: string;
+function ActionCard({ title, subtitle, href, icon }: {
+  title: string[];
+  subtitle: string;
   href: string;
-  icon: string;
+  icon: React.ReactNode;
 }) {
   return (
-    <a
+    <Link
       href={href}
-      className="block p-6 bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white hover:border-accent hover:shadow-brutal-lg transition-all"
+      className="block p-6 bg-white rounded-sm border-3 border-black hover:border-[#22FF00] hover:shadow-brutal transition-all min-h-[180px]"
     >
-      <div className="w-12 h-12 rounded-sm bg-accent-light dark:bg-accent-dark flex items-center justify-center mb-4 border-2 border-black dark:border-white">
-        <span className="text-2xl">{icon}</span>
+      <div className="mb-6">
+        {icon}
       </div>
-      <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-1">
-        {title}
-      </h3>
-      <p className="text-sm text-subtext-light dark:text-subtext-dark">
-        {description}
+      <div>
+        {title.map((line, i) => (
+          <h3 key={i} className="text-lg font-black uppercase text-black leading-tight">
+            {line}
+          </h3>
+        ))}
+      </div>
+      <p className="text-xs text-gray-500 uppercase tracking-wider mt-2 font-mono">
+        {subtitle}
       </p>
-    </a>
+    </Link>
   );
 }
 
@@ -281,12 +230,76 @@ function NavButton({ href, label, icon }: {
   icon: string;
 }) {
   return (
-    <a
+    <Link
       href={href}
-      className="flex flex-col items-center justify-center py-3 text-text-light dark:text-text-dark hover:text-primary transition-colors"
+      className="flex flex-col items-center justify-center py-3 text-black hover:text-[#22FF00] transition-colors"
     >
       <span className="text-2xl mb-1">{icon}</span>
       <span className="text-xs font-bold uppercase">{label}</span>
-    </a>
+    </Link>
+  );
+}
+
+// SVG Icons
+function DumbbellIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6.5 6.5L17.5 17.5" />
+      <path d="M17.5 6.5L6.5 17.5" />
+      <path d="M3 9L9 3" />
+      <path d="M15 21L21 15" />
+      <path d="M3 15L9 21" />
+      <path d="M15 3L21 9" />
+    </svg>
+  );
+}
+
+function ChartIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+      <rect x="14" y="8" width="4" height="12" rx="1" />
+    </svg>
+  );
+}
+
+function RobotIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="6" width="16" height="14" rx="2" />
+      <circle cx="9" cy="13" r="1.5" fill="currentColor" />
+      <circle cx="15" cy="13" r="1.5" fill="currentColor" />
+      <path d="M9 17h6" />
+      <path d="M12 2v4" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 4v12" />
+      <path d="M8 12l4 4 4-4" />
+      <path d="M4 18h16" />
+    </svg>
+  );
+}
+
+function GearIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+    </svg>
+  );
+}
+
+function HelpIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+      <circle cx="12" cy="17" r="0.5" fill="currentColor" />
+    </svg>
   );
 }
