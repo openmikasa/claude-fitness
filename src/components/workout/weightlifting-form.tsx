@@ -106,7 +106,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 pb-24">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 pb-32">
       {/* Exercises */}
       <div className="space-y-4">
         {exercises.map((exercise, exerciseIndex) => (
@@ -117,7 +117,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
             control={control}
             errors={errors}
             removeExercise={removeExercise}
-            canRemoveExercise={true}
+            canRemoveExercise={exercises.length > 1}
             setValue={setValue}
             watch={watch}
             weightUnit={getWeightUnitLabel(settings?.units || 'metric')}
@@ -238,19 +238,13 @@ function ExerciseField({
           <label className="block text-xs font-medium text-subtext-light dark:text-subtext-dark mb-2">
             Exercise Name
           </label>
-          {exerciseName ? (
-            <h3 className="text-xl font-bold text-text-light dark:text-text-dark">
-              {exerciseName}
-            </h3>
-          ) : (
-            <Autocomplete
-              value={exerciseName || ''}
-              onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
-              onExerciseSelect={handleExerciseSelect}
-              onCreateNew={handleCreateNew}
-              placeholder="Search exercise..."
-            />
-          )}
+          <Autocomplete
+            value={exerciseName || ''}
+            onChange={(value) => setValue(`exercises.${exerciseIndex}.name`, value)}
+            onExerciseSelect={handleExerciseSelect}
+            onCreateNew={handleCreateNew}
+            placeholder="Search exercise..."
+          />
           {errors.exercises?.[exerciseIndex]?.name && (
             <p className="mt-1 text-sm text-red-600">
               {errors.exercises[exerciseIndex].name.message}
