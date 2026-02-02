@@ -90,23 +90,23 @@ export default function CsvUpload({ onParsed }: CsvUploadProps) {
   return (
     <div className="space-y-6">
       {/* CSV Format Instructions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
-        <h3 className="text-sm font-semibold text-blue-900">CSV Format Requirements</h3>
-        <div className="text-sm text-blue-800 space-y-2">
+      <div className="bg-[#22FF00]/10 border-3 border-[#22FF00] rounded-sm p-4 space-y-3">
+        <h3 className="text-sm font-bold uppercase text-black">CSV Format Requirements</h3>
+        <div className="text-sm text-gray-700 space-y-2">
           <p><strong>Required column:</strong> Date</p>
           <p><strong>Optional columns:</strong> Exercise, Weight, Reps, Sets, Notes</p>
 
-          <div className="mt-3 pt-3 border-t border-blue-200">
-            <p className="font-semibold mb-2">How workouts are grouped:</p>
+          <div className="mt-3 pt-3 border-t border-[#22FF00]">
+            <p className="font-bold mb-2">How workouts are grouped:</p>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li><strong>One workout per day:</strong> All rows with the same date become one workout</li>
               <li><strong>Multiple workouts per day:</strong> Add a &quot;workout&quot; or &quot;session&quot; column (e.g., &quot;morning&quot;, &quot;evening&quot;) to create separate workouts on the same date</li>
             </ul>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-blue-200">
-            <p className="font-semibold mb-2">Example CSV (one workout per day):</p>
-            <pre className="bg-white p-2 rounded text-xs overflow-x-auto">
+          <div className="mt-3 pt-3 border-t border-[#22FF00]">
+            <p className="font-bold mb-2">Example CSV (one workout per day):</p>
+            <pre className="bg-white p-2 border-2 border-black rounded-sm text-xs overflow-x-auto">
 date,exercise,weight,reps,sets,notes
 2026-01-10,Bench press,80kg,10,3,
 2026-01-10,Squat,100kg,8,3,
@@ -114,9 +114,9 @@ date,exercise,weight,reps,sets,notes
             <p className="text-xs mt-1">→ Creates 2 workouts: Jan 10 (Bench + Squat), Jan 11 (Deadlift)</p>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-blue-200">
-            <p className="font-semibold mb-2">Example CSV (multiple workouts per day):</p>
-            <pre className="bg-white p-2 rounded text-xs overflow-x-auto">
+          <div className="mt-3 pt-3 border-t border-[#22FF00]">
+            <p className="font-bold mb-2">Example CSV (multiple workouts per day):</p>
+            <pre className="bg-white p-2 border-2 border-black rounded-sm text-xs overflow-x-auto">
 date,workout,exercise,weight,reps,sets,notes
 2026-01-10,morning,Bench press,80kg,10,3,
 2026-01-10,morning,Squat,100kg,8,3,
@@ -134,12 +134,12 @@ date,workout,exercise,weight,reps,sets,notes
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={`
-          relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
+          relative border-3 border-dashed rounded-sm p-12 text-center cursor-pointer
           transition-colors
           ${
             isDragging
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300 hover:border-gray-400 bg-gray-50'
+              ? 'border-[#22FF00] bg-[#22FF00]/10'
+              : 'border-black hover:border-[#22FF00] bg-white'
           }
           ${isProcessing ? 'opacity-50 pointer-events-none' : ''}
         `}
@@ -154,8 +154,8 @@ date,workout,exercise,weight,reps,sets,notes
 
         {isProcessing ? (
           <div className="flex flex-col items-center gap-3">
-            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-600">Processing CSV file...</p>
+            <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-600 font-bold">Processing CSV file...</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -186,8 +186,8 @@ date,workout,exercise,weight,reps,sets,notes
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
+        <div className="p-4 bg-red-500/10 border-3 border-red-500 rounded-sm">
+          <p className="text-sm text-red-600 font-bold">{error}</p>
         </div>
       )}
     </div>

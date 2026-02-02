@@ -83,24 +83,24 @@ export default function ColumnMapper({
   return (
     <div className="space-y-6">
       {/* Instructions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
+      <div className="bg-[#22FF00]/10 border-3 border-[#22FF00] rounded-sm p-4">
+        <p className="text-sm text-gray-700">
           Map your CSV columns to workout fields. The <strong>Date</strong> column is required. Other fields are optional.
         </p>
       </div>
 
       {/* Column Mapping Table */}
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="border-3 border-black rounded-sm overflow-hidden">
+        <table className="min-w-full divide-y divide-black">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">
                 CSV Column
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">
                 Maps To
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">
                 Sample Data
               </th>
             </tr>
@@ -108,14 +108,14 @@ export default function ColumnMapper({
           <tbody className="bg-white divide-y divide-gray-200">
             {preview.headers.map((header) => (
               <tr key={header}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {header}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   <select
                     value={mappings[header] || ''}
                     onChange={(e) => handleMappingChange(header, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                    className="w-full px-3 py-2 border-3 border-black rounded-sm focus:outline-none focus:border-[#22FF00] text-sm bg-white"
                   >
                     {FIELD_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -124,7 +124,7 @@ export default function ColumnMapper({
                     ))}
                   </select>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
+                <td className="px-4 py-4 text-sm text-gray-600 font-mono">
                   {preview.sampleRows[0]?.[header] || '-'}
                 </td>
               </tr>
@@ -135,17 +135,17 @@ export default function ColumnMapper({
 
       {/* Preview Mapped Data */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-2">
+        <h3 className="text-sm font-bold uppercase text-black mb-2">
           Preview First 5 Rows
         </h3>
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 overflow-x-auto">
+        <div className="bg-gray-50 border-3 border-black rounded-sm p-4 overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-300">
+              <tr className="border-b-2 border-black">
                 {Object.entries(mappings)
                   .filter(([_, value]) => value)
                   .map(([header, value]) => (
-                    <th key={header} className="px-3 py-2 text-left font-medium text-gray-700">
+                    <th key={header} className="px-3 py-2 text-left font-bold text-black">
                       {FIELD_OPTIONS.find((opt) => opt.value === value)?.label || value}
                     </th>
                   ))}
@@ -157,7 +157,7 @@ export default function ColumnMapper({
                   {Object.entries(mappings)
                     .filter(([_, value]) => value)
                     .map(([header]) => (
-                      <td key={header} className="px-3 py-2 text-gray-600">
+                      <td key={header} className="px-3 py-2 text-gray-600 font-mono">
                         {row[header] || '-'}
                       </td>
                     ))}
@@ -170,8 +170,8 @@ export default function ColumnMapper({
 
       {/* Error Message */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
+        <div className="p-4 bg-red-500/10 border-3 border-red-500 rounded-sm">
+          <p className="text-sm text-red-600 font-bold">{error}</p>
         </div>
       )}
 
@@ -179,13 +179,13 @@ export default function ColumnMapper({
       <div className="flex gap-4">
         <button
           onClick={onBack}
-          className="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          className="flex-1 px-4 py-3 font-bold uppercase text-black bg-white border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
         >
           Back
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          className="flex-1 px-4 py-3 font-bold uppercase text-white bg-[#8B5CF6] border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
         >
           Next: Review
         </button>

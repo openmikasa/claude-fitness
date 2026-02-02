@@ -521,20 +521,23 @@ export function ProgramManager() {
               })()}
 
               {/* Plan Overview */}
-              <div className='bg-gray-50 rounded-2xl p-4'>
-                <h4 className='font-semibold text-gray-900 mb-2'>Plan Overview</h4>
+              <div className='bg-white border-3 border-black rounded-sm p-4'>
+                <h4 className='font-bold uppercase text-black mb-2 flex items-center gap-2'>
+                  <span>📋</span>
+                  Plan Overview
+                </h4>
                 <p className='text-sm text-gray-700'>{selectedProgram.rationale}</p>
               </div>
 
               {/* Refresh Program Section (only for active programs) */}
               {selectedProgram.status === 'active' && (
-                <div className='bg-blue-50 rounded-2xl p-4 border-2 border-blue-200'>
-                  <h4 className='font-semibold text-gray-900 mb-3 flex items-center gap-2'>
+                <div className='bg-[#8B5CF6]/10 border-3 border-[#8B5CF6] rounded-sm p-4'>
+                  <h4 className='font-bold uppercase text-black mb-3 flex items-center gap-2'>
                     <span>🔄</span>
                     Refresh Program Based on Progress
                   </h4>
-                  <p className='text-sm text-gray-700 mb-3'>
-                    AI will analyze your completed workouts and adjust remaining days based on your performance.
+                  <p className='text-sm text-gray-600 mb-3'>
+                    Tell Claude about your recent training experience and get personalized adjustments.
                   </p>
 
                   <textarea
@@ -542,15 +545,15 @@ export function ProgramManager() {
                     onChange={(e) => setRefreshNotes(e.target.value)}
                     placeholder='Optional: Add any specific adjustments or concerns (e.g., "Lower back feeling tight", "Want to focus more on upper body")'
                     rows={3}
-                    className='w-full px-3 py-2 border border-blue-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm bg-white'
+                    className='w-full px-3 py-2 border-3 border-black rounded-sm focus:outline-none focus:border-[#22FF00] resize-none text-sm'
                   />
 
                   <button
                     onClick={handleRefreshProgram}
                     disabled={refreshMutation.isPending}
-                    className='mt-3 w-full bg-blue-600 text-white px-4 py-2 rounded-2xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50'
+                    className='mt-3 w-full bg-[#8B5CF6] text-white px-4 py-3 border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none font-bold uppercase transition-all flex items-center justify-center gap-2'
                   >
-                    {refreshMutation.isPending ? 'Analyzing & Refreshing...' : 'Refresh Program'}
+                    {refreshMutation.isPending ? 'Refreshing...' : 'Refresh Program'}
                   </button>
                 </div>
               )}
