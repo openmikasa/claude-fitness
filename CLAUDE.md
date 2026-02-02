@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 🎯 Project Overview
 * **Purpose:** AI-powered weightlifting tracker and workout programming application
-* **Production URL:** https://claude-fitness.vercel.app/
+* **Production URL:** https://winter-arc.vercel.app/
 * **Repository:** https://github.com/openmikasa/claude-fitness
 * **Deployment:** Vercel with auto-deploy from `main` branch (deploys in ~2 minutes)
 * **Tech Stack:** Next.js 14 (App Router), Supabase (PostgreSQL + Auth), Claude API, React Query, Tailwind CSS
