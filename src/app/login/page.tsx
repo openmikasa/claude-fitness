@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [accessCode, setAccessCode] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,18 @@ export default function LoginPage() {
 
     try {
       if (isSignUp) {
+        // Validate access code first
+        const response = await fetch('/api/auth/validate-access-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ accessCode }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Invalid access code');
+        }
+
         await signUp(email, password);
         setError('Check your email to confirm your account!');
       } else {
@@ -44,12 +57,29 @@ export default function LoginPage() {
           <p className="mt-2 text-center text-sm text-subtext-light dark:text-subtext-dark">
             Winter Arc is a fitness app to generate programs and log your workouts, powered by AI.
             <br />
-            If you like it, contact me <a href="https://github.com/openmikasa" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 underline">@openmikasa</a> on GitHub.
+            If you wanna try it, contact me <a href="https://github.com/openmikasa" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 underline">@openmikasa</a> on GitHub.
           </p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            {isSignUp && (
+              <div>
+                <label htmlFor="accessCode" className="block text-sm font-medium text-text-light dark:text-text-dark">
+                  Access Code
+                </label>
+                <input
+                  id="accessCode"
+                  name="accessCode"
+                  type="text"
+                  required
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white transition-colors"
+                  placeholder="Enter access code"
+                />
+              </div>
+            )}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-text-light dark:text-text-dark">
                 Email address
