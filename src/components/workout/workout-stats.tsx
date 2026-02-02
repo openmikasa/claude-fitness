@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 
 interface PersonalRecord {
   name: string;
@@ -13,6 +14,18 @@ interface PersonalRecord {
   date: string;
 }
 
+interface VolumeDataPoint {
+  date: string;
+  volume: number;
+  workoutId: string;
+}
+
+interface ExerciseVolumeHistory {
+  exerciseName: string;
+  equipment: string;
+  volumeHistory: VolumeDataPoint[];
+}
+
 interface StatsData {
   total: number;
   thisWeek: number;
@@ -20,6 +33,7 @@ interface StatsData {
   personalRecords: {
     weightlifting: PersonalRecord[];
   };
+  volumeHistory: ExerciseVolumeHistory[];
 }
 
 export default function WorkoutStats() {
@@ -28,6 +42,7 @@ export default function WorkoutStats() {
   const [error, setError] = useState<string | null>(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'weight' | 'date'>('name');
+  const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const { data: settings } = useSettings();
 
   useEffect(() => {
@@ -85,6 +100,32 @@ export default function WorkoutStats() {
 
     return sorted;
   }, [stats, searchFilter, sortBy]);
+
+  // Get volume data for selected exercise
+  const volumeDataForExercise = useMemo(() => {
+    if (!selectedExercise || !stats?.volumeHistory) return [];
+
+    const [exerciseName, equipment] = selectedExercise.split(' | ');
+    const exerciseData = stats.volumeHistory.find(
+      (vh) => vh.exerciseName === exerciseName && vh.equipment === equipment
+    );
+
+    return exerciseData?.volumeHistory || [];
+  }, [selectedExercise, stats]);
+
+  // Custom tooltip for volume chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload?.length) {
+      const { value, unit } = displayWeight(payload[0].value, settings?.units || 'metric');
+      return (
+        <div className="bg-white border-3 border-black p-3 shadow-brutal">
+          <p className="font-bold text-sm uppercase">{format(new Date(label), 'MMM d, yyyy')}</p>
+          <p className="font-black text-lg text-[#8B5CF6]">{value.toLocaleString()}{unit}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   if (loading) {
     return (
@@ -232,10 +273,16 @@ export default function WorkoutStats() {
                 ) : (
                   filteredAndSortedPRs.map((pr, index) => {
                     const { value, unit } = displayWeight(pr.weight, settings?.units || 'metric');
+                    const exerciseKey = `${pr.name} | ${pr.equipment}`;
                     return (
                       <div
                         key={index}
-                        className="flex items-center justify-between border-b-2 border-black pb-3 last:border-0 last:pb-0"
+                        onClick={() => setSelectedExercise(exerciseKey)}
+                        className={`flex items-center justify-between border-b-2 border-black pb-3 last:border-0 last:pb-0 cursor-pointer transition-colors ${
+                          selectedExercise === exerciseKey
+                            ? 'bg-[#22FF00] -mx-3 px-3 py-2'
+                            : 'hover:bg-gray-50'
+                        }`}
                       >
                         <div className="flex-grow min-w-0 mr-3">
                           <p className="text-sm font-bold text-black truncate">
@@ -260,6 +307,82 @@ export default function WorkoutStats() {
               </div>
             </div>
           )}
+
+          {/* Volume Chart - Right Column */}
+          <div className="bg-white border-3 border-black rounded-sm p-4 md:p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-2xl">📈</span>
+              <h3 className="text-lg font-bold text-black uppercase">
+                Volume Over Time
+              </h3>
+            </div>
+
+            {!selectedExercise ? (
+              <div className="h-64 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-gray-500 font-bold uppercase text-sm mb-2">
+                    Select an exercise
+                  </p>
+                  <p className="text-gray-400 text-xs font-mono">
+                    Click a PR to view volume history
+                  </p>
+                </div>
+              </div>
+            ) : volumeDataForExercise.length === 0 ? (
+              <div className="h-64 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-gray-500 font-bold uppercase text-sm mb-2">
+                    No volume data
+                  </p>
+                  <p className="text-gray-400 text-xs font-mono">
+                    No workout history for this exercise
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm font-bold text-[#8B5CF6] truncate">
+                    {selectedExercise}
+                  </p>
+                  <button
+                    onClick={() => setSelectedExercise(null)}
+                    className="text-xs font-bold uppercase text-gray-500 hover:text-black transition-colors"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={volumeDataForExercise}>
+                      <XAxis
+                        dataKey="date"
+                        tick={{ fontSize: 10, fontFamily: 'monospace' }}
+                        tickFormatter={(date) => format(new Date(date), 'MMM d')}
+                        stroke="#000000"
+                        strokeWidth={2}
+                      />
+                      <YAxis
+                        tick={{ fontSize: 10, fontFamily: 'monospace' }}
+                        stroke="#000000"
+                        strokeWidth={2}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Area
+                        type="monotone"
+                        dataKey="volume"
+                        stroke="#000000"
+                        strokeWidth={3}
+                        fill="#8B5CF6"
+                        fillOpacity={0.3}
+                        activeDot={{ fill: '#22FF00', stroke: '#000000', strokeWidth: 2, r: 6 }}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>

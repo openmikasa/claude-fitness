@@ -13,6 +13,18 @@ interface PersonalRecord {
   date: string;
 }
 
+interface VolumeDataPoint {
+  date: string;
+  volume: number;
+  workoutId: string;
+}
+
+interface ExerciseVolumeHistory {
+  exerciseName: string;
+  equipment: string;
+  volumeHistory: VolumeDataPoint[];
+}
+
 interface StatsResponse {
   total: number;
   thisWeek: number;
@@ -20,6 +32,7 @@ interface StatsResponse {
   personalRecords: {
     weightlifting: PersonalRecord[]; // Only weightlifting PRs
   };
+  volumeHistory: ExerciseVolumeHistory[];
 }
 
 // Type guard for weightlifting data
@@ -80,6 +93,9 @@ export async function GET() {
     // Key format: "Exercise Name | Equipment" (e.g., "Bench Press | Barbell")
     const weightliftingPRs = new Map<string, { weight: number; reps: number; date: string; name: string; equipment: string }>();
 
+    // Track volume history per exercise
+    const volumeHistoryMap = new Map<string, VolumeDataPoint[]>();
+
     (workouts as Workout[]).forEach((workout) => {
       const workoutDate = new Date(workout.workout_date);
 
@@ -98,9 +114,13 @@ export async function GET() {
         workout.workout_exercises.forEach((we) => {
           const exerciseName = we.exercises?.name || 'Unknown';
           const equipment = we.equipment?.[0] || 'Unknown'; // Take first equipment
+          const key = `${exerciseName} | ${equipment}`;
+
+          // Calculate volume for this exercise in this workout
+          let exerciseVolume = 0;
 
           we.sets_data?.forEach((set) => {
-            const key = `${exerciseName} | ${equipment}`;
+            // Track PRs
             const existing = weightliftingPRs.get(key);
 
             if (!existing || set.weight > existing.weight) {
@@ -112,15 +132,32 @@ export async function GET() {
                 equipment: equipment,
               });
             }
+
+            // Accumulate volume (weight × reps)
+            exerciseVolume += set.weight * set.reps;
           });
+
+          // Add volume data point if there's volume
+          if (exerciseVolume > 0) {
+            if (!volumeHistoryMap.has(key)) {
+              volumeHistoryMap.set(key, []);
+            }
+            volumeHistoryMap.get(key)!.push({
+              date: workout.workout_date,
+              volume: exerciseVolume,
+              workoutId: workout.id,
+            });
+          }
         });
       }
       // Fallback to JSONB data for backward compatibility (no equipment tracking)
       else if (isWeightliftingData(workout.data)) {
         workout.data.exercises.forEach((exercise) => {
           const key = `${exercise.name} | Unknown`;
+          let exerciseVolume = 0;
 
           exercise.sets.forEach((set) => {
+            // Track PRs
             const existing = weightliftingPRs.get(key);
             if (!existing || set.weight > existing.weight) {
               weightliftingPRs.set(key, {
@@ -131,7 +168,22 @@ export async function GET() {
                 equipment: 'Unknown',
               });
             }
+
+            // Accumulate volume
+            exerciseVolume += set.weight * set.reps;
           });
+
+          // Add volume data point if there's volume
+          if (exerciseVolume > 0) {
+            if (!volumeHistoryMap.has(key)) {
+              volumeHistoryMap.set(key, []);
+            }
+            volumeHistoryMap.get(key)!.push({
+              date: workout.workout_date,
+              volume: exerciseVolume,
+              workoutId: workout.id,
+            });
+          }
         });
       }
     });
@@ -147,6 +199,19 @@ export async function GET() {
       }))
       .sort((a, b) => b.weight - a.weight); // Sort by weight, no limit
 
+    // Convert volume history to array and sort by date
+    const volumeHistory: ExerciseVolumeHistory[] = Array.from(volumeHistoryMap.entries())
+      .map(([key, dataPoints]) => {
+        const [exerciseName, equipment] = key.split(' | ');
+        return {
+          exerciseName,
+          equipment,
+          volumeHistory: dataPoints.sort((a, b) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+          ),
+        };
+      });
+
     const response: StatsResponse = {
       total: workouts.length,
       thisWeek,
@@ -154,6 +219,7 @@ export async function GET() {
       personalRecords: {
         weightlifting: weightliftingRecords,
       },
+      volumeHistory,
     };
 
     return NextResponse.json(response);
