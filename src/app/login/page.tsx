@@ -43,6 +43,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-2 text-center text-sm text-subtext-light dark:text-subtext-dark">
             Winter Arc is a fitness app to generate programs and log your workouts, powered by AI.
+            <br />
             If you like it, contact me <a href="https://github.com/openmikasa" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 underline">@openmikasa</a> on GitHub.
           </p>
         </div>
