@@ -205,6 +205,7 @@ function ExerciseField({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [suggestedExerciseName, setSuggestedExerciseName] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
+  const [hasSelectedExercise, setHasSelectedExercise] = useState(!!watch(`exercises.${exerciseIndex}.name`));
 
   const { fields: sets, append: appendSet, remove: removeSet } = useFieldArray({
     control,
@@ -217,6 +218,7 @@ function ExerciseField({
     setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
     setValue(`exercises.${exerciseIndex}.equipment`, exercise.equipment || []);
     setValue(`exercises.${exerciseIndex}.muscle_groups`, exercise.muscle_groups || []);
+    setHasSelectedExercise(true);
     setIsEditingName(false);
   };
 
@@ -232,6 +234,7 @@ function ExerciseField({
     setValue(`exercises.${exerciseIndex}.muscle_groups`,
       [...(exercise.primary_muscles || []), ...(exercise.secondary_muscles || [])]
     );
+    setHasSelectedExercise(true);
     setIsEditingName(false);
   };
 
@@ -247,7 +250,7 @@ function ExerciseField({
           <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 font-mono">
             Exercise Name
           </label>
-          {exerciseName && !isEditingName ? (
+          {hasSelectedExercise && !isEditingName ? (
             <button
               type="button"
               onClick={handleNameClick}
@@ -284,17 +287,30 @@ function ExerciseField({
         )}
       </div>
 
-      {/* Equipment Tags */}
+      {/* Equipment Selector */}
       {exerciseName && (
-        <div className="flex flex-wrap gap-2">
-          {watch(`exercises.${exerciseIndex}.equipment`)?.map((eq: string) => (
-            <span
-              key={eq}
-              className="inline-flex items-center px-2 py-1 text-xs font-mono font-bold text-black bg-white border-2 border-[#22FF00]"
-            >
-              {eq}
-            </span>
-          ))}
+        <div className="relative inline-block">
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 font-mono">
+            Equipment
+          </label>
+          <select
+            value={watch(`exercises.${exerciseIndex}.equipment`)?.[0] || ''}
+            onChange={(e) => setValue(`exercises.${exerciseIndex}.equipment`, e.target.value ? [e.target.value] : [])}
+            className="pl-3 pr-8 py-2 text-xs font-mono font-bold text-black bg-white border-2 border-[#22FF00] rounded-sm focus:outline-none focus:border-black cursor-pointer appearance-none"
+          >
+            <option value="">No equipment</option>
+            <option value="barbell">Barbell</option>
+            <option value="hax barbell">Hax Barbell</option>
+            <option value="dumbbell">Dumbbell</option>
+            <option value="cable">Cable</option>
+            <option value="machine">Machine</option>
+            <option value="bodyweight">Bodyweight</option>
+            <option value="kettlebell">Kettlebell</option>
+            <option value="band">Band</option>
+          </select>
+          <svg className="absolute right-2 top-[calc(50%+6px)] -translate-y-1/2 w-4 h-4 pointer-events-none text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
       )}
 
@@ -328,7 +344,7 @@ function ExerciseField({
             const weight = watch(`exercises.${exerciseIndex}.sets.${setIndex}.weight`);
             const reps = watch(`exercises.${exerciseIndex}.sets.${setIndex}.reps`);
             const note = watch(`exercises.${exerciseIndex}.sets.${setIndex}.note`);
-            const isComplete = weight > 0 && reps > 0;
+            const isComplete = reps > 0;
 
             return (
               <div key={set.id} className="space-y-2">
