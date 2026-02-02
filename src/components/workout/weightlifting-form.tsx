@@ -15,6 +15,7 @@ import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conve
 const weightliftingSetSchema = z.object({
   weight: z.number().min(0, 'Weight must be 0 or greater'),
   reps: z.number().int().min(1, 'Reps must be at least 1'),
+  note: z.string().optional(),
 });
 
 const weightliftingExerciseSchema = z.object({
@@ -48,7 +49,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         exercises: [
           {
             name: '',
-            sets: [{ weight: 0, reps: 0 }],
+            sets: [{ weight: 0, reps: 0, note: '' }],
           },
         ],
       };
@@ -60,6 +61,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         sets: ex.sets.map(set => ({
           weight: kgToInput(set.weight, settings?.units || 'metric'),
           reps: set.reps,
+          note: (set as any).note || '',
         })),
       })),
     };
@@ -97,8 +99,9 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
       exercises: data.exercises.map(ex => ({
         ...ex,
         sets: ex.sets.map(set => ({
-          ...set,
           weight: inputToKg(set.weight, settings?.units || 'metric'),
+          reps: set.reps,
+          note: set.note || undefined,
         })),
       })),
     };
@@ -131,7 +134,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         onClick={() =>
           appendExercise({
             name: '',
-            sets: [{ weight: 0, reps: 0 }],
+            sets: [{ weight: 0, reps: 0, note: '' }],
           })
         }
         className="w-full px-4 py-4 text-sm font-bold uppercase text-black bg-white border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
@@ -201,6 +204,7 @@ function ExerciseField({
 }: ExerciseFieldProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [suggestedExerciseName, setSuggestedExerciseName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
 
   const { fields: sets, append: appendSet, remove: removeSet } = useFieldArray({
     control,
@@ -213,6 +217,7 @@ function ExerciseField({
     setValue(`exercises.${exerciseIndex}.exercise_id`, exercise.id);
     setValue(`exercises.${exerciseIndex}.equipment`, exercise.equipment || []);
     setValue(`exercises.${exerciseIndex}.muscle_groups`, exercise.muscle_groups || []);
+    setIsEditingName(false);
   };
 
   const handleCreateNew = (name: string) => {
@@ -227,6 +232,11 @@ function ExerciseField({
     setValue(`exercises.${exerciseIndex}.muscle_groups`,
       [...(exercise.primary_muscles || []), ...(exercise.secondary_muscles || [])]
     );
+    setIsEditingName(false);
+  };
+
+  const handleNameClick = () => {
+    setIsEditingName(true);
   };
 
   return (
@@ -237,8 +247,14 @@ function ExerciseField({
           <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 font-mono">
             Exercise Name
           </label>
-          {exerciseName ? (
-            <h3 className="text-xl font-black uppercase text-black">{exerciseName}</h3>
+          {exerciseName && !isEditingName ? (
+            <button
+              type="button"
+              onClick={handleNameClick}
+              className="text-xl font-black uppercase text-black hover:text-[#22FF00] transition-colors text-left"
+            >
+              {exerciseName}
+            </button>
           ) : (
             <Autocomplete
               value={exerciseName || ''}
@@ -311,45 +327,58 @@ function ExerciseField({
           {sets.map((set, setIndex) => {
             const weight = watch(`exercises.${exerciseIndex}.sets.${setIndex}.weight`);
             const reps = watch(`exercises.${exerciseIndex}.sets.${setIndex}.reps`);
+            const note = watch(`exercises.${exerciseIndex}.sets.${setIndex}.note`);
             const isComplete = weight > 0 && reps > 0;
 
             return (
-              <div key={set.id} className="grid grid-cols-[50px_1fr_1fr_40px] gap-2 items-center">
-                <div className="flex items-center justify-center">
-                  <span className="inline-flex items-center justify-center w-8 h-8 border-2 border-black text-black text-sm font-bold">
-                    {setIndex + 1}
-                  </span>
+              <div key={set.id} className="space-y-2">
+                <div className="grid grid-cols-[50px_1fr_1fr_40px] gap-2 items-center">
+                  <div className="flex items-center justify-center">
+                    <span className="inline-flex items-center justify-center w-8 h-8 border-2 border-black text-black text-sm font-bold">
+                      {setIndex + 1}
+                    </span>
+                  </div>
+                  <input
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    placeholder="-"
+                    className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
+                  />
+                  <input
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    min="1"
+                    placeholder="-"
+                    className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
+                  />
+                  <div className="flex items-center justify-center">
+                    {isComplete ? (
+                      <svg className="w-7 h-7 text-[#22C55E]" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.1" />
+                        <path d="M8 12l2.5 2.5L16 9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    ) : (
+                      <svg className="w-7 h-7 text-gray-300" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                      </svg>
+                    )}
+                  </div>
                 </div>
-                <input
-                  {...register(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, {
-                    valueAsNumber: true,
-                  })}
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  placeholder="-"
-                  className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
-                />
-                <input
-                  {...register(`exercises.${exerciseIndex}.sets.${setIndex}.reps`, {
-                    valueAsNumber: true,
-                  })}
-                  type="number"
-                  min="1"
-                  placeholder="-"
-                  className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
-                />
-                <div className="flex items-center justify-center">
-                  {isComplete ? (
-                    <svg className="w-7 h-7 text-[#22C55E]" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.1" />
-                      <path d="M8 12l2.5 2.5L16 9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  ) : (
-                    <svg className="w-7 h-7 text-gray-300" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                    </svg>
-                  )}
+                {/* Set Note */}
+                <div className="grid grid-cols-[50px_1fr] gap-2">
+                  <div></div>
+                  <input
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.note`)}
+                    type="text"
+                    placeholder="Add note..."
+                    className="w-full px-3 py-2 bg-gray-50 text-gray-600 text-sm border border-gray-200 focus:outline-none focus:border-[#22FF00] placeholder:text-gray-400"
+                  />
                 </div>
               </div>
             );
@@ -374,7 +403,7 @@ function ExerciseField({
           {/* Add Set Button */}
           <button
             type="button"
-            onClick={() => appendSet({ weight: 0, reps: 0 })}
+            onClick={() => appendSet({ weight: 0, reps: 0, note: '' })}
             className="w-full px-4 py-3 text-sm font-bold uppercase text-[#22FF00] bg-transparent border-2 border-dashed border-gray-300 hover:border-[#22FF00] transition-colors"
           >
             + Add Set

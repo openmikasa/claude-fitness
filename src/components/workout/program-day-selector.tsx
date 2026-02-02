@@ -52,7 +52,7 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true, initia
 
   if (isLoading) {
     return (
-      <select className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg" disabled>
+      <select className="w-full px-4 py-3 bg-white text-black border-3 border-black rounded-sm font-bold" disabled>
         <option>Loading programs...</option>
       </select>
     );
@@ -60,7 +60,7 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true, initia
 
   if (!programs || programs.length === 0) {
     return (
-      <select className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg" disabled>
+      <select className="w-full px-4 py-3 bg-white text-black border-3 border-black rounded-sm font-bold" disabled>
         <option>No active programs</option>
       </select>
     );
@@ -98,8 +98,9 @@ export default function ProgramDaySelector({ onSelect, activeOnly = true, initia
   return (
     <select
       onChange={handleChange}
-      className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+      className="w-full px-4 py-3 bg-white text-black border-3 border-black rounded-sm font-bold focus:outline-none focus:border-[#22FF00] cursor-pointer appearance-none"
       defaultValue={initialSelection ? `${initialSelection.programId}|${initialSelection.dayIndex}` : ""}
+      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '20px', paddingRight: '48px' }}
     >
       <option value="">Select a program workout (optional)</option>
       {programs.map((program) => {
