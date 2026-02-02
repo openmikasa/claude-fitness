@@ -143,7 +143,7 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
-              href="/workouts"
+              href="/"
               className="p-2 hover:bg-accent-light dark:hover:bg-accent-dark rounded-full transition-colors"
             >
               <svg className="w-6 h-6 text-text-light dark:text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">

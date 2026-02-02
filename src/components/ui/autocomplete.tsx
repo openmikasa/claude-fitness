@@ -35,7 +35,7 @@ export function Autocomplete({
   }, []);
 
   useEffect(() => {
-    if (value.length < 2) {
+    if (value.length < 1) {
       setExercises([]);
       return;
     }
@@ -81,7 +81,7 @@ export function Autocomplete({
         className='w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark font-medium transition-colors'
       />
 
-      {isOpen && value.length >= 2 && (
+      {isOpen && value.length >= 1 && (
         <div className='absolute z-10 w-full mt-1 bg-card-light dark:bg-card-dark border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md max-h-60 overflow-y-auto'>
           {loading ? (
             <div className='px-3 py-2 text-subtext-light dark:text-subtext-dark text-sm'>Searching...</div>

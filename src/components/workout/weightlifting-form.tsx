@@ -117,7 +117,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
             control={control}
             errors={errors}
             removeExercise={removeExercise}
-            canRemoveExercise={exercises.length > 1}
+            canRemoveExercise={true}
             setValue={setValue}
             watch={watch}
             weightUnit={getWeightUnitLabel(settings?.units || 'metric')}
@@ -270,6 +270,28 @@ function ExerciseField({
           </button>
         )}
       </div>
+
+      {/* Equipment and Muscle Groups Display */}
+      {exerciseName && (
+        <div className="flex flex-wrap gap-2">
+          {watch(`exercises.${exerciseIndex}.equipment`)?.map((eq: string) => (
+            <span
+              key={eq}
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-600 border border-orange-200 dark:border-orange-800"
+            >
+              {eq}
+            </span>
+          ))}
+          {watch(`exercises.${exerciseIndex}.muscle_groups`)?.map((mg: string) => (
+            <span
+              key={mg}
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-accent-light dark:bg-accent-dark text-primary border border-primary/20"
+            >
+              {mg}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Create Exercise Modal */}
       <CreateExerciseModal
