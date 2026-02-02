@@ -76,25 +76,25 @@ function GenerationProgress({ programWeeks }: { programWeeks: number }) {
     <div className='py-8'>
       <div className='max-w-md mx-auto'>
         <div className='flex items-center justify-center gap-3 mb-6'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600'></div>
+          <div className='w-12 h-12 border-4 border-black dark:border-white border-t-primary animate-spin'></div>
           <span className='text-4xl animate-pulse'>{currentStage.emoji}</span>
         </div>
 
         <div className='text-center mb-4'>
-          <p className='text-lg font-medium text-text-light dark:text-text-dark mb-1'>{currentStage.message}</p>
-          <p className='text-sm text-subtext-light dark:text-subtext-dark'>
+          <p className='text-lg font-bold uppercase text-text-light dark:text-text-dark mb-1'>{currentStage.message}</p>
+          <p className='text-sm text-subtext-light dark:text-subtext-dark font-bold'>
             Step {stage + 1} of {stages.length}
           </p>
         </div>
 
         {/* Progress bar */}
-        <div className='w-full bg-gray-200 rounded-full h-2 mb-2 overflow-hidden'>
+        <div className='w-full bg-background-light dark:bg-background-dark h-3 border-2 border-black dark:border-white rounded-sm mb-2 overflow-hidden'>
           <div
-            className='bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500 ease-out'
+            className='bg-primary h-full transition-all duration-500 ease-out'
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-        <p className='text-xs text-center text-subtext-light dark:text-subtext-dark'>{Math.round(progress)}% complete</p>
+        <p className='text-xs text-center font-bold uppercase text-subtext-light dark:text-subtext-dark'>{Math.round(progress)}% complete</p>
       </div>
     </div>
   );
@@ -151,10 +151,10 @@ export function WeeklyPlanView() {
   };
 
   return (
-    <div className='bg-white rounded-lg shadow-md p-6 border-2 border-purple-100'>
+    <div className='bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6'>
       <div className='flex items-center gap-2 mb-4'>
         <span className='text-2xl'>✨</span>
-        <h2 className='text-xl font-bold text-text-light dark:text-text-dark'>Generate New Program</h2>
+        <h2 className='text-xl font-bold uppercase text-text-light dark:text-text-dark'>Generate New Program</h2>
       </div>
 
       {generateMutation.isPending ? (
@@ -164,7 +164,7 @@ export function WeeklyPlanView() {
           {/* Prompt History Dropdown */}
           {!historyLoading && promptHistory.length > 0 && (
             <div>
-              <label className='block text-sm font-medium text-text-light dark:text-text-dark mb-2'>
+              <label className='block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-2'>
                 Load Previous Prompt (Optional)
               </label>
               <select
@@ -182,7 +182,7 @@ export function WeeklyPlanView() {
                     }
                   }
                 }}
-                className='w-full px-4 py-2 bg-white text-text-light dark:text-text-dark border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none'
+                className='w-full px-4 py-3 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark border-3 border-black dark:border-white rounded-sm focus:outline-none focus:border-accent focus:shadow-brutal-sm transition-all'
               >
                 <option value="">Start Fresh (Use Template)</option>
                 {promptHistory.map((entry) => {
@@ -205,16 +205,16 @@ export function WeeklyPlanView() {
                   }
                 }}
                 disabled={deletePromptMutation.isPending}
-                className='mt-2 text-sm text-red-600 hover:text-red-700 transition-colors disabled:opacity-50'
+                className='mt-2 text-sm text-danger hover:underline font-bold uppercase transition-colors disabled:opacity-50'
               >
                 {deletePromptMutation.isPending ? 'Clearing...' : `Clear History (${promptHistory.length} saved)`}
               </button>
             </div>
           )}
 
-          <div className='bg-accent-light dark:bg-accent-dark border border-primary rounded-lg p-4 mb-4'>
-            <p className='text-sm text-text-light dark:text-text-dark font-medium mb-2'>💡 Customize Your Program</p>
-            <p className='text-xs text-primary'>
+          <div className='bg-accent-light dark:bg-accent-dark border-3 border-black dark:border-white rounded-sm p-4 mb-4'>
+            <p className='text-sm text-text-light dark:text-text-dark font-bold uppercase mb-2'>💡 Customize Your Program</p>
+            <p className='text-xs text-subtext-light dark:text-subtext-dark'>
               Fill out the template below with your preferences. Update the schedule, constraints,
               and performance goals to create a personalized training plan.
             </p>
@@ -224,20 +224,20 @@ export function WeeklyPlanView() {
             value={programRequest}
             onChange={(e) => setProgramRequest(e.target.value)}
             rows={12}
-            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none font-mono text-sm text-text-light dark:text-text-dark'
+            className='w-full px-3 py-3 border-3 border-black dark:border-white rounded-sm focus:outline-none focus:border-accent focus:shadow-brutal-sm font-mono text-sm text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark transition-all'
             placeholder='Describe your training program requirements...'
           />
 
           <div className='flex gap-3'>
             <button
               onClick={() => setShowForm(false)}
-              className='flex-1 bg-gray-200 text-text-light dark:text-text-dark px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors'
+              className='flex-1 px-4 py-3 font-bold uppercase text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
             >
               Cancel
             </button>
             <button
               onClick={handleGenerate}
-              className='flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors'
+              className='flex-1 px-4 py-3 font-bold uppercase text-white bg-primary border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
             >
               Generate Plan
             </button>
@@ -250,7 +250,7 @@ export function WeeklyPlanView() {
           </p>
           <button
             onClick={() => setShowForm(true)}
-            className='bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors'
+            className='bg-primary text-white px-6 py-4 rounded-sm font-bold uppercase border-3 border-black dark:border-white shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all'
           >
             Create Training Program
           </button>
@@ -258,14 +258,14 @@ export function WeeklyPlanView() {
       )}
 
       {generateMutation.isError && (
-        <div className='mt-4 bg-red-50 border-l-4 border-red-400 p-4'>
-          <p className='text-sm text-red-700'>{generateMutation.error.message}</p>
+        <div className='mt-4 bg-danger/10 border-3 border-l-6 border-danger rounded-sm p-4'>
+          <p className='text-sm text-danger font-bold'>{generateMutation.error.message}</p>
         </div>
       )}
 
       {generateMutation.isSuccess && (
-        <div className='mt-4 bg-green-50 border-l-4 border-green-400 p-4'>
-          <p className='text-sm text-green-700'>Program generated successfully! Check &ldquo;My Programs&rdquo; below.</p>
+        <div className='mt-4 bg-success/10 border-3 border-l-6 border-success rounded-sm p-4'>
+          <p className='text-sm text-success font-bold'>Program generated successfully! Check &ldquo;My Programs&rdquo; below.</p>
         </div>
       )}
     </div>

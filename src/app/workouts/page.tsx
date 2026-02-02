@@ -20,24 +20,24 @@ export default function WorkoutsPage() {
   if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
-        <div className="text-lg text-text-light dark:text-text-dark">Loading...</div>
+        <div className="text-lg font-bold uppercase text-text-light dark:text-text-dark">Loading...</div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-8">
-      <header className="bg-card-light dark:bg-card-dark shadow-sm sticky top-0 z-10 backdrop-blur-md">
+      <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">
+              <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
                 Workout History
               </h1>
             </Link>
             <Link
               href="/workouts/log"
-              className="px-4 py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all text-sm md:text-base"
+              className="px-4 py-3 bg-primary text-white rounded-sm font-bold uppercase border-3 border-black dark:border-white shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-sm"
             >
               Log New Workout
             </Link>

@@ -198,11 +198,11 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+      <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white">
         {/* Mobile Filter Toggle */}
         <button
           onClick={() => setFiltersExpanded(!filtersExpanded)}
-          className="w-full lg:hidden flex items-center justify-between p-4 text-left font-medium text-text-light dark:text-text-dark"
+          className="w-full lg:hidden flex items-center justify-between p-4 text-left font-bold uppercase text-text-light dark:text-text-dark"
         >
           <span>Filters</span>
           <svg
@@ -219,31 +219,31 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
         <div className={`${filtersExpanded ? 'block' : 'hidden lg:block'} p-4 space-y-4`}>
           {/* Quick Date Filters */}
           <div>
-            <label className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
+            <label className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-2">
               Quick Filters
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 onClick={() => handleQuickDateFilter('week')}
-                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
+                className="px-3 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent transition-colors"
               >
                 This Week
               </button>
               <button
                 onClick={() => handleQuickDateFilter('month')}
-                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
+                className="px-3 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent transition-colors"
               >
                 This Month
               </button>
               <button
                 onClick={() => handleQuickDateFilter('last30')}
-                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
+                className="px-3 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent transition-colors"
               >
                 Last 30 Days
               </button>
               <button
                 onClick={() => handleQuickDateFilter('all')}
-                className="px-3 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 transition-colors"
+                className="px-3 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent transition-colors"
               >
                 All Time
               </button>
@@ -252,7 +252,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
           {/* Search */}
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
+            <label htmlFor="search" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-2">
               Search Notes
             </label>
             <input
@@ -263,14 +263,14 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               onBlur={handleFilterChange}
               onKeyDown={(e) => e.key === 'Enter' && handleFilterChange()}
               placeholder="Search in notes..."
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark placeholder-gray-400"
+              className="w-full px-4 py-3 border-3 border-black dark:border-white rounded-sm focus:outline-none focus:border-accent focus:shadow-brutal-sm bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark placeholder-subtext-light dark:placeholder-subtext-dark transition-all"
             />
           </div>
 
           {/* Date Range */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="date-from" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
+              <label htmlFor="date-from" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-2">
                 From Date
               </label>
               <input
@@ -281,11 +281,11 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                   setDateFrom(e.target.value);
                   handleFilterChange();
                 }}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark"
+                className="w-full px-4 py-3 border-3 border-black dark:border-white rounded-sm focus:outline-none focus:border-accent focus:shadow-brutal-sm bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark transition-all"
               />
             </div>
             <div>
-              <label htmlFor="date-to" className="block text-sm font-medium text-text-light dark:text-text-dark mb-2">
+              <label htmlFor="date-to" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-2">
                 To Date
               </label>
               <input
@@ -296,7 +296,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                   setDateTo(e.target.value);
                   handleFilterChange();
                 }}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors bg-white dark:bg-gray-700 text-text-light dark:text-text-dark"
+                className="w-full px-4 py-3 border-3 border-black dark:border-white rounded-sm focus:outline-none focus:border-accent focus:shadow-brutal-sm bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark transition-all"
               />
             </div>
           </div>
@@ -328,12 +328,12 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
         {/* Active Filter Chips */}
         {hasActiveFilters && (
-          <div className="px-4 pb-4 space-y-2">
+          <div className="px-4 pb-4 space-y-2 border-t-2 border-black dark:border-white pt-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Filters:</span>
+              <span className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Active Filters:</span>
               <button
                 onClick={clearAllFilters}
-                className="text-sm font-medium text-primary hover:underline"
+                className="text-sm font-bold uppercase text-primary hover:underline"
               >
                 Clear All
               </button>
@@ -342,7 +342,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {searchQuery && (
                 <button
                   onClick={() => removeFilter('search')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-bright text-text-light text-sm font-bold uppercase border-2 border-black rounded-sm hover:bg-accent transition-colors"
                 >
                   <span>Search: {searchQuery}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,7 +353,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {(dateFrom || dateTo) && (
                 <button
                   onClick={() => removeFilter('dates')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-bright text-text-light text-sm font-bold uppercase border-2 border-black rounded-sm hover:bg-accent transition-colors"
                 >
                   <span>
                     {dateFrom && dateTo
@@ -370,7 +370,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {equipmentFilter.length > 0 && (
                 <button
                   onClick={() => removeFilter('equipment')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-bright text-text-light text-sm font-bold uppercase border-2 border-black rounded-sm hover:bg-accent transition-colors"
                 >
                   <span>Equipment: {equipmentFilter.join(', ')}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -381,7 +381,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               {muscleGroupsFilter.length > 0 && (
                 <button
                   onClick={() => removeFilter('muscle_groups')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-light dark:bg-accent-dark text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-bright text-text-light text-sm font-bold uppercase border-2 border-black rounded-sm hover:bg-accent transition-colors"
                 >
                   <span>Muscles: {muscleGroupsFilter.join(', ')}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,17 +400,17 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 animate-pulse"
+              className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-4 animate-pulse"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0" />
+                <div className="w-12 h-12 bg-background-light dark:bg-background-dark border-2 border-black dark:border-white flex-shrink-0" />
                 <div className="flex-grow space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32" />
-                    <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24" />
+                    <div className="h-6 bg-background-light dark:bg-background-dark border-2 border-black dark:border-white w-32" />
+                    <div className="h-5 bg-background-light dark:bg-background-dark border-2 border-black dark:border-white w-24" />
                   </div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full max-w-md" />
+                  <div className="h-4 bg-background-light dark:bg-background-dark border-2 border-black dark:border-white w-48" />
+                  <div className="h-4 bg-background-light dark:bg-background-dark border-2 border-black dark:border-white w-full max-w-md" />
                 </div>
               </div>
             </div>
@@ -420,11 +420,11 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Error State */}
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-          <p className="text-red-800 dark:text-red-200">{error}</p>
+        <div className="bg-danger/10 border-3 border-danger rounded-sm p-4">
+          <p className="text-danger font-bold">{error}</p>
           <button
             onClick={fetchWorkouts}
-            className="mt-2 text-sm text-red-600 dark:text-red-400 hover:underline"
+            className="mt-2 text-sm text-danger hover:underline font-bold"
           >
             Try again
           </button>
@@ -433,9 +433,9 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Empty State */}
       {!loading && !error && workouts.length === 0 && (
-        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-12 text-center">
+        <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-12 text-center">
           <div className="text-6xl mb-4">🏋️</div>
-          <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-2">
+          <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-2">
             No workouts found
           </h3>
           <p className="text-subtext-light dark:text-subtext-dark mb-4">
@@ -453,7 +453,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
             <button
               key={workout.id}
               onClick={() => setSelectedWorkout(workout)}
-              className="w-full bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow p-4 text-left"
+              className="w-full bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white hover:border-accent hover:shadow-brutal-lg transition-all p-4 text-left"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}
@@ -464,10 +464,10 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                 {/* Content */}
                 <div className="flex-grow min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">
+                    <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark">
                       Workout
                     </h3>
-                    <span className="text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
+                    <span className="text-sm font-bold text-subtext-light dark:text-subtext-dark flex-shrink-0">
                       {format(new Date(workout.workout_date), 'MMM d, yyyy')}
                     </span>
                   </div>
@@ -477,7 +477,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
                   </p>
 
                   {workout.notes && (
-                    <p className="text-sm text-gray-500 dark:text-gray-500 truncate">
+                    <p className="text-sm text-subtext-light dark:text-subtext-dark truncate">
                       {workout.notes}
                     </p>
                   )}
@@ -490,10 +490,10 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Pagination */}
       {!loading && !error && totalPages > 1 && (
-        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4">
+        <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Results Info */}
-            <div className="text-sm text-subtext-light dark:text-subtext-dark">
+            <div className="text-sm font-bold uppercase text-subtext-light dark:text-subtext-dark">
               Showing {startItem}-{endItem} of {total} workout{total !== 1 ? 's' : ''}
             </div>
 
@@ -502,23 +502,23 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
+                className="px-4 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[90px]"
                 aria-label="Previous page"
               >
-                Previous
+                ← Prev
               </button>
-              <div className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 min-w-[100px] justify-center">
-                <span className="font-medium">{page}</span>
+              <div className="flex items-center px-3 py-2 text-sm font-bold text-text-light dark:text-text-dark min-w-[100px] justify-center border-2 border-black dark:border-white rounded-sm">
+                <span>{page}</span>
                 <span className="mx-1">/</span>
                 <span>{totalPages}</span>
               </div>
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className="px-4 py-2 text-sm font-medium text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-700 transition-colors min-w-[90px]"
+                className="px-4 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-accent-light dark:bg-accent-dark border-2 border-black dark:border-white rounded-sm hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[90px]"
                 aria-label="Next page"
               >
-                Next
+                Next →
               </button>
             </div>
           </div>
@@ -527,7 +527,7 @@ export default function WorkoutList({ userId }: WorkoutListProps) {
 
       {/* Results Summary for Single Page */}
       {!loading && !error && workouts.length > 0 && totalPages === 1 && (
-        <div className="text-center text-sm text-subtext-light dark:text-subtext-dark">
+        <div className="text-center text-sm font-bold uppercase text-subtext-light dark:text-subtext-dark">
           Showing all {total} workout{total !== 1 ? 's' : ''}
         </div>
       )}

@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { useImportWorkouts } from '@/lib/hooks/useImport';
 import CsvUpload from '@/components/import/csv-upload';
 import ColumnMapper from '@/components/import/column-mapper';
-import type { ImportPreview, CsvMapping } from '@/types/import';
+import type { ImportPreview, CsvMapping, CsvRow } from '@/types/import';
 import Papa from 'papaparse';
 
 type Step = 'upload' | 'map' | 'review' | 'importing' | 'complete';
@@ -21,7 +21,7 @@ export default function ImportPage() {
   const [preview, setPreview] = useState<ImportPreview | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [mapping, setMapping] = useState<CsvMapping>({ dateColumn: '' });
-  const [allRows, setAllRows] = useState<any[]>([]);
+  const [allRows, setAllRows] = useState<CsvRow[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -39,7 +39,7 @@ export default function ImportPage() {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        setAllRows(results.data);
+        setAllRows(results.data as CsvRow[]);
       },
     });
   };
@@ -84,27 +84,27 @@ export default function ImportPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
+        <div className="text-lg font-bold uppercase text-text-light dark:text-text-dark">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark">
+      <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
                 Import Workouts
               </h1>
             </Link>
             <Link
               href="/workouts"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="text-sm text-primary hover:underline font-bold uppercase"
             >
-              Back to Workouts
+              ← Back to Workouts
             </Link>
           </div>
         </div>
@@ -113,23 +113,23 @@ export default function ImportPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Progress Bar */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className={`text-sm font-medium ${step === 'upload' ? 'text-blue-600' : 'text-gray-500'}`}>
+          <div className="flex items-center justify-between mb-2 gap-2">
+            <span className={`text-sm font-bold uppercase ${step === 'upload' ? 'text-text-light dark:text-text-dark bg-accent px-2 py-1' : 'text-subtext-light dark:text-subtext-dark'}`}>
               1. Upload
             </span>
-            <span className={`text-sm font-medium ${step === 'map' ? 'text-blue-600' : 'text-gray-500'}`}>
+            <span className={`text-sm font-bold uppercase ${step === 'map' ? 'text-text-light dark:text-text-dark bg-accent px-2 py-1' : 'text-subtext-light dark:text-subtext-dark'}`}>
               2. Map Columns
             </span>
-            <span className={`text-sm font-medium ${step === 'review' ? 'text-blue-600' : 'text-gray-500'}`}>
+            <span className={`text-sm font-bold uppercase ${step === 'review' ? 'text-text-light dark:text-text-dark bg-accent px-2 py-1' : 'text-subtext-light dark:text-subtext-dark'}`}>
               3. Review
             </span>
-            <span className={`text-sm font-medium ${step === 'importing' || step === 'complete' ? 'text-blue-600' : 'text-gray-500'}`}>
+            <span className={`text-sm font-bold uppercase ${step === 'importing' || step === 'complete' ? 'text-text-light dark:text-text-dark bg-accent px-2 py-1' : 'text-subtext-light dark:text-subtext-dark'}`}>
               4. Import
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-background-light dark:bg-background-dark h-3 border-2 border-black dark:border-white rounded-sm overflow-hidden">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-black dark:bg-white h-full transition-all duration-300"
               style={{
                 width:
                   step === 'upload'
@@ -145,7 +145,7 @@ export default function ImportPage() {
         </div>
 
         {/* Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6">
           {step === 'upload' && <CsvUpload onParsed={handleParsed} />}
 
           {step === 'map' && preview && (
@@ -159,57 +159,57 @@ export default function ImportPage() {
 
           {step === 'review' && preview && (
             <div className="space-y-6">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
+              <div className="bg-accent-light dark:bg-accent-dark border-3 border-black dark:border-white rounded-sm p-4">
+                <p className="text-sm text-text-light dark:text-text-dark">
                   Review your import settings before proceeding. This will import{' '}
                   <strong>{preview.totalRows} rows</strong> from <strong>{file?.name}</strong>.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Column Mapping</h3>
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-2">Column Mapping</h3>
+                <div className="bg-background-light dark:bg-background-dark border-3 border-black dark:border-white rounded-sm p-4">
                   <dl className="grid grid-cols-2 gap-4">
                     {mapping.dateColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Date:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.dateColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Date:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.dateColumn}</dd>
                       </>
                     )}
                     {mapping.workoutTypeColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Workout Type:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.workoutTypeColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Workout Type:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.workoutTypeColumn}</dd>
                       </>
                     )}
                     {mapping.exerciseColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Exercise:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.exerciseColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Exercise:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.exerciseColumn}</dd>
                       </>
                     )}
                     {mapping.weightColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Weight:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.weightColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Weight:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.weightColumn}</dd>
                       </>
                     )}
                     {mapping.repsColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Reps:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.repsColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Reps:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.repsColumn}</dd>
                       </>
                     )}
                     {mapping.setsColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Sets:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.setsColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Sets:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.setsColumn}</dd>
                       </>
                     )}
                     {mapping.notesColumn && (
                       <>
-                        <dt className="text-sm font-medium text-gray-700">Notes:</dt>
-                        <dd className="text-sm text-gray-600">{mapping.notesColumn}</dd>
+                        <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Notes:</dt>
+                        <dd className="text-sm text-subtext-light dark:text-subtext-dark">{mapping.notesColumn}</dd>
                       </>
                     )}
                   </dl>
@@ -219,13 +219,13 @@ export default function ImportPage() {
               <div className="flex gap-4">
                 <button
                   onClick={handleBackToMap}
-                  className="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                  className="flex-1 px-4 py-3 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleImport}
-                  className="flex-1 px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                  className="flex-1 px-4 py-3 text-sm font-bold uppercase text-white bg-primary border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
                 >
                   Start Import
                 </button>
@@ -235,18 +235,18 @@ export default function ImportPage() {
 
           {step === 'importing' && (
             <div className="flex flex-col items-center gap-4 py-12">
-              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-lg font-medium text-gray-700">Importing workouts...</p>
-              <p className="text-sm text-gray-500">This may take a moment</p>
+              <div className="w-16 h-16 border-4 border-black dark:border-white border-t-primary animate-spin"></div>
+              <p className="text-lg font-bold uppercase text-text-light dark:text-text-dark">Importing workouts...</p>
+              <p className="text-sm text-subtext-light dark:text-subtext-dark">This may take a moment</p>
             </div>
           )}
 
           {step === 'complete' && importMutation.data && (
             <div className="space-y-6">
               <div className="text-center py-6">
-                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-sm bg-success border-3 border-black mb-4">
                   <svg
-                    className="h-8 w-8 text-green-600"
+                    className="h-8 w-8 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -254,31 +254,31 @@ export default function ImportPage() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={3}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Import Complete!</h2>
-                <p className="text-gray-600">Your workouts have been imported successfully.</p>
+                <h2 className="text-2xl font-bold uppercase text-text-light dark:text-text-dark mb-2">Import Complete!</h2>
+                <p className="text-subtext-light dark:text-subtext-dark">Your workouts have been imported successfully.</p>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Import Summary</h3>
+              <div className="bg-background-light dark:bg-background-dark border-3 border-black dark:border-white rounded-sm p-6">
+                <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-4">Import Summary</h3>
                 <dl className="space-y-2">
                   <div className="flex justify-between">
-                    <dt className="text-sm font-medium text-gray-700">Total Rows:</dt>
-                    <dd className="text-sm text-gray-900">{importMutation.data.total}</dd>
+                    <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Total Rows:</dt>
+                    <dd className="text-sm text-text-light dark:text-text-dark">{importMutation.data.total}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-sm font-medium text-gray-700">Successfully Imported:</dt>
-                    <dd className="text-sm text-green-600 font-semibold">
+                    <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Successfully Imported:</dt>
+                    <dd className="text-sm text-success font-bold">
                       {importMutation.data.successful}
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-sm font-medium text-gray-700">Failed:</dt>
-                    <dd className="text-sm text-red-600 font-semibold">
+                    <dt className="text-sm font-bold uppercase text-text-light dark:text-text-dark">Failed:</dt>
+                    <dd className="text-sm text-danger font-bold">
                       {importMutation.data.failed}
                     </dd>
                   </div>
@@ -286,16 +286,16 @@ export default function ImportPage() {
               </div>
 
               {importMutation.data.errors.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <h4 className="text-sm font-medium text-red-800 mb-2">Errors:</h4>
-                  <ul className="text-sm text-red-700 space-y-1 max-h-48 overflow-y-auto">
+                <div className="bg-danger/10 border-3 border-danger rounded-sm p-4">
+                  <h4 className="text-sm font-bold uppercase text-danger mb-2">Errors:</h4>
+                  <ul className="text-sm text-danger space-y-1 max-h-48 overflow-y-auto">
                     {importMutation.data.errors.slice(0, 10).map((error, idx) => (
                       <li key={idx}>
                         Row {error.row}: {error.message} ({error.field})
                       </li>
                     ))}
                     {importMutation.data.errors.length > 10 && (
-                      <li className="font-medium">
+                      <li className="font-bold">
                         ... and {importMutation.data.errors.length - 10} more errors
                       </li>
                     )}
@@ -306,13 +306,13 @@ export default function ImportPage() {
               <div className="flex gap-4">
                 <button
                   onClick={handleBackToUpload}
-                  className="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                  className="flex-1 px-4 py-3 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
                 >
                   Import Another File
                 </button>
                 <Link
                   href="/workouts"
-                  className="flex-1 px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-center"
+                  className="flex-1 px-4 py-3 text-sm font-bold uppercase text-white bg-primary border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-center"
                 >
                   View Workouts
                 </Link>
@@ -321,8 +321,8 @@ export default function ImportPage() {
           )}
 
           {importMutation.isError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-600">
+            <div className="bg-danger/10 border-3 border-danger rounded-sm p-4">
+              <p className="text-sm text-danger font-bold">
                 {importMutation.error instanceof Error
                   ? importMutation.error.message
                   : 'Import failed. Please try again.'}

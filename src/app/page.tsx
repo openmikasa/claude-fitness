@@ -59,7 +59,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+        <div className="text-lg font-bold uppercase">Loading...</div>
       </div>
     );
   }
@@ -71,14 +71,14 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-0">
       {/* Header */}
-      <header className="bg-card-light dark:bg-card-dark shadow-sm">
+      <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">
+          <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
             Claude Fitness
           </h1>
           <button
             onClick={() => signOut()}
-            className="px-4 py-2 text-sm font-medium text-subtext-light dark:text-subtext-dark hover:text-primary transition-colors"
+            className="px-4 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark underline hover:text-primary transition-colors"
           >
             Sign out
           </button>
@@ -88,9 +88,16 @@ export default function Home() {
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-text-light dark:text-text-dark mb-2">
-            Your winter arc starts here
+          <h2 className="text-3xl md:text-4xl font-bold text-text-light dark:text-text-dark mb-4 leading-tight">
+            <span className="heading-underline block">YOUR WINTER</span>
+            <span className="heading-underline block mt-2">ARC STARTS</span>
+            <span className="heading-underline block mt-2">HERE</span>
           </h2>
+        </div>
+
+        {/* System Ready Callout */}
+        <div className="bg-card-light dark:bg-card-dark border-3 border-black dark:border-white border-l-6 border-l-accent rounded-sm p-4 shadow-brutal mb-8">
+          <p className="font-bold text-accent">&gt;&gt;&gt; SYSTEM READY</p>
           <p className="text-subtext-light dark:text-subtext-dark">
             Start by uploading your training history, then generate a new AI-powered program.
           </p>
@@ -99,12 +106,12 @@ export default function Home() {
         {/* Backfill Banner */}
         {unmigratedCount > 0 && (
           <div
-            className="mb-8 bg-accent-light dark:bg-accent-dark border-l-4 border-primary p-4 rounded-2xl"
+            className="mb-8 bg-card-light dark:bg-card-dark border-3 border-black dark:border-white border-l-6 border-l-primary p-4 rounded-sm shadow-brutal"
             data-testid="backfill-banner"
           >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-1">
+                <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-1">
                   Enhance Your Workout Data
                 </h3>
                 <p className="text-sm text-subtext-light dark:text-subtext-dark mb-3">
@@ -114,14 +121,14 @@ export default function Home() {
                 </p>
                 <button
                   onClick={() => setShowBackfillModal(true)}
-                  className="px-4 py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all text-sm"
+                  className="px-4 py-3 bg-primary text-white border-3 border-black dark:border-white rounded-sm font-bold uppercase shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-sm"
                 >
                   Start Migration
                 </button>
               </div>
               <button
                 onClick={() => setUnmigratedCount(0)}
-                className="text-primary hover:text-primary/80 text-xl font-bold ml-4"
+                className="text-text-light dark:text-text-dark hover:text-primary text-2xl font-bold ml-4"
               >
                 ×
               </button>
@@ -137,7 +144,7 @@ export default function Home() {
         />
 
         {/* Quick actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
           <ActionCard
             title="Log Workout"
             description="Record your training session"
@@ -177,15 +184,15 @@ export default function Home() {
         </div>
 
         {/* Recent workouts */}
-        <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">
+            <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark">
               Recent Workouts
             </h3>
             {workouts && workouts.length > 0 && (
               <Link
                 href="/workouts"
-                className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
+                className="text-sm text-primary hover:underline font-bold uppercase transition-colors"
               >
                 View all →
               </Link>
@@ -194,10 +201,10 @@ export default function Home() {
 
           {workoutsLoading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+              <div className="w-8 h-8 border-3 border-black dark:border-white border-t-primary mx-auto animate-spin"></div>
             </div>
           ) : !workouts || workouts.length === 0 ? (
-            <p className="text-subtext-light dark:text-subtext-dark text-center py-8">
+            <p className="text-subtext-light dark:text-subtext-dark text-center py-8 uppercase">
               No workouts yet. Start by logging your first session!
             </p>
           ) : (
@@ -213,18 +220,18 @@ export default function Home() {
                   <Link
                     key={workout.id}
                     href={`/workouts/${workout.id}/edit`}
-                    className="block p-4 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-primary hover:shadow-md transition-all"
+                    className="block p-4 rounded-sm border-3 border-black dark:border-white hover:border-accent hover:shadow-brutal-sm transition-all bg-card-light dark:bg-card-dark"
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-text-light dark:text-text-dark">
+                        <p className="font-bold text-text-light dark:text-text-dark">
                           {format(parseISO(workout.workout_date), 'EEEE, MMM d')}
                         </p>
                         <p className="text-sm text-subtext-light dark:text-subtext-dark mt-1">
                           {exerciseCount} exercise{exerciseCount !== 1 ? 's' : ''} · {totalSets} set{totalSets !== 1 ? 's' : ''}
                         </p>
                       </div>
-                      <span className="text-subtext-light dark:text-subtext-dark">→</span>
+                      <span className="text-text-light dark:text-text-dark font-bold">→</span>
                     </div>
                   </Link>
                 );
@@ -235,7 +242,7 @@ export default function Home() {
       </main>
 
       {/* Bottom navigation for mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card-light/90 dark:bg-card-dark/90 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card-light dark:bg-card-dark border-t-3 border-black dark:border-white md:hidden">
         <div className="grid grid-cols-4 gap-1">
           <NavButton href="/" label="Home" icon="🏠" />
           <NavButton href="/workouts/log" label="Log" icon="➕" />
@@ -256,12 +263,12 @@ function ActionCard({ title, description, href, icon }: {
   return (
     <a
       href={href}
-      className="block p-6 bg-card-light dark:bg-card-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md hover:-translate-y-1 transition-all"
+      className="block p-6 bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white hover:border-accent hover:shadow-brutal-lg transition-all"
     >
-      <div className="w-12 h-12 rounded-full bg-accent-light dark:bg-accent-dark flex items-center justify-center mb-4 border border-gray-100 dark:border-gray-700">
+      <div className="w-12 h-12 rounded-sm bg-accent-light dark:bg-accent-dark flex items-center justify-center mb-4 border-2 border-black dark:border-white">
         <span className="text-2xl">{icon}</span>
       </div>
-      <h3 className="text-lg font-semibold text-text-light dark:text-text-dark mb-1">
+      <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-1">
         {title}
       </h3>
       <p className="text-sm text-subtext-light dark:text-subtext-dark">
@@ -279,10 +286,10 @@ function NavButton({ href, label, icon }: {
   return (
     <a
       href={href}
-      className="flex flex-col items-center justify-center py-3 text-subtext-light dark:text-subtext-dark hover:text-primary transition-colors"
+      className="flex flex-col items-center justify-center py-3 text-text-light dark:text-text-dark hover:text-primary transition-colors"
     >
       <span className="text-2xl mb-1">{icon}</span>
-      <span className="text-xs">{label}</span>
+      <span className="text-xs font-bold uppercase">{label}</span>
     </a>
   );
 }

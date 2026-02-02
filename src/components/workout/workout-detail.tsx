@@ -67,14 +67,14 @@ export default function WorkoutDetail({
   // If in edit mode, show the form
   if (isEditMode) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold uppercase text-text-light dark:text-text-dark">
             Edit Workout
           </h2>
           <button
             onClick={() => setIsEditMode(false)}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none"
+            className="text-text-light dark:text-text-dark hover:text-primary text-2xl leading-none font-bold"
           >
             ×
           </button>
@@ -93,10 +93,10 @@ export default function WorkoutDetail({
 
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exercises</h3>
+        <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark">Exercises</h3>
         {exercises.map((exercise, idx) => (
-          <div key={idx} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 dark:text-white mb-2">{exercise.name}</h4>
+          <div key={idx} className="bg-background-light dark:bg-background-dark border-3 border-black dark:border-white rounded-sm p-4">
+            <h4 className="font-bold text-text-light dark:text-text-dark mb-2">{exercise.name}</h4>
 
             {/* Equipment and Muscle Groups */}
             {(exercise.equipment.length > 0 || exercise.muscle_groups.length > 0) && (
@@ -104,7 +104,7 @@ export default function WorkoutDetail({
                 {exercise.equipment.map((eq) => (
                   <span
                     key={eq}
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                    className="inline-flex items-center px-2 py-1 text-xs font-bold uppercase bg-accent-bright text-text-light border-2 border-black rounded-sm"
                   >
                     {eq}
                   </span>
@@ -112,7 +112,7 @@ export default function WorkoutDetail({
                 {exercise.muscle_groups.map((mg) => (
                   <span
                     key={mg}
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                    className="inline-flex items-center px-2 py-1 text-xs font-bold uppercase bg-primary/20 text-primary border-2 border-primary rounded-sm"
                   >
                     {mg}
                   </span>
@@ -127,13 +127,13 @@ export default function WorkoutDetail({
                 return (
                   <div
                     key={setIdx}
-                    className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+                    className="flex items-center justify-between text-sm text-text-light dark:text-text-dark"
                   >
-                    <span>Set {setIdx + 1}</span>
+                    <span className="font-bold">Set {setIdx + 1}</span>
                     <span>
                       {value}{unit} × {set.reps} reps
                       {set.notes && (
-                        <span className="text-xs text-gray-500 dark:text-gray-500 italic ml-2">
+                        <span className="text-xs text-subtext-light dark:text-subtext-dark italic ml-2">
                           ({set.notes})
                         </span>
                       )}
@@ -150,21 +150,21 @@ export default function WorkoutDetail({
 
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 p-6">
+      <div className="border-b-3 border-black dark:border-white p-6">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold uppercase text-text-light dark:text-text-dark mb-2">
               Workout
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-subtext-light dark:text-subtext-dark font-bold">
               {format(new Date(workout.workout_date), 'EEEE, MMMM d, yyyy')}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none"
+            className="text-text-light dark:text-text-dark hover:text-primary text-2xl leading-none font-bold"
           >
             ×
           </button>
@@ -178,9 +178,9 @@ export default function WorkoutDetail({
         {/* Notes */}
         {workout.notes && (
           <div className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+            <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-2">Notes</h3>
+            <div className="bg-background-light dark:bg-background-dark border-3 border-black dark:border-white rounded-sm p-4">
+              <p className="text-text-light dark:text-text-dark whitespace-pre-wrap">
                 {workout.notes}
               </p>
             </div>
@@ -188,17 +188,17 @@ export default function WorkoutDetail({
         )}
 
         {/* Timestamps */}
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-6 pt-6 border-t-3 border-black dark:border-white">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-600 dark:text-gray-400">Created: </span>
-              <span className="text-gray-900 dark:text-white">
+              <span className="text-subtext-light dark:text-subtext-dark font-bold uppercase">Created: </span>
+              <span className="text-text-light dark:text-text-dark">
                 {format(new Date(workout.created_at), 'MMM d, yyyy h:mm a')}
               </span>
             </div>
             <div>
-              <span className="text-gray-600 dark:text-gray-400">Updated: </span>
-              <span className="text-gray-900 dark:text-white">
+              <span className="text-subtext-light dark:text-subtext-dark font-bold uppercase">Updated: </span>
+              <span className="text-text-light dark:text-text-dark">
                 {format(new Date(workout.updated_at), 'MMM d, yyyy h:mm a')}
               </span>
             </div>
@@ -207,19 +207,18 @@ export default function WorkoutDetail({
       </div>
 
       {/* Actions */}
-      <div className="border-t border-gray-200 dark:border-gray-700 p-6">
+      <div className="border-t-3 border-black dark:border-white p-6">
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="flex-1 px-4 py-3 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
           >
             Close
           </button>
 
-          {/* Edit button placeholder - could implement edit functionality later */}
           <button
             onClick={() => setIsEditMode(true)}
-            className="flex-1 px-4 py-2 text-sm font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+            className="flex-1 px-4 py-3 text-sm font-bold uppercase text-primary bg-accent-light dark:bg-accent-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
           >
             Edit
           </button>
@@ -227,14 +226,14 @@ export default function WorkoutDetail({
           <button
             onClick={() => setShowDeleteConfirm(true)}
             disabled={isDeleting}
-            className="flex-1 px-4 py-2 text-sm font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-4 py-3 text-sm font-bold uppercase text-danger bg-danger/10 border-3 border-danger rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             {isDeleting ? 'Deleting...' : 'Delete'}
           </button>
         </div>
 
         {deleteError && (
-          <div className="mt-3 text-sm text-red-600 dark:text-red-400">
+          <div className="mt-3 text-sm text-danger font-bold">
             {deleteError}
           </div>
         )}
@@ -243,25 +242,25 @@ export default function WorkoutDetail({
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <div className="bg-card-light dark:bg-card-dark rounded-sm shadow-brutal border-3 border-black dark:border-white max-w-md w-full p-6">
+            <h3 className="text-lg font-bold uppercase text-text-light dark:text-text-dark mb-2">
               Delete Workout?
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-subtext-light dark:text-subtext-dark mb-6">
               This action cannot be undone. Are you sure you want to delete this workout?
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 transition-colors"
+                className="flex-1 px-4 py-3 text-sm font-bold uppercase text-text-light dark:text-text-dark bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 px-4 py-3 text-sm font-bold uppercase text-white bg-danger border-3 border-black dark:border-white rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
               </button>

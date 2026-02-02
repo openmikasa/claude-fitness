@@ -40,8 +40,9 @@ export default function LoginPage() {
         await signIn(email, password);
         router.push('/');
       }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -49,15 +50,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark p-4">
-      <div className="max-w-md w-full space-y-8 bg-card-light dark:bg-card-dark p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-800">
+      <div className="max-w-md w-full space-y-8 bg-card-light dark:bg-card-dark p-8 rounded-sm shadow-brutal border-3 border-black dark:border-white">
         <div>
-          <h2 className="text-center text-3xl font-bold text-text-light dark:text-text-dark">
-            {isSignUp ? 'Create your account' : 'Sign in to your account'}
+          <h2 className="text-center text-3xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
+            {isSignUp ? 'Create Account' : 'Sign In'}
           </h2>
-          <p className="mt-2 text-center text-sm text-subtext-light dark:text-subtext-dark">
+          <p className="mt-4 text-center text-sm text-subtext-light dark:text-subtext-dark">
             Winter Arc is a fitness app to generate programs and log your workouts, powered by AI.
             <br />
-            If you wanna try it, contact me <a href="https://github.com/openmikasa" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 underline">@openmikasa</a> on GitHub.
+            If you wanna try it, contact me <a href="https://github.com/openmikasa" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">@openmikasa</a> on GitHub.
           </p>
         </div>
 
@@ -65,7 +66,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             {isSignUp && (
               <div>
-                <label htmlFor="accessCode" className="block text-sm font-medium text-text-light dark:text-text-dark">
+                <label htmlFor="accessCode" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-1">
                   Access Code
                 </label>
                 <input
@@ -75,14 +76,14 @@ export default function LoginPage() {
                   required
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white transition-colors"
+                  className="block w-full px-3 py-3 border-3 border-black dark:border-white rounded-sm placeholder-subtext-light dark:placeholder-subtext-dark focus:outline-none focus:border-accent focus:shadow-brutal-sm dark:bg-card-dark dark:text-white transition-all"
                   placeholder="Enter access code"
                 />
               </div>
             )}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-light dark:text-text-dark">
-                Email address
+              <label htmlFor="email" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-1">
+                Email Address
               </label>
               <input
                 id="email"
@@ -92,13 +93,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white transition-colors"
+                className="block w-full px-3 py-3 border-3 border-black dark:border-white rounded-sm placeholder-subtext-light dark:placeholder-subtext-dark focus:outline-none focus:border-accent focus:shadow-brutal-sm dark:bg-card-dark dark:text-white transition-all"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text-light dark:text-text-dark">
+              <label htmlFor="password" className="block text-sm font-bold uppercase text-text-light dark:text-text-dark mb-1">
                 Password
               </label>
               <input
@@ -109,7 +110,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white transition-colors"
+                className="block w-full px-3 py-3 border-3 border-black dark:border-white rounded-sm placeholder-subtext-light dark:placeholder-subtext-dark focus:outline-none focus:border-accent focus:shadow-brutal-sm dark:bg-card-dark dark:text-white transition-all"
                 placeholder="••••••••"
                 minLength={6}
               />
@@ -117,7 +118,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className={`text-sm ${error.includes('Check your email') ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-sm font-bold p-3 border-2 rounded-sm ${error.includes('Check your email') ? 'text-success border-success bg-success/10' : 'text-danger border-danger bg-danger/10'}`}>
               {error}
             </div>
           )}
@@ -126,9 +127,9 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3.5 px-4 rounded-xl text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/30 active:scale-[0.98] transition-all"
+              className="w-full flex justify-center py-4 px-4 rounded-sm text-sm font-bold uppercase text-white bg-primary border-3 border-black dark:border-white shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              {loading ? 'Processing...' : (isSignUp ? 'Sign up' : 'Sign in')}
+              {loading ? 'Processing...' : (isSignUp ? 'Sign Up' : 'Sign In')}
             </button>
           </div>
 
@@ -139,7 +140,7 @@ export default function LoginPage() {
                 setIsSignUp(!isSignUp);
                 setError('');
               }}
-              className="text-sm text-primary hover:text-primary/80 transition-colors"
+              className="text-sm text-primary hover:underline font-bold transition-colors"
             >
               {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
             </button>

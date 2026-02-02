@@ -119,17 +119,17 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-md transition-opacity ${
+          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-sm shadow-brutal border-3 transition-opacity ${
             toast.type === 'success'
-              ? 'bg-accent-light dark:bg-accent-dark border-2 border-primary text-text-light dark:text-text-dark'
-              : 'bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
+              ? 'bg-success/10 border-success text-success'
+              : 'bg-danger/10 border-danger text-danger'
           }`}
         >
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">{toast.message}</span>
+            <span className="text-sm font-bold uppercase">{toast.message}</span>
             <button
               onClick={() => setToast(null)}
-              className="hover:opacity-70 transition-opacity"
+              className="hover:opacity-70 transition-opacity font-bold"
               aria-label="Close"
             >
               ×
@@ -139,24 +139,24 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
       )}
 
       {/* Header */}
-      <header className="bg-card-light dark:bg-card-dark border-b border-gray-100 dark:border-gray-800">
+      <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 hover:bg-accent-light dark:hover:bg-accent-dark rounded-full transition-colors"
+              className="p-2 hover:bg-accent-light dark:hover:bg-accent-dark border-2 border-black dark:border-white rounded-sm transition-colors"
             >
               <svg className="w-6 h-6 text-text-light dark:text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
-            <h1 className="text-xl font-bold text-text-light dark:text-text-dark">
+            <h1 className="text-xl font-bold uppercase text-text-light dark:text-text-dark">
               Log Workout
             </h1>
           </div>
           <Link
             href="/workouts"
-            className="text-primary hover:text-primary/80 font-medium transition-colors"
+            className="text-primary hover:underline font-bold uppercase transition-colors"
           >
             Cancel
           </Link>
@@ -165,8 +165,8 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         {/* Date Display */}
-        <div className="flex items-center justify-center gap-3 py-4">
-          <svg className="w-5 h-5 text-subtext-light dark:text-subtext-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-center justify-center gap-3 py-4 bg-card-light dark:bg-card-dark border-3 border-black dark:border-white rounded-sm">
+          <svg className="w-5 h-5 text-text-light dark:text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <input
@@ -174,14 +174,14 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
             value={workoutDate}
             onChange={(e) => setWorkoutDate(e.target.value)}
             max={new Date().toISOString().split('T')[0]}
-            className="text-lg font-medium text-text-light dark:text-text-dark bg-transparent border-none focus:outline-none cursor-pointer"
+            className="text-lg font-bold text-text-light dark:text-text-dark bg-transparent border-none focus:outline-none cursor-pointer"
           />
         </div>
 
         {/* Program Selector - Only show when creating new workout */}
         {!workoutId && (
           <div>
-            <label className="block text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wide mb-2">
+            <label className="block text-xs font-bold text-subtext-light dark:text-subtext-dark uppercase tracking-wide mb-2">
               Program (Optional)
             </label>
             <ProgramDaySelector
@@ -212,9 +212,9 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
       {/* Loading Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-          <div className="bg-card-light dark:bg-card-dark rounded-2xl p-8 flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-text-light dark:text-text-dark font-medium">
+          <div className="bg-card-light dark:bg-card-dark rounded-sm border-3 border-black dark:border-white shadow-brutal p-8 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-black dark:border-white border-t-primary animate-spin"></div>
+            <p className="text-text-light dark:text-text-dark font-bold uppercase">
               {workoutId ? 'Updating workout...' : 'Saving workout...'}
             </p>
           </div>
