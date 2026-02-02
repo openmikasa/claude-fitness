@@ -72,10 +72,7 @@ export default function Home() {
     <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-0">
       {/* Header */}
       <header className="bg-card-light dark:bg-card-dark border-b-3 border-black dark:border-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
-            Claude Fitness
-          </h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-end items-center">
           <button
             onClick={() => signOut()}
             className="px-4 py-2 text-sm font-bold uppercase text-text-light dark:text-text-dark underline hover:text-primary transition-colors"

@@ -9,12 +9,31 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [accessCode, setAccessCode] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isResetMode, setIsResetMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, resetPassword } = useAuth();
   const router = useRouter();
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      await resetPassword(email);
+      setError('Check your email for a password reset link!');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,8 +142,9 @@ export default function LoginPage() {
                 {!isSignUp && (
                   <button
                     type="button"
-                    onClick={() => {/* TODO: Implement password reset */}}
-                    className="text-xs font-bold uppercase tracking-wider text-black hover:text-[#22FF00] transition-colors"
+                    onClick={handleResetPassword}
+                    disabled={loading}
+                    className="text-xs font-bold uppercase tracking-wider text-black hover:text-[#22FF00] transition-colors disabled:opacity-50"
                   >
                     LOST KEY?
                   </button>
