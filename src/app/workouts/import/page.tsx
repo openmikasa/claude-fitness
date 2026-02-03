@@ -96,9 +96,14 @@ export default function ImportPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
-                Import Workouts
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
+                  Import Workouts
+                </h1>
+                <p className="text-xs text-subtext-light dark:text-subtext-dark mt-1 font-medium">
+                  Wanna let us know what happened during the time skip?
+                </p>
+              </div>
             </Link>
             <Link
               href="/workouts"

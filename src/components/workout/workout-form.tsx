@@ -147,9 +147,14 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
-            <h1 className="text-xl font-black uppercase text-black tracking-tight">
-              Log Workout
-            </h1>
+            <div>
+              <h1 className="text-xl font-black uppercase text-black tracking-tight">
+                Log Workout
+              </h1>
+              <p className="text-xs text-black/70 mt-0.5 font-medium">
+                This is the part of the episode where you prove you aren&apos;t just a side character.
+              </p>
+            </div>
           </div>
           <Link
             href="/workouts"

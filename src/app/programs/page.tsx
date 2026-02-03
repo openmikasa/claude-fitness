@@ -32,6 +32,9 @@ export default function ProgramsPage() {
     <div className="min-h-screen bg-background-light dark:bg-background-dark pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-black text-black mb-2">AI Programs</h1>
+        <p className="text-sm text-black/70 mb-2 font-medium">
+          Let your digital Sensei train you.
+        </p>
         <div className="w-full h-[3px] bg-black mb-8" />
 
         <div className="space-y-6">

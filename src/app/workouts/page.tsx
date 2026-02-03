@@ -31,9 +31,14 @@ export default function WorkoutsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
-                Workout History
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">
+                  Workout History
+                </h1>
+                <p className="text-xs text-subtext-light dark:text-subtext-dark mt-1 font-medium">
+                  Get a flashback of your origin story. Scroll through the sweat and tears of your previous arcs.
+                </p>
+              </div>
             </Link>
             <Link
               href="/workouts/log"

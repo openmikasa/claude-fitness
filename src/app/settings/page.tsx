@@ -54,7 +54,12 @@ export default function SettingsPage() {
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
           <div className='flex items-center justify-between'>
             <Link href='/' className='hover:opacity-80 transition-opacity'>
-              <h1 className='text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark'>Settings</h1>
+              <div>
+                <h1 className='text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark'>Settings</h1>
+                <p className='text-xs text-subtext-light dark:text-subtext-dark mt-1 font-medium'>
+                  Adjust your limiter until you can break it.
+                </p>
+              </div>
             </Link>
             <Link href='/' className='text-sm text-primary hover:underline font-bold uppercase transition-colors'>
               ← Back

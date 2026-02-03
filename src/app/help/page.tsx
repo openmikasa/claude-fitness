@@ -9,7 +9,12 @@ export default function HelpPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">Help & Docs</h1>
+              <div>
+                <h1 className="text-2xl font-bold uppercase tracking-wide text-text-light dark:text-text-dark">Help & Docs</h1>
+                <p className="text-xs text-subtext-light dark:text-subtext-dark mt-1 font-medium">
+                  Don&apos;t get stuck in a filler. Read the guide and get back to the main plot.
+                </p>
+              </div>
             </Link>
             <Link href="/" className="text-sm text-primary hover:underline font-bold uppercase">
               ← Back
