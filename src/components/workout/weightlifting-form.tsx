@@ -370,7 +370,7 @@ function ExerciseField({
                       valueAsNumber: true,
                     })}
                     type="number"
-                    step="1"
+                    step="0.5"
                     min="0"
                     placeholder="-"
                     className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
