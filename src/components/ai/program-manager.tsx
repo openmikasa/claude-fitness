@@ -13,6 +13,7 @@ import {
 import { displayWeight } from '@/lib/utils/unit-conversion';
 import { useSettings } from '@/lib/hooks/useSettings';
 import RefreshChangesModal from './refresh-changes-modal';
+import { GenerationProgress } from './weekly-plan-view';
 import type { Program, ProgramDay, RefreshProgramResponse } from '@/types/workout';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -26,6 +27,7 @@ export function ProgramManager() {
   const [showRefreshModal, setShowRefreshModal] = useState(false);
   const [refreshResult, setRefreshResult] = useState<RefreshProgramResponse | null>(null);
   const [fixedPrograms, setFixedPrograms] = useState<Set<string>>(new Set());
+  const [refreshingWeeks, setRefreshingWeeks] = useState(1);
 
   const { data: programs = [], isLoading } = usePrograms();
   const updateStatusMutation = useUpdateProgramStatus();
@@ -183,6 +185,12 @@ export function ProgramManager() {
 
   const handleRefreshProgram = async () => {
     if (!selectedProgram) return;
+
+    // Extract weeks from mesocycle_info or calculate from plan_data
+    const programWeeks = selectedProgram.mesocycle_info?.total_weeks
+      || Math.ceil(selectedProgram.plan_data.length / (selectedProgram.mesocycle_info?.workouts_per_week || 4));
+    setRefreshingWeeks(programWeeks);
+
     try {
       const result = await refreshMutation.mutateAsync({
         program_id: selectedProgram.id,
@@ -548,13 +556,29 @@ export function ProgramManager() {
                     className='w-full px-3 py-2 border-3 border-black rounded-sm focus:outline-none focus:border-[#22FF00] resize-none text-sm'
                   />
 
-                  <button
-                    onClick={handleRefreshProgram}
-                    disabled={refreshMutation.isPending}
-                    className='mt-3 w-full bg-[#8B5CF6] text-white px-4 py-3 border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none font-bold uppercase transition-all flex items-center justify-center gap-2'
-                  >
-                    {refreshMutation.isPending ? 'Refreshing...' : 'Refresh Program'}
-                  </button>
+                  {refreshMutation.isPending ? (
+                    <GenerationProgress programWeeks={refreshingWeeks} />
+                  ) : (
+                    <button
+                      onClick={handleRefreshProgram}
+                      disabled={refreshMutation.isPending}
+                      className='mt-3 w-full bg-[#8B5CF6] text-white px-4 py-3 border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none font-bold uppercase transition-all flex items-center justify-center gap-2'
+                    >
+                      Refresh Program
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Error Handling for Refresh */}
+              {refreshMutation.isError && (
+                <div className='bg-red-500/10 border-3 border-red-500 rounded-sm p-4'>
+                  <p className='text-sm text-red-600 font-bold uppercase mb-1'>
+                    ⚠️ Refresh Failed
+                  </p>
+                  <p className='text-xs text-red-600'>
+                    {refreshMutation.error?.message || 'Unable to refresh program. Please try again.'}
+                  </p>
                 </div>
               )}
             </div>

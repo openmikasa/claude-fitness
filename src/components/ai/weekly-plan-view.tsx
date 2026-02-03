@@ -23,7 +23,7 @@ const extractProgramWeeks = (prompt: string): number => {
 };
 
 // Progress stages for AI generation
-function GenerationProgress({ programWeeks }: { programWeeks: number }) {
+export function GenerationProgress({ programWeeks }: { programWeeks: number }) {
   const [stage, setStage] = useState(0);
 
   // Define stages based on program length
@@ -53,8 +53,8 @@ function GenerationProgress({ programWeeks }: { programWeeks: number }) {
 
   // Progress through stages based on time
   useEffect(() => {
-    // Estimate total time: 2-3 seconds per week + 4 seconds base
-    const totalTime = (programWeeks * 2500) + 4000;
+    // Base time of 180 seconds (3 minutes) + 5 seconds per week for UX scaling
+    const totalTime = 180000 + (programWeeks * 5000);
     const timePerStage = totalTime / stages.length;
 
     const interval = setInterval(() => {
@@ -161,6 +161,19 @@ export function WeeklyPlanView() {
         <GenerationProgress programWeeks={generatingWeeks} />
       ) : showForm ? (
         <div className='space-y-4'>
+          {/* Generation Time Warning */}
+          <div className='bg-yellow-50 border-3 border-yellow-500 rounded-sm p-4'>
+            <div className='flex items-center gap-2 mb-1'>
+              <span className='text-xl'>⏱️</span>
+              <p className='text-sm font-bold uppercase text-yellow-800'>
+                Generation Time: ~3 Minutes
+              </p>
+            </div>
+            <p className='text-xs text-yellow-700'>
+              Claude analyzes your workout history and creates a personalized program. This typically takes around 3 minutes.
+            </p>
+          </div>
+
           {/* Prompt History Dropdown */}
           {!historyLoading && promptHistory.length > 0 && (
             <div>

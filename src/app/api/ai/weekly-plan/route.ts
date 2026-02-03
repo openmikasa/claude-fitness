@@ -204,8 +204,10 @@ Return ONLY the JSON object. Nothing else.`;
     const validation = weeklyPlanResponseSchema.safeParse(parsedResponse);
     if (!validation.success) {
       console.error('=== VALIDATION FAILURE ===');
-      console.error('Validation error:', validation.error);
-      console.error('Parsed response keys:', Object.keys(parsedResponse as object));
+      console.error('Validation error:', JSON.stringify(validation.error.flatten(), null, 2));
+      console.error('Parsed response keys:', parsedResponse && typeof parsedResponse === 'object'
+        ? Object.keys(parsedResponse)
+        : `Invalid type: ${typeof parsedResponse}`);
       console.error('=== END VALIDATION FAILURE ===');
       return NextResponse.json(
         {

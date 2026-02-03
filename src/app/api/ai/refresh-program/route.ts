@@ -237,8 +237,10 @@ Return ONLY the JSON object. Nothing else.
     const aiValidation = weeklyPlanResponseSchema.safeParse(extraction.data);
     if (!aiValidation.success) {
       console.error('=== VALIDATION FAILURE ===');
-      console.error('Validation error:', aiValidation.error);
-      console.error('Parsed response keys:', Object.keys(extraction.data as object));
+      console.error('Validation error:', JSON.stringify(aiValidation.error.flatten(), null, 2));
+      console.error('Parsed response keys:', extraction.data && typeof extraction.data === 'object'
+        ? Object.keys(extraction.data)
+        : `Invalid type: ${typeof extraction.data}`);
       console.error('=== END VALIDATION FAILURE ===');
       return NextResponse.json(
         {
