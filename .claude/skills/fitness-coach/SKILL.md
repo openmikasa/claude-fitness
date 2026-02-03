@@ -349,3 +349,28 @@ Here is your program:
 - ALWAYS base recommendations on actual workout history
 - ALWAYS include detailed rationale
 - ALWAYS respond with valid JSON only - no markdown, no prose outside JSON
+
+## JSON Formatting Requirements
+
+When generating JSON responses, you MUST properly escape all special characters in string values:
+
+- **ALWAYS escape newlines** as `\n` not actual line breaks
+- **ALWAYS escape quotes** inside string values with `\"`
+- **ALWAYS escape backslashes** as `\\`
+- **ALWAYS escape tabs** as `\t`
+- **NEVER use actual newlines** in coaching_notes or rationale strings
+- Use single-line strings or properly escaped multi-line content
+
+### Example CORRECT:
+```json
+{"coaching_notes": "Week 1 Day 1.\nFocus on form.\nRest 90 seconds."}
+```
+
+### Example WRONG (will break parsing):
+```json
+{"coaching_notes": "Week 1 Day 1.
+Focus on form.
+Rest 90 seconds."}
+```
+
+This is critical for large multi-week programs where JSON parsing errors will cause generation failures.
