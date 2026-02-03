@@ -52,8 +52,11 @@ export default function WorkoutForm({ initialData, workoutId, onSuccess, initial
     setIsSubmitting(true);
 
     try {
+      // Convert date string (YYYY-MM-DD) to ISO datetime string
+      const dateTimeString = new Date(workoutDate + 'T12:00:00').toISOString();
+
       const workoutInput: CreateWorkoutInput = {
-        workout_date: workoutDate,
+        workout_date: dateTimeString,
         data,
         notes: notes.trim() || undefined,
         program_id: programSelection?.programId,
