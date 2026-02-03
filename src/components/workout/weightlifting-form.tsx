@@ -114,10 +114,10 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
       {/* Exercises */}
       <div className="space-y-4">
         {/* Unit switching note */}
-        <div className="bg-blue-50 border-2 border-blue-300 rounded-sm px-4 py-3 text-sm">
-          <p className="text-gray-700">
-            <span className="font-bold text-gray-900">Note:</span> To switch between lb and kg, go to{' '}
-            <Link href="/settings" className="font-bold text-blue-600 hover:text-blue-800 underline">
+        <div className="bg-white border-3 border-black border-l-6 border-l-[#22FF00] p-4 rounded-sm shadow-brutal">
+          <p className="text-sm text-gray-600">
+            <span className="font-bold text-black uppercase">Tip:</span> To switch between lb and kg, go to{' '}
+            <Link href="/settings" className="font-bold text-black hover:text-[#22FF00] underline transition-colors">
               Settings
             </Link>
           </p>
