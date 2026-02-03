@@ -27,6 +27,7 @@ interface ParsedSet {
   exerciseName: string;
   weight: number;
   reps: number;
+  unit: 'kg' | 'lb'; // Track detected unit
   notes?: string;
 }
 
@@ -62,9 +63,12 @@ function parseRowToSet(
 
   // Extract weight
   const rawWeightValue = mapping.weightColumn ? row[mapping.weightColumn] : '0';
-  const weight = mapping.weightColumn
+  const weightResult = mapping.weightColumn
     ? normalizeWeight(rawWeightValue, mapping.weightColumn, userPreferredUnit)
-    : 0;
+    : { weight: 0, unit: 'kg' as const };
+
+  const weight = weightResult.weight;
+  const unit = weightResult.unit;
 
   // Extract reps
   const reps = mapping.repsColumn ? parseInt(row[mapping.repsColumn]) : 1;
@@ -81,6 +85,7 @@ function parseRowToSet(
     exerciseName: exerciseName || 'Exercise',
     weight,
     reps,
+    unit,
     notes,
   };
 }
@@ -103,11 +108,11 @@ function groupSetsIntoWorkouts(parsedSets: ParsedSet[]): CreateWorkoutInput[] {
   for (const [key, sets] of Array.from(byDateAndSession.entries())) {
     const [date] = key.split('|||'); // Extract date from key
     // Group by exercise name
-    const byExercise = new Map<string, Array<{ weight: number; reps: number; notes?: string }>>();
+    const byExercise = new Map<string, Array<{ weight: number; reps: number; unit: 'kg' | 'lb'; notes?: string }>>();
 
     for (const set of sets) {
       const existing = byExercise.get(set.exerciseName) || [];
-      existing.push({ weight: set.weight, reps: set.reps, notes: set.notes });
+      existing.push({ weight: set.weight, reps: set.reps, unit: set.unit, notes: set.notes });
       byExercise.set(set.exerciseName, existing);
     }
 

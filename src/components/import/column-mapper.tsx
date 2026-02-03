@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { autoDetectMapping } from '@/lib/parsers/csv-parser';
+import { autoDetectMapping, analyzeWeightColumnUnits } from '@/lib/parsers/csv-parser';
 import type { CsvMapping, ImportPreview } from '@/types/import';
 
 interface ColumnMapperProps {
@@ -30,6 +30,7 @@ export default function ColumnMapper({
 }: ColumnMapperProps) {
   const [mappings, setMappings] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
+  const [userPreferredUnit] = useState<'metric' | 'imperial'>('metric'); // TODO: Get from user settings
 
   // Auto-detect mappings on mount
   useEffect(() => {
@@ -80,6 +81,19 @@ export default function ColumnMapper({
     onNext();
   };
 
+  // Helper to get detected unit for a weight column
+  const getDetectedUnit = (header: string): string => {
+    if (mappings[header] !== 'weight') return '-';
+
+    // Get sample values for this column
+    const sampleValues = preview.sampleRows.map((row) => row[header] || '').filter(Boolean);
+
+    const detectedUnit = analyzeWeightColumnUnits(header, sampleValues, userPreferredUnit);
+
+    if (detectedUnit === 'mixed') return 'mixed';
+    return detectedUnit;
+  };
+
   return (
     <div className="space-y-6">
       {/* Instructions */}
@@ -103,32 +117,55 @@ export default function ColumnMapper({
               <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">
                 Sample Data
               </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">
+                Detected Unit
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {preview.headers.map((header) => (
-              <tr key={header}>
-                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {header}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <select
-                    value={mappings[header] || ''}
-                    onChange={(e) => handleMappingChange(header, e.target.value)}
-                    className="w-full px-3 py-2 border-3 border-black rounded-sm focus:outline-none focus:border-[#22FF00] text-sm bg-white"
-                  >
-                    {FIELD_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="px-4 py-4 text-sm text-gray-600 font-mono">
-                  {preview.sampleRows[0]?.[header] || '-'}
-                </td>
-              </tr>
-            ))}
+            {preview.headers.map((header) => {
+              const detectedUnit = getDetectedUnit(header);
+              return (
+                <tr key={header}>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {header}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <select
+                      value={mappings[header] || ''}
+                      onChange={(e) => handleMappingChange(header, e.target.value)}
+                      className="w-full px-3 py-2 border-3 border-black rounded-sm focus:outline-none focus:border-[#22FF00] text-sm bg-white"
+                    >
+                      {FIELD_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="px-4 py-4 text-sm text-gray-600 font-mono">
+                    {preview.sampleRows[0]?.[header] || '-'}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {detectedUnit === '-' ? (
+                      <span className="text-gray-400 text-xs">-</span>
+                    ) : detectedUnit === 'mixed' ? (
+                      <span className="px-2 py-1 rounded-sm text-xs font-bold uppercase border-2 border-yellow-500 text-yellow-700 bg-yellow-50">
+                        mixed
+                      </span>
+                    ) : detectedUnit === 'kg' ? (
+                      <span className="px-2 py-1 rounded-sm text-xs font-bold uppercase border-2 border-[#22FF00] text-green-700 bg-green-50">
+                        kg
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 rounded-sm text-xs font-bold uppercase border-2 border-blue-500 text-blue-700 bg-blue-50">
+                        lb
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

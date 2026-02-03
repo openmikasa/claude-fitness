@@ -145,7 +145,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Unit Conversion System
 * **[Storage] Always Store in KG** | Database always stores weights in kg regardless of user preference. Use `src/lib/utils/unit-conversion.ts` utilities for all conversions.
 * **[Display] User Preference** | All weight displays use `displayWeight(weightInKg, userPreference)` to show in metric or imperial based on user settings.
-* **[CSV Import] Auto-Detection** | CSV parser detects units from cell values (e.g., "60.0kg", "45lb") or column names. Converts all to kg via `normalizeWeight()`.
+* **[CSV Import] Auto-Detection** | CSV parser detects units from cell values (e.g., "60.0kg", "45lb") or column names. `normalizeWeight()` returns both the weight (in kg) and the detected unit.
+* **[CSV Import] Unit Tracking** | Detected units are stored in `WeightliftingSet.unit` field for provenance tracking. Import mapping UI displays detected unit for each weight column. Display always converts to user's current preference via `displayWeight()`.
 * **[Forms] Dynamic Units** | Workout forms show unit labels based on user preference and convert input to kg before saving via `inputToKg()`.
 * **[Backward Compat] Optional Unit Field** | `WeightliftingSet.unit` is optional - existing workouts without unit field are assumed to be kg.
 

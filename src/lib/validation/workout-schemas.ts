@@ -20,6 +20,11 @@ export const weightliftingSetSchema = z.object({
     })
     .int('Reps must be a whole number')
     .positive('Reps must be a positive number'),
+  unit: z
+    .enum(['kg', 'lb'], {
+      invalid_type_error: 'Unit must be either "kg" or "lb"',
+    })
+    .optional(),
   notes: z
     .string({
       invalid_type_error: 'Notes must be a string',

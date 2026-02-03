@@ -185,14 +185,14 @@ export function detectWeightUnit(columnName: string): WeightUnit | null {
 }
 
 /**
- * Convert weight value to kg for storage
+ * Convert weight value to kg for storage and return detected unit
  * Detects unit from cell value or column name, falls back to user preference
  */
 export function normalizeWeight(
   rawValue: string,
   columnName: string,
   userPreferredUnit: 'metric' | 'imperial' = 'metric'
-): number {
+): { weight: number; unit: 'kg' | 'lb' } {
   // First try to detect unit from the cell value itself (e.g., "60.0kg" or "45lb")
   const valueUnitMatch = rawValue.match(/(kg|lb|lbs|pound|kilo)/i);
   if (valueUnitMatch) {
@@ -200,14 +200,14 @@ export function normalizeWeight(
     const numericValue = parseFloat(rawValue);
 
     if (isNaN(numericValue)) {
-      return 0;
+      return { weight: 0, unit: 'kg' };
     }
 
     if (unit === 'kg' || unit === 'kilo') {
-      return numericValue;
+      return { weight: numericValue, unit: 'kg' };
     } else {
       // lb, lbs, pound
-      return convertWeight(numericValue, 'lb', 'kg');
+      return { weight: convertWeight(numericValue, 'lb', 'kg'), unit: 'lb' };
     }
   }
 
@@ -216,14 +216,64 @@ export function normalizeWeight(
   const numericValue = parseFloat(rawValue);
 
   if (isNaN(numericValue)) {
-    return 0;
+    return { weight: 0, unit: 'kg' };
   }
 
   if (detectedUnit) {
-    return detectedUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
+    const weightInKg = detectedUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
+    return { weight: weightInKg, unit: detectedUnit };
   }
 
   // Fall back to user preference if no unit detected
   const fromUnit: WeightUnit = userPreferredUnit === 'imperial' ? 'lb' : 'kg';
-  return fromUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
+  const weightInKg = fromUnit === 'kg' ? numericValue : convertWeight(numericValue, 'lb', 'kg');
+  return { weight: weightInKg, unit: fromUnit };
+}
+
+/**
+ * Analyze sample values to determine predominant unit in a weight column
+ * Used for UI display only - actual conversion uses normalizeWeight() per value
+ */
+export function analyzeWeightColumnUnits(
+  columnName: string,
+  sampleValues: string[],
+  userPreferredUnit: 'metric' | 'imperial' = 'metric'
+): 'kg' | 'lb' | 'mixed' {
+  // Check column name first
+  const columnUnit = detectWeightUnit(columnName);
+
+  // Analyze sample values for explicit unit markers
+  const detectedUnits = new Set<'kg' | 'lb'>();
+
+  for (const value of sampleValues) {
+    if (!value || value.trim() === '') continue;
+
+    const valueUnitMatch = value.match(/(kg|lb|lbs|pound|kilo)/i);
+    if (valueUnitMatch) {
+      const unit = valueUnitMatch[1].toLowerCase();
+      if (unit === 'kg' || unit === 'kilo') {
+        detectedUnits.add('kg');
+      } else {
+        detectedUnits.add('lb');
+      }
+    }
+  }
+
+  // If values have mixed units, return 'mixed'
+  if (detectedUnits.size > 1) {
+    return 'mixed';
+  }
+
+  // If values have consistent unit, return it
+  if (detectedUnits.size === 1) {
+    return Array.from(detectedUnits)[0];
+  }
+
+  // If column name has unit, use it
+  if (columnUnit) {
+    return columnUnit;
+  }
+
+  // Fall back to user preference
+  return userPreferredUnit === 'imperial' ? 'lb' : 'kg';
 }
