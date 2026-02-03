@@ -3,6 +3,7 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
 import { WeightliftingData } from '@/types/workout';
 import { Autocomplete } from '@/components/ui/autocomplete';
 import { CreateExerciseModal } from './create-exercise-modal';
@@ -15,7 +16,7 @@ import { getWeightUnitLabel, inputToKg, kgToInput } from '@/lib/utils/unit-conve
 const weightliftingSetSchema = z.object({
   weight: z.number().min(0, 'Weight must be 0 or greater'),
   reps: z.number().int().min(1, 'Reps must be at least 1'),
-  note: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 const weightliftingExerciseSchema = z.object({
@@ -49,7 +50,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         exercises: [
           {
             name: '',
-            sets: [{ weight: 0, reps: 0, note: '' }],
+            sets: [{ weight: 0, reps: 0, notes: '' }],
           },
         ],
       };
@@ -61,7 +62,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         sets: ex.sets.map(set => ({
           weight: kgToInput(set.weight, settings?.units || 'metric'),
           reps: set.reps,
-          note: (set as any).note || '',
+          notes: (set as any).notes || (set as any).note || '',
         })),
       })),
     };
@@ -101,7 +102,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         sets: ex.sets.map(set => ({
           weight: inputToKg(set.weight, settings?.units || 'metric'),
           reps: set.reps,
-          note: set.note || undefined,
+          notes: set.notes || undefined,
         })),
       })),
     };
@@ -112,6 +113,16 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 pb-48">
       {/* Exercises */}
       <div className="space-y-4">
+        {/* Unit switching note */}
+        <div className="bg-blue-50 border-2 border-blue-300 rounded-sm px-4 py-3 text-sm">
+          <p className="text-gray-700">
+            <span className="font-bold text-gray-900">Note:</span> To switch between lb and kg, go to{' '}
+            <Link href="/settings" className="font-bold text-blue-600 hover:text-blue-800 underline">
+              Settings
+            </Link>
+          </p>
+        </div>
+
         {exercises.map((exercise, exerciseIndex) => (
           <ExerciseField
             key={exercise.id}
@@ -134,7 +145,7 @@ export default function WeightliftingForm({ onSubmit, initialData, notes, onNote
         onClick={() =>
           appendExercise({
             name: '',
-            sets: [{ weight: 0, reps: 0, note: '' }],
+            sets: [{ weight: 0, reps: 0, notes: '' }],
           })
         }
         className="w-full px-4 py-4 text-sm font-bold uppercase text-black bg-white border-3 border-black rounded-sm shadow-brutal hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
@@ -343,7 +354,7 @@ function ExerciseField({
           {sets.map((set, setIndex) => {
             const weight = watch(`exercises.${exerciseIndex}.sets.${setIndex}.weight`);
             const reps = watch(`exercises.${exerciseIndex}.sets.${setIndex}.reps`);
-            const note = watch(`exercises.${exerciseIndex}.sets.${setIndex}.note`);
+            const notes = watch(`exercises.${exerciseIndex}.sets.${setIndex}.notes`);
             const isComplete = reps > 0;
 
             return (
@@ -359,7 +370,7 @@ function ExerciseField({
                       valueAsNumber: true,
                     })}
                     type="number"
-                    step="0.1"
+                    step="1"
                     min="0"
                     placeholder="-"
                     className="w-full px-3 py-3 bg-white text-black text-center border-2 border-black focus:outline-none focus:border-[#22FF00] font-bold"
@@ -390,7 +401,7 @@ function ExerciseField({
                 <div className="grid grid-cols-[50px_1fr] gap-2">
                   <div></div>
                   <input
-                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.note`)}
+                    {...register(`exercises.${exerciseIndex}.sets.${setIndex}.notes`)}
                     type="text"
                     placeholder="Add note..."
                     className="w-full px-3 py-2 bg-gray-50 text-gray-600 text-sm border border-gray-200 focus:outline-none focus:border-[#22FF00] placeholder:text-gray-400"
@@ -419,7 +430,7 @@ function ExerciseField({
           {/* Add Set Button */}
           <button
             type="button"
-            onClick={() => appendSet({ weight: 0, reps: 0, note: '' })}
+            onClick={() => appendSet({ weight: 0, reps: 0, notes: '' })}
             className="w-full px-4 py-3 text-sm font-bold uppercase text-[#22FF00] bg-transparent border-2 border-dashed border-gray-300 hover:border-[#22FF00] transition-colors"
           >
             + Add Set
