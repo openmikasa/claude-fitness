@@ -136,6 +136,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * **[API] Filtering Logic** | Complex filters (equipment, muscle groups on arrays) require client-side filtering after fetch. Can't use Supabase filters on nested arrays efficiently.
 
 ### Component Patterns
+* **[UI] Design System Compliance** | Before adding new components, inspect existing similar components to match the app's neo-brutalist design style. Use consistent patterns: `border-3 border-black`, `shadow-brutal`, `rounded-sm`, uppercase font-bold labels, `#22FF00` accent color. Never introduce new design patterns without reviewing existing pages first.
 * **[UI] Reusable Components** | Multi-selects, autocompletes, and form controls belong in `components/ui/`. Keep them generic with props, not tied to specific domains.
 * **[Forms] React Hook Form + Zod** | Use `react-hook-form` with `zodResolver`. Validation schema should match API endpoint schema.
 * **[Forms] Autocomplete Integration** | When selecting from autocomplete, auto-populate related fields (e.g., exercise selection fills equipment/muscle groups).
