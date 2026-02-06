@@ -5,13 +5,13 @@ import { QueryProvider } from "@/lib/providers/query-provider";
 import { OfflineIndicator } from "@/components/offline/offline-indicator";
 
 export const metadata: Metadata = {
-  title: "Claude Fitness",
+  title: "Winter Arc - AI-Powered Training",
   description: "AI-powered fitness tracking and programming",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Fitness",
+    title: "Winter Arc",
   },
   formatDetection: {
     telephone: false,

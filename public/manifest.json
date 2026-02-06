@@ -1,6 +1,6 @@
 {
-  "name": "Claude Fitness - AI-Powered Training",
-  "short_name": "Fitness",
+  "name": "Winter Arc - AI-Powered Training",
+  "short_name": "Winter Arc",
   "description": "Track workouts and get AI-powered training recommendations",
   "start_url": "/",
   "display": "standalone",
